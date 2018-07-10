@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "187216777011",
+    "firebase_url": "https://collab-428e6.firebaseio.com",
+    "project_id": "collab-428e6",
+    "storage_bucket": "collab-428e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:187216777011:android:0b56294ca91842bb",
+        "android_client_info": {
+          "package_name": "com.richard.imoh.collab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "187216777011-2i9itth7k1echkmcu0rpj07fo513jai5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHs3yn2fDs2DEsxLgFbRvsaeucZnhkVPs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.richard.imoh.collab.PropertyDetails"
+    tools:showIn="@layout/activity_property_details">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.synnapps.carouselview.CarouselView
+                    android:id="@+id/carouselView"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    app:fillColor="#FFFFFFFF"
+
+                    app:pageColor="#00000000"
+                    app:radius="6dp"
+                    app:slideInterval="3000"
+                    app:strokeColor="#FF777777"
+                    app:strokeWidth="1dp" />
+
+                <TextView
+                    android:layout_marginTop="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#000000"
+                    android:text="2 BHK 2 Residential Appatment for Rent"
+                    android:textSize="18sp"
+                    android:typeface="sans" />
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="in APapa Oshodi Rd, Orile tennison drive VI"
+                    android:textSize="17dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginLeft="30dp"
+                android:layout_marginBottom="25dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textColor="#000000"
+                        android:textSize="30sp"
+                        android:text="$2000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textSize="15sp"
+                        android:text="per Month"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="15sp"
+                    android:text=" @14 per Sq feet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:scaleType="fitCenter"
+                    android:layout_margin="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/room"/>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textSize="15sp"
+                        android:layout_margin="10dp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Configuration"/>
+                    <TextView
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="-8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2 Bedroom, 2 Bathroom, 2 Toilet"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:scaleType="fitCenter"
+                    android:layout_margin="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/room"/>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textSize="15sp"
+                        android:layout_margin="10dp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rent in Details"/>
+                    <TextView
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="-8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$30,000 (Negotiable)"/>
+                    <TextView
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Maintenance $90,00(monthly)"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:scaleType="fitCenter"
+                    android:layout_margin="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/room"/>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textSize="15sp"
+                        android:layout_margin="10dp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Available From"/>
+                    <TextView
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="-8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Immediate"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:scaleType="fitCenter"
+                    android:layout_margin="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/room"/>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textSize="15sp"
+                        android:layout_margin="10dp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Available for"/>
+                    <TextView
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="-8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Family/Bachelor"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:scaleType="fitCenter"
+                    android:layout_margin="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/room"/>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textSize="15sp"
+                        android:layout_margin="10dp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Furnishing"/>
+                    <TextView
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="-8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Semi Furnished"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:scaleType="fitCenter"
+                    android:layout_margin="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/room"/>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textSize="15sp"
+                        android:layout_margin="10dp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Areas"/>
+                    <TextView
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="-8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Super Built uP area 995sqm"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:scaleType="fitCenter"
+                    android:layout_margin="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/room"/>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textSize="15sp"
+                        android:layout_margin="10dp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Address"/>
+                    <TextView
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="-8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="30 Olorunkemi Steert Olorunona"/>
+                    <TextView
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Shomolu Lagos"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:text="Contact Owner"
+                android:background="@color/colorPrimary"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

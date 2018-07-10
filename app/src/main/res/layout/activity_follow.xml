@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.richard.imoh.collab.Follow">
+
+    <TextView
+        android:textColor="@color/colorPrimaryText"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:layout_margin="15dp"
+        android:textSize="25sp"
+        android:text="Connect with other agents and share leads"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:textSize="15sp"
+        android:layout_margin="15dp"
+        android:textAlignment="center"
+        android:text="Tab on a picture to follow an agent to enable you chat with them and view their properties"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/follow_recycle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

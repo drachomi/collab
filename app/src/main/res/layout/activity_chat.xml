@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.richard.imoh.collab.Chat">
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_margin="10dp"
+        android:id="@+id/reyclerview_message_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/linearLayout"
+
+        android:background="@color/colorSecondaryText" />
+
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout">
+
+        <LinearLayout
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/gallery_send_btn"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_menu_gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/ic_menu_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/ic_menu_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/ic_menu_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/ic_menu_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/ic_menu_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+        <!-- A horizontal line between the chatbox and RecyclerView -->
+
+        <LinearLayout
+
+            android:id="@+id/layout_chatbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:minHeight="48dp"
+            android:orientation="horizontal"
+            >
+
+            <EditText
+                android:id="@+id/edittext_chatbox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="Enter message"
+                android:maxLines="6" />
+
+            <Button
+                android:id="@+id/button_chatbox_send"
+                android:layout_width="64dp"
+                android:layout_height="48dp"
+                android:layout_gravity="bottom"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="SEND"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
+
+
