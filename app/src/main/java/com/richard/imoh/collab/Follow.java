@@ -33,8 +33,12 @@ public class Follow extends AppCompatActivity {
     ChildEventListener childEventListener;
     DatabaseReference mChatListReference;
     DatabaseReference otherChatListRef;
+    DatabaseReference connectionInfoRef;
     FirebaseAuth firebaseAuth;
-    ValueEventListener valueEventListener;
+    User obj;
+    ChildEventListener valueEventListener;
+    List<String> suggestionsList = new ArrayList<>();
+    //String[] suggestionsList = {};
 
 
     @Override
@@ -46,19 +50,21 @@ public class Follow extends AppCompatActivity {
         databaseReference = firebaseDatabase.getReference().child("agents");
 
 
+
         firebaseAuth = FirebaseAuth.getInstance();
         myUserId = firebaseAuth.getUid();
-        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPref.getString("user", "");
-        User obj = gson.fromJson(json, User.class);
+//        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+//        Gson gson = new Gson();
+//        String json = sharedPref.getString("user", "");
+//        obj = gson.fromJson(json, User.class);
+//        Log.d("json",obj.uId);
 
 
         mChatListReference = firebaseDatabase.getReference().child("agents").child(myUserId).child("connections");
 
         RecyclerView recyclerView = findViewById(R.id.follow_recycle);
         mAdampter = new FollowAdapter(mUser);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,3);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addOnItemTouchListener(new FollowTouchListerner(getApplicationContext(), recyclerView, new FollowTouchListerner.ClickListener() {
@@ -69,8 +75,8 @@ public class Follow extends AppCompatActivity {
                 String userId = mUser.get(position).getuId();
                 Log.d(" userO", userId);
                 otherChatListRef = firebaseDatabase.getReference().child("agents").child(userId).child("connections");
-                otherChatListRef.push().setValue(obj);
-                mChatListReference.push().setValue(mUser);
+                otherChatListRef.push().setValue(firebaseAuth.getUid());
+                mChatListReference.push().setValue(userId);
             }
 
             @Override
@@ -78,22 +84,32 @@ public class Follow extends AppCompatActivity {
 
             }
         }));
+
         recyclerView.setAdapter(mAdampter);
 
-        valueEventListener = new ValueEventListener() {
+        childEventListener = new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    User user = ds.getValue(User.class);
-                    if(user!=null){
-                        if(user.getuId() != obj.uId){
-                            mUser.add(user);
-                        }
-                    }
-                }
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String user =dataSnapshot.getKey();
+                Log.d("jonah",user);
+                connectionInfo(user);
 
 
-                mAdampter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
             }
 
             @Override
@@ -101,7 +117,52 @@ public class Follow extends AppCompatActivity {
 
             }
         };
-        databaseReference.addValueEventListener(valueEventListener);
+        databaseReference.addChildEventListener(childEventListener);
+
+
+
     }
+
+    void connectionInfo(String conId){
+        Log.d("yonah","got here");
+        connectionInfoRef = firebaseDatabase.getReference().child("agents").child(conId).child("info");
+        valueEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                User user = dataSnapshot.getValue(User.class);
+                if (user != null) {
+                    if(!user.getuId().equals(firebaseAuth.getUid())){
+                        Log.d("yonah",user.getuId());
+
+                        mUser.add(user);
+                    }
+                }
+                mAdampter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        connectionInfoRef.addChildEventListener(valueEventListener);
+    }
+
 
 }

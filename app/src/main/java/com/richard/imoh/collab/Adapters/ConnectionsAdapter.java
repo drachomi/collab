@@ -38,7 +38,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     public void onBindViewHolder(ConnectionsAdapter.MyViewHolder holder, int position) {
         User user = mUser.get(position);
         holder.name.setText(user.getFullName());
-        holder.name.setText(user.getUserName());
+        holder.location.setText(user.getLocation());
         if(user.getImage().equals("none")){
             user.setImage("https://pbs.twimg.com/profile_images/723476945879633920/N59ePNGs_400x400.jpg");
         }
@@ -58,14 +58,14 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView name,username;
+        TextView name,location;
         ImageView imageView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.follower_list_img);
             name = itemView.findViewById(R.id.follower_list_displayname);
-            username = itemView.findViewById(R.id.follower_list_location);
+            location = itemView.findViewById(R.id.follower_list_location);
 
         }
     }

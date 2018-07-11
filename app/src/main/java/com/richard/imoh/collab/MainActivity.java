@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             startActivity(new Intent(MainActivity.this,Follow.class));
         } else if (id == R.id.nav_gallery) {
-            startActivity(new Intent(MainActivity.this,ChatList.class));
+            startActivity(new Intent(MainActivity.this,ConnectionList.class));
         } else if (id == R.id.nav_slideshow) {
             startActivity(new Intent(MainActivity.this,Chat.class));
         } else if (id == R.id.nav_manage) {

@@ -82,10 +82,6 @@ public class Registration extends AppCompatActivity {
                            User user = new User(regName,"none",regEmail,"lagos",regUsername,currentUser);
                            databaseReference.child(currentUser).child("info").push().setValue(user);
 
-//                           databaseReference.push().setValue(currentUser);
-//
-//                           userObjectRef = firebaseDatabase.getReference().child("agents").child(currentUser);
-//                           userObjectRef.push().setValue(user);
                            Intent intent = new Intent(Registration.this,MainActivity.class);
                            intent.putExtra("userId", currentUser);
                            startActivity(intent);

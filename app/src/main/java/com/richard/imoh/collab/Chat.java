@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,6 +44,7 @@ public class Chat extends AppCompatActivity {
     List<UserMessage> messages = new ArrayList<>();
     FirebaseDatabase mFirebaseDataBase;
     DatabaseReference mChatReference;
+    FirebaseAuth firebaseAuth;
     EditText editText;
     Button sendBtn;
     String username;
@@ -52,6 +54,7 @@ public class Chat extends AppCompatActivity {
     private FirebaseStorage mFireBaseStorage;
     private StorageReference chatPhotoRference;
     private ImageView mPhotoPicker;
+    String myUserId;
 
 
 
@@ -63,13 +66,16 @@ public class Chat extends AppCompatActivity {
         editText  = findViewById(R.id.edittext_chatbox);
         sendBtn = findViewById(R.id.button_chatbox_send);
         mPhotoPicker = findViewById(R.id.gallery_send_btn);
-         username = "imoh";
         String otherPersonId = "maduka";
+        String timeStamp;
         String chatPath = username + otherPersonId;
         mFirebaseDataBase = FirebaseDatabase.getInstance();
-        mChatReference = mFirebaseDataBase.getReference().child("private-chat").child(chatPath);
         mFireBaseStorage = FirebaseStorage.getInstance();
         chatPhotoRference = mFireBaseStorage.getReference().child("chat-images");
+        firebaseAuth = FirebaseAuth.getInstance();
+        myUserId = firebaseAuth.getUid();
+        mChatReference = mFirebaseDataBase.getReference().child("agents").child(myUserId);
+
         username = "ANONYMOUS";
 
 
