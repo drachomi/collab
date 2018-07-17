@@ -11,8 +11,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.richard.imoh.collab.R;
-import com.richard.imoh.collab.UserMessage;
+import com.richard.imoh.collab.Pojo.UserMessage;
 
 import java.util.List;
 
@@ -41,9 +42,11 @@ public class ChatAdapter extends RecyclerView.Adapter{
         // Determines the appropriate ViewType according to the sender of the message.
         @Override
         public int getItemViewType(int position) {
+            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+            String myUid = firebaseAuth.getUid();
             UserMessage message =  mMessageList.get(position);
             Log.d("adapter","Got to get view type");
-            if (message.getImageString() == null) {
+            if (message.getUid().equals(myUid)) {
                 Log.d("adapter","view type is message sent");
 
                 // If the current user is the sender of the message
@@ -103,14 +106,15 @@ public class ChatAdapter extends RecyclerView.Adapter{
             }
 
             void bind(UserMessage message) {
-                boolean isPhoto = message.getPhotoUrl() != null;
-
+                boolean isPhoto = message.getImageMessage() != null;
+                //if it is a photoMessage
                 if(isPhoto){
                     messageText.setVisibility(View.GONE);
                     Glide.with(imgMsg.getContext())
-                            .load(message.getPhotoUrl())
+                            .load(message.getImageMessage())
                             .into(imgMsg);
                 }
+                //Not a photo message
                 else {
                     imgMsg.setVisibility(View.GONE);
                     messageText.setText(message.getMessageBody());
@@ -135,14 +139,15 @@ public class ChatAdapter extends RecyclerView.Adapter{
             }
 
             void bind(UserMessage message) {
-                boolean isPhoto = message.getPhotoUrl() != null;
-
+                boolean isPhoto = message.getImageMessage() != null;
+                //if its a photo message
                 if(isPhoto){
                     messageText.setVisibility(View.GONE);
                     Glide.with(imgMsg.getContext())
-                            .load(message.getPhotoUrl())
+                            .load(message.getImageMessage())
                             .into(imgMsg);
                 }
+                //not a photo message
                 else {
                     imgMsg.setVisibility(View.GONE);
                     messageText.setText(message.getMessageBody());
@@ -151,13 +156,14 @@ public class ChatAdapter extends RecyclerView.Adapter{
                 timeText.setText(message.getTimeStamp());
 
                 nameText.setText(message.getUsername());
+                profileImage.setVisibility(View.GONE);
 
                 // Insert the profile image from the URL into the ImageView.
 
-                Glide.with(profileImage.getContext())
-                        .load(message.getImageString())
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(profileImage);
+//                Glide.with(profileImage.getContext())
+//                        .load(message.getProfilePicture())
+//                        .apply(RequestOptions.circleCropTransform())
+//                        .into(profileImage);
             }
         }
     }

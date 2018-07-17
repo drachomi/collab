@@ -1,6 +1,5 @@
 package com.richard.imoh.collab;
 
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -17,9 +16,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 import com.richard.imoh.collab.Adapters.FollowAdapter;
+import com.richard.imoh.collab.Pojo.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +62,7 @@ public class Follow extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.follow_recycle);
         mAdampter = new FollowAdapter(mUser);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 3);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 4);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addOnItemTouchListener(new FollowTouchListerner(getApplicationContext(), recyclerView, new FollowTouchListerner.ClickListener() {
@@ -74,9 +72,11 @@ public class Follow extends AppCompatActivity {
                 //TODO Add action to be taken when user clicks to follow
                 String userId = mUser.get(position).getuId();
                 Log.d(" userO", userId);
+                mUser.remove(position);
                 otherChatListRef = firebaseDatabase.getReference().child("agents").child(userId).child("connections");
                 otherChatListRef.push().setValue(firebaseAuth.getUid());
                 mChatListReference.push().setValue(userId);
+                mAdampter.notifyDataSetChanged();
             }
 
             @Override

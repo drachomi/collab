@@ -26,8 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
-
-import java.io.Console;
+import com.richard.imoh.collab.Pojo.User;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         firebaseAuth = FirebaseAuth.getInstance();
 
         if(firebaseAuth.getCurrentUser()==null){
-            startActivity(new Intent(MainActivity.this,Registration.class));
+            startActivity(new Intent(MainActivity.this,Login.class));
         }
         else {
             String userId = firebaseAuth.getUid();
@@ -143,7 +142,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
             startActivity(new Intent(MainActivity.this,ConnectionList.class));
         } else if (id == R.id.nav_slideshow) {
-            startActivity(new Intent(MainActivity.this,Chat.class));
+            startActivity(new Intent(MainActivity.this,ChatList.class));
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

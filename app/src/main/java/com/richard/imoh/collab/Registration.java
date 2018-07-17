@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -16,11 +17,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.richard.imoh.collab.Pojo.User;
 
 public class Registration extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
-    EditText email,fullname,username,password;
+    EditText email,firstname,lastname,username,phonenumber,occupation,company,profbody,password;
     ProgressBar progressBar;
+    ImageView profiledp;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     DatabaseReference userObjectRef;
@@ -32,7 +35,12 @@ public class Registration extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
         firebaseAuth = FirebaseAuth.getInstance();
         email = findViewById(R.id.reg_email);
-        fullname = findViewById(R.id.reg_last_name);
+        firstname = findViewById(R.id.reg_first_name);
+        lastname = findViewById(R.id.reg_last_name);
+        phonenumber = findViewById(R.id.reg_phone_number);
+        occupation = findViewById(R.id.reg_occupation);
+        company = findViewById(R.id.reg_company);
+        profbody = findViewById(R.id.reg_prof_body);
         username = findViewById(R.id.reg_username);
         password = findViewById(R.id.reg_password);
         progressBar = findViewById(R.id.reg_progress_bar);
@@ -43,12 +51,17 @@ public class Registration extends AppCompatActivity {
     }
 
    public void register(android.view.View view){
-        String regName,regEmail,regUsername,regPassword;
+        String regName,regEmail,regUsername,regPassword,regOccupation,regCompany,regProfbody,regPhoneNumber;
 
-        regName = fullname.getText().toString();
+        regName = firstname.getText().toString() + " " + lastname.getText().toString();
         regEmail = email.getText().toString();
         regUsername = username.getText().toString();
         regPassword = password.getText().toString();
+        regCompany = company.getText().toString();
+        regOccupation = occupation.getText().toString();
+        regProfbody = profbody.getText().toString();
+        regPhoneNumber = phonenumber.getText().toString();
+
 
         if(TextUtils.isEmpty(regEmail)){
             Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();

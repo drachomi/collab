@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+<LinearLayout
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.richard.imoh.collab.Registration">
     <ImageView
-
+        android:id="@+id/reg_dp"
         android:layout_marginTop="30dp"
         android:layout_gravity="center_horizontal"
         android:layout_width="150dp"
         android:layout_height="100dp"
-        android:src="@drawable/logo"/>
+        android:src="@drawable/reg_camera"/>
     <EditText
         android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"
@@ -24,8 +29,16 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:id="@+id/reg_first_name"
+        android:hint="First Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:id="@+id/reg_last_name"
-        android:hint="Full Name"
+        android:hint="Last Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -38,6 +51,66 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <EditText
+        android:inputType="phone"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:id="@+id/reg_phone_number"
+        android:hint="Phone Number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:inputType="text"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:id="@+id/reg_occupation"
+        android:hint="Occupation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:inputType="text"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:id="@+id/reg_company"
+        android:hint="Company"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:inputType="text"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:id="@+id/reg_prof_body"
+        android:hint="Professional Body, e.g NBA"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <!--<Spinner-->
+        <!--android:spinnerMode="dialog"-->
+        <!--android:prompt="Gender"-->
+        <!--android:id="@+id/reg_gender"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <!--<Spinner-->
+        <!--android:spinnerMode="dialog"-->
+        <!--android:prompt="Country"-->
+        <!--android:id="@+id/reg_country"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <!--<Spinner-->
+        <!--android:spinnerMode="dialog"-->
+        <!--android:prompt="State"-->
+        <!--android:id="@+id/reg_state"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <!--<Spinner-->
+        <!--android:spinnerMode="dialog"-->
+        <!--android:prompt="City"-->
+        <!--android:id="@+id/reg_city"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <EditText
         android:inputType="textPassword"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="15dp"
@@ -46,6 +119,9 @@
         android:hint="Password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+
+
     <Button
         android:onClick="register"
         android:textColor="@color/colorText"
@@ -68,5 +144,5 @@
         android:layout_gravity="center|bottom"
         android:layout_marginBottom="20dp"
         android:visibility="gone" />
-
 </LinearLayout>
+</ScrollView>

@@ -4,13 +4,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import com.hbb20.GThumb;
 import com.richard.imoh.collab.R;
-import com.richard.imoh.collab.User;
+import com.richard.imoh.collab.Pojo.User;
 
 import java.util.List;
 
@@ -39,13 +37,14 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.MyViewHold
         User user = mUser.get(position);
         holder.name.setText(user.getFullName());
         if(user.getImage().equals("none")){
-            user.setImage("https://pbs.twimg.com/profile_images/723476945879633920/N59ePNGs_400x400.jpg");
+            user.setImage("");
         }
+        holder.imageView.loadThumbForName(user.getImage(),user.getFullName());
 
-        Glide.with(holder.imageView.getContext())
-                .load(user.getImage())
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.imageView);
+//        Glide.with(holder.imageView.getContext())
+//                .load(user.getImage())
+//                .apply(RequestOptions.circleCropTransform())
+//                .into(holder.imageView);
 
     }
 
@@ -58,7 +57,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.MyViewHold
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView name;
-        ImageView imageView;
+        GThumb imageView;
 
         public MyViewHolder(View itemView) {
             super(itemView);

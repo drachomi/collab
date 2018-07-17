@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.richard.imoh.collab.Adapters.ConnectionsAdapter;
+import com.richard.imoh.collab.Pojo.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,14 +51,15 @@ public class ConnectionList extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.addOnItemTouchListener(new FollowTouchListerner(this, recyclerView, new FollowTouchListerner.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 User touchedUser = connections.get(position);
                 String chatRef = touchedUser.getuId() + myUserId;
-                otherPersonChatRef = firebaseDatabase.getReference().child("agents").child("chats");
-                otherPersonChatRef.push().setValue(chatRef);
-                databaseReference.child("chats").push().setValue(chatRef);
+                otherPersonChatRef = firebaseDatabase.getReference().child("agents").child(touchedUser.getuId()).child("chats");
+                otherPersonChatRef.child(myUserId).setValue(chatRef);
+                databaseReference.child("chats").child(touchedUser.getuId()).setValue(chatRef);
                 Intent intent = new Intent(ConnectionList.this,Chat.class);
                 intent.putExtra("chatRef",chatRef);
                 startActivity(intent);

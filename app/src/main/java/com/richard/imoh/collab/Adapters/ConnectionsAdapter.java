@@ -4,13 +4,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import com.hbb20.GThumb;
 import com.richard.imoh.collab.R;
-import com.richard.imoh.collab.User;
+import com.richard.imoh.collab.Pojo.User;
 
 import java.util.List;
 
@@ -40,13 +38,14 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         holder.name.setText(user.getFullName());
         holder.location.setText(user.getLocation());
         if(user.getImage().equals("none")){
-            user.setImage("https://pbs.twimg.com/profile_images/723476945879633920/N59ePNGs_400x400.jpg");
+            user.setImage("");
         }
 
-        Glide.with(holder.imageView.getContext())
-                .load(user.getImage())
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.imageView);
+        holder.imageView.loadThumbForName(user.getImage(),user.getFullName());
+//        Glide.with(holder.imageView.getContext())
+//                .load(user.getImage())
+//                .apply(RequestOptions.circleCropTransform())
+//                .into(holder.imageView);
 
     }
 
@@ -59,7 +58,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView name,location;
-        ImageView imageView;
+        GThumb imageView;
 
         public MyViewHolder(View itemView) {
             super(itemView);

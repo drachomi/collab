@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.richard.imoh.collab.ChatList;
-import com.richard.imoh.collab.ChatListPojo;
+import com.hbb20.GThumb;
+import com.richard.imoh.collab.Pojo.ChatMeta;
 import com.richard.imoh.collab.R;
 
 import java.util.List;
@@ -21,9 +19,9 @@ import java.util.List;
  */
 
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatListViewHolder> {
-    List<ChatListPojo>chatList;
+    List<ChatMeta>chatList;
 
-    public ChatListAdapter(List<ChatListPojo> chatList) {
+    public ChatListAdapter(List<ChatMeta> chatList) {
         this.chatList = chatList;
     }
 
@@ -37,14 +35,22 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
 
     @Override
     public void onBindViewHolder(@NonNull ChatListViewHolder holder, int position) {
-        ChatListPojo chat = chatList.get(position);
+        ChatMeta chat = chatList.get(position);
         holder.name.setText(chat.getDisplayName());
-        holder.shortMsg.setText(chat.getDisplayMsg());
+        holder.shortMsg.setText(chat.getLastMessage());
         holder.time.setText(chat.getDisplayTime());
-        Glide.with(holder.imageView.getContext())
-                .load(chat.getDisplayImg())
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.imageView);
+
+        holder.imageView.loadThumbForName(chat.getDisplayImg(),chat.getDisplayName());
+        if(chat.getMessageCount() > 0){
+            holder.chat_indicator.setImageResource(R.drawable.blue_button);
+        }
+
+//        imageView.loadThumbForName(imageURL, firstName, secondName)
+//        Glide.with(holder.imageView.getContext())
+//                .load(chat.getDisplayImg())
+//                .apply(RequestOptions.circleCropTransform())
+//                .into(holder.imageView);
+
 
     }
 
@@ -55,8 +61,10 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
 
 
     class ChatListViewHolder extends RecyclerView.ViewHolder{
-        ImageView imageView;
-        TextView name,time,shortMsg;
+        TextView time;
+        TextView name,shortMsg;
+        GThumb imageView;
+        ImageView chat_indicator;
 
         public ChatListViewHolder(View itemView) {
             super(itemView);
@@ -64,6 +72,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
             name = itemView.findViewById(R.id.chat_list_displayname);
             time = itemView.findViewById(R.id.chat_list_time);
             shortMsg = itemView.findViewById(R.id.chat_list_display_msg);
+            chat_indicator = itemView.findViewById(R.id.chat_list_indicator);
         }
     }
 }

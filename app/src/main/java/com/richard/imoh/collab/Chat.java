@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,10 +31,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.richard.imoh.collab.Adapters.ChatAdapter;
+import com.richard.imoh.collab.Pojo.ChatMeta;
+import com.richard.imoh.collab.Pojo.UserMessage;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 public class Chat extends AppCompatActivity {
@@ -48,6 +50,7 @@ public class Chat extends AppCompatActivity {
     EditText editText;
     Button sendBtn;
     String username;
+    String time;
     static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
     static final int RC_PHOTO_PICKER = 2;
     ChildEventListener mChildEventListerner;
@@ -55,6 +58,7 @@ public class Chat extends AppCompatActivity {
     private StorageReference chatPhotoRference;
     private ImageView mPhotoPicker;
     String myUserId;
+    int messageCount;
 
 
 
@@ -66,17 +70,17 @@ public class Chat extends AppCompatActivity {
         editText  = findViewById(R.id.edittext_chatbox);
         sendBtn = findViewById(R.id.button_chatbox_send);
         mPhotoPicker = findViewById(R.id.gallery_send_btn);
-        String otherPersonId = "maduka";
-        String timeStamp;
-        String chatPath = username + otherPersonId;
         mFirebaseDataBase = FirebaseDatabase.getInstance();
         mFireBaseStorage = FirebaseStorage.getInstance();
         chatPhotoRference = mFireBaseStorage.getReference().child("chat-images");
         firebaseAuth = FirebaseAuth.getInstance();
         myUserId = firebaseAuth.getUid();
-        mChatReference = mFirebaseDataBase.getReference().child("agents").child(myUserId);
+        username = firebaseAuth.getCurrentUser().getDisplayName();
+        messageCount =0;
+        Bundle bundle = getIntent().getExtras();
+        String chatRef = bundle.getString("chatRef");
+        mChatReference = mFirebaseDataBase.getReference().child("chats").child(chatRef);
 
-        username = "ANONYMOUS";
 
 
 //        Date date = new Date(location.getTime());
@@ -93,6 +97,8 @@ public class Chat extends AppCompatActivity {
         Log.d("recyclerview", "Finish set recycler view to adapter");
 
 
+        DateFormat df = new SimpleDateFormat("h:mm a");
+         time = df.format(Calendar.getInstance().getTime());
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -126,8 +132,11 @@ public class Chat extends AppCompatActivity {
         });
 
        sendBtn.setOnClickListener(view -> {
-           UserMessage userMessage = new UserMessage(username,"https://pbs.twimg.com/profile_images/723476945879633920/N59ePNGs_400x400.jpg","12:00",editText.getText().toString(),null);
-           mChatReference.push().setValue(userMessage);
+           UserMessage userMessage = new UserMessage(username,null,time,editText.getText().toString(),null,firebaseAuth.getUid());
+           mChatReference.child("messages").push().setValue(userMessage);
+           messageCount++;
+           ChatMeta chatMeta = new ChatMeta(editText.getText().toString(),time,messageCount);
+           mChatReference.child("chatMeta").setValue(chatMeta);
            editText.setText("");
        });
        attachDbReadListener();
@@ -166,13 +175,13 @@ public class Chat extends AppCompatActivity {
 
                 }
             };
-            mChatReference.addChildEventListener(mChildEventListerner);
+            mChatReference.child("messages").addChildEventListener(mChildEventListerner);
         }
 
     }
     void detachedDbReadListener(){
         if(mChildEventListerner != null){
-            mChatReference.removeEventListener(mChildEventListerner);
+            mChatReference.child("messages").removeEventListener(mChildEventListerner);
         }
         mChildEventListerner = null;
     }
@@ -211,8 +220,12 @@ public class Chat extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Uri> task) {
                     if(task.isSuccessful()){
                         Uri downloadUri = task.getResult();
-                        UserMessage friendlyMessage = new UserMessage(username,null,"10:22",null,downloadUri.toString());
-                        mChatReference.push().setValue(friendlyMessage);
+                        UserMessage friendlyMessage = new UserMessage(username,null,time,null,downloadUri.toString(),firebaseAuth.getUid());
+                        mChatReference.child("messages").push().setValue(friendlyMessage);
+                        messageCount++;
+                        ChatMeta chatMeta = new ChatMeta("Image",time,messageCount);
+                        mChatReference.child("chatMeta").setValue(chatMeta);
+
                     }
                 }
             });
