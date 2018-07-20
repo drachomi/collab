@@ -5,28 +5,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.richard.imoh.collab.AgentActivity"
+    tools:context="com.richard.imoh.collab.Activities.AgentActivity"
     >
 
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:background="@color/colorPrimary">
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <ImageView
             android:id="@+id/profile_image"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginTop="50dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/richy"
-            app:civ_border_color="#fff"
-            app:civ_border_width="2dp"
 
             />
         <LinearLayout
@@ -47,7 +42,7 @@
                 android:textSize="25sp" />
 
             <TextView
-                android:id="@+id/profile_description"
+                android:id="@+id/profile_occupation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -55,7 +50,7 @@
                 android:textColor="#fff"
                 android:textSize="14sp" />
             <TextView
-                android:id="@+id/profile_location"
+                android:id="@+id/profile_prof_body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -68,97 +63,184 @@
     </RelativeLayout>
 
 
-
-
-    <RelativeLayout
-        android:layout_marginTop="-70dp"
+    <TabHost
+        android:layout_gravity="left"
+        android:layout_marginTop="-53dp"
+        android:id="@android:id/tabhost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_marginLeft="20dp"
-            android:layout_alignParentLeft="true"
-            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:textColor="#fff"
-                android:layout_gravity="center_horizontal"
-                android:textSize="30sp"
-                android:text="20"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TabWidget
+                android:layout_gravity="left"
+                android:id="@android:id/tabs"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:textColor="#fff"
-                android:layout_gravity="center_horizontal"
-                android:textSize="16sp"
-                android:text="SHOUTS"
+                android:layout_height="wrap_content"/>
+            <FrameLayout
+                android:id="@android:id/tabcontent"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/details_tab"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:scaleType="fitCenter"
+                            android:layout_margin="10dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/phone_black"/>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:textSize="15sp"
+                                android:layout_margin="10dp"
+                                android:textColor="@color/colorPrimary"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Full Name"/>
+                            <TextView
+                                android:id="@+id/profile_fullname"
+                                android:textSize="16sp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="-8dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Imoh Richard"/>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:scaleType="fitCenter"
+                            android:layout_margin="10dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/phone_black"/>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:textSize="15sp"
+                                android:layout_margin="10dp"
+                                android:textColor="@color/colorPrimary"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Location"/>
+                            <TextView
+                                android:id="@+id/profile_location"
+                                android:textSize="16sp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="-8dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Bariga, Lagos"/>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:scaleType="fitCenter"
+                            android:layout_margin="10dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/phone_black"/>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:textSize="15sp"
+                                android:layout_margin="10dp"
+                                android:textColor="@color/colorPrimary"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Telephone"/>
+                            <TextView
+                                android:id="@+id/profile_telephone"
+                                android:textSize="16sp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="-8dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="09034310695"/>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:scaleType="fitCenter"
+                            android:layout_margin="10dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/phone_black"/>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+
+                                android:textSize="15sp"
+                                android:layout_margin="10dp"
+                                android:textColor="@color/colorPrimary"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Email"/>
+                            <TextView
+                                android:id="@+id/profile_email"
+                                android:textSize="16sp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="-8dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="imoh@collab.com"/>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/agent_proprties"
+                    android:layout_margin="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/connection_list_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </FrameLayout>
+
+
         </LinearLayout>
-        <LinearLayout
-            android:layout_centerInParent="true"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:textColor="#fff"
-                android:layout_gravity="center_horizontal"
-                android:textSize="30sp"
-                android:text="20"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:textColor="#fff"
-                android:layout_gravity="center_horizontal"
-                android:textSize="16sp"
-                android:text="PROPERTY"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:textColor="#fff"
-                android:layout_gravity="center_horizontal"
-                android:textSize="30sp"
-                android:text="20"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:textSize="16sp"
-                android:textColor="#fff"
-                android:layout_gravity="center_horizontal"
-                android:text="CONNECT"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <View
-            android:background="#fff"
-            android:layout_alignParentTop="true"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
 
-    </RelativeLayout>
-
-
-
-
-
-    <TextView
-        android:textColor="@color/colorPrimaryText"
-        android:text="Properties"
-        android:textSize="20sp"
-        android:layout_margin="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/agent_proprties"
-        android:layout_margin="10dp"
-        android:layout_width="wrap_content"
+    </TabHost>
+    <Button
+        android:text="Chat"
+        android:layout_margin="15dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
 

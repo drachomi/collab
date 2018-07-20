@@ -1,4 +1,4 @@
-package com.richard.imoh.collab;
+package com.richard.imoh.collab.Activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -9,8 +9,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -19,7 +22,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.richard.imoh.collab.Adapters.ConnectionsAdapter;
+import com.richard.imoh.collab.Utils.FollowTouchListerner;
 import com.richard.imoh.collab.Pojo.User;
+import com.richard.imoh.collab.R;
+import com.richard.imoh.collab.Utils.FireBaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +48,12 @@ public class ConnectionList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.connection_list);
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase = FireBaseUtils.getDatabase();
         firebaseAuth = FirebaseAuth.getInstance();
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Connections");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String myUserId = firebaseAuth.getUid();
         databaseReference = firebaseDatabase.getReference().child("agents").child(myUserId);
         recyclerView = findViewById(R.id.connection_list_recycler);
@@ -55,22 +65,42 @@ public class ConnectionList extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new FollowTouchListerner(this, recyclerView, new FollowTouchListerner.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+               ImageView img =  view.findViewById(R.id.follower_list_chat);
+                TextView personName = view.findViewById(R.id.follower_list_displayname);
                 User touchedUser = connections.get(position);
-                String chatRef = touchedUser.getuId() + myUserId;
-                otherPersonChatRef = firebaseDatabase.getReference().child("agents").child(touchedUser.getuId()).child("chats");
-                otherPersonChatRef.child(myUserId).setValue(chatRef);
-                databaseReference.child("chats").child(touchedUser.getuId()).setValue(chatRef);
-                Intent intent = new Intent(ConnectionList.this,Chat.class);
-                intent.putExtra("chatRef",chatRef);
-                startActivity(intent);
+               img.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+                       String chatRef = touchedUser.getuId() + myUserId;
+                       otherPersonChatRef = firebaseDatabase.getReference().child("agents").child(touchedUser.getuId()).child("chats");
+                       otherPersonChatRef.child(myUserId).setValue(chatRef);
+                       databaseReference.child("chats").child(touchedUser.getuId()).setValue(chatRef);
+                       Intent intent = new Intent(ConnectionList.this,Chat.class);
+                       intent.putExtra("chatRef",chatRef);
+                       startActivity(intent);
+                   }
+               });
+                personName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(ConnectionList.this,AgentActivity.class);
+                        intent.putExtra("user",touchedUser.getuId());
+                        startActivity(intent);
+                    }
+                });
             }
 
             @Override
             public void onLongClick(View view, int position) {
+                User touchedUser = connections.get(position);
+                Intent intent = new Intent(ConnectionList.this,AgentActivity.class);
+                intent.putExtra("user",touchedUser.getuId());
+                startActivity(intent);
 
             }
         }));
         recyclerView.setAdapter(connectionsAdapter);
+
 
 
 

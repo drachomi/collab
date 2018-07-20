@@ -2,12 +2,14 @@ package com.richard.imoh.collab.Adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.hbb20.GThumb;
 import com.richard.imoh.collab.Pojo.ChatMeta;
 import com.richard.imoh.collab.R;
@@ -20,6 +22,7 @@ import java.util.List;
 
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatListViewHolder> {
     List<ChatMeta>chatList;
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     public ChatListAdapter(List<ChatMeta> chatList) {
         this.chatList = chatList;
@@ -41,8 +44,13 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
         holder.time.setText(chat.getDisplayTime());
 
         holder.imageView.loadThumbForName(chat.getDisplayImg(),chat.getDisplayName());
-        if(chat.getMessageCount() > 0){
-            holder.chat_indicator.setImageResource(R.drawable.blue_button);
+        if((!chat.getuId().equals(firebaseAuth.getCurrentUser().getUid())&& chat.getMessageCount() > 0 )){
+            Log.d("currentUser ","mine  "+firebaseAuth.getCurrentUser().getUid());
+            Log.d("currentUser ","other  "+chat.getuId());
+            holder.chat_indicator.setText(" "+Integer.toString(chat.getMessageCount())+" ");
+        }
+        else {
+            holder.chat_indicator.setVisibility(View.GONE);
         }
 
 //        imageView.loadThumbForName(imageURL, firstName, secondName)
@@ -64,7 +72,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
         TextView time;
         TextView name,shortMsg;
         GThumb imageView;
-        ImageView chat_indicator;
+        TextView chat_indicator;
 
         public ChatListViewHolder(View itemView) {
             super(itemView);
@@ -72,7 +80,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
             name = itemView.findViewById(R.id.chat_list_displayname);
             time = itemView.findViewById(R.id.chat_list_time);
             shortMsg = itemView.findViewById(R.id.chat_list_display_msg);
-            chat_indicator = itemView.findViewById(R.id.chat_list_indicator);
+            chat_indicator = itemView.findViewById(R.id.chat_indicator);
         }
     }
 }

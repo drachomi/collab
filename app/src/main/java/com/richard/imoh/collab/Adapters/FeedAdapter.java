@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.richard.imoh.collab.Property;
+import com.richard.imoh.collab.Activities.Property;
 import com.richard.imoh.collab.R;
 
 import java.util.List;

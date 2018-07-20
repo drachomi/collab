@@ -1,4 +1,4 @@
-package com.richard.imoh.collab;
+package com.richard.imoh.collab.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +27,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.richard.imoh.collab.Pojo.User;
+import com.richard.imoh.collab.R;
+import com.richard.imoh.collab.Utils.FireBaseUtils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity
         ChildEventListener childEventListener;
 
         firebaseDatabase = FirebaseDatabase.getInstance();
+        FireBaseUtils.getDatabase();
         firebaseAuth = FirebaseAuth.getInstance();
 
         if(firebaseAuth.getCurrentUser()==null){
@@ -144,7 +147,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
             startActivity(new Intent(MainActivity.this,ChatList.class));
         } else if (id == R.id.nav_manage) {
-
+            startActivity(new Intent(MainActivity.this,AgentActivity.class));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

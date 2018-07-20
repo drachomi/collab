@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_margin="10dp"
     android:layout_width="match_parent" android:layout_height="wrap_content">
     <com.hbb20.GThumb
-        android:layout_margin="5dp"
         android:layout_alignParentLeft="true"
         android:id="@+id/follower_list_img"
         android:layout_width="60dp"
         android:layout_height="60dp" />
     <LinearLayout
+        android:layout_margin="10dp"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/follower_list_img"
         android:orientation="vertical"
@@ -29,9 +28,11 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
     <ImageView
+        android:id="@+id/follower_list_chat"
+        android:layout_marginTop="10dp"
         android:layout_alignParentRight="true"
-        android:src="@drawable/ic_menu"
-        android:layout_width="50dp"
-        android:layout_height="50dp" />
+        android:src="@drawable/chat_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
 
 </RelativeLayout>

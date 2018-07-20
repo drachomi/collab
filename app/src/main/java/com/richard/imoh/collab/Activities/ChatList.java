@@ -1,4 +1,4 @@
-package com.richard.imoh.collab;
+package com.richard.imoh.collab.Activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -21,8 +21,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.richard.imoh.collab.Adapters.ChatListAdapter;
+import com.richard.imoh.collab.Utils.FollowTouchListerner;
 import com.richard.imoh.collab.Pojo.ChatMeta;
 import com.richard.imoh.collab.Pojo.User;
+import com.richard.imoh.collab.R;
+import com.richard.imoh.collab.Utils.FireBaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +35,6 @@ public class ChatList extends AppCompatActivity {
     ChatListAdapter chatListAdapter;
     FirebaseDatabase mFirebaseDataBase;
     DatabaseReference myChatListReference;
-
-
-
     String myUserId;
     String otherUserId;
     ChildEventListener myChatListEventListerner;
@@ -43,12 +43,9 @@ public class ChatList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        toolbar.setNavigationOnClickListener(v -> {
-            // back button pressed
-            finish();
-        });
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         RecyclerView recyclerView = findViewById(R.id.chat_list_recycler);
         chatListAdapter = new ChatListAdapter(chatList);
@@ -61,6 +58,7 @@ public class ChatList extends AppCompatActivity {
             public void onClick(View view, int position) {
                 Intent intent = new Intent(ChatList.this,Chat.class);
                 intent.putExtra("chatRef",chatList.get(position).getChatRef());
+                intent.putExtra("username",chatList.get(position).getDisplayName());
                 startActivity(intent);
             }
 
@@ -70,9 +68,10 @@ public class ChatList extends AppCompatActivity {
             }
         }));
         recyclerView.setAdapter(chatListAdapter);
+
+        mFirebaseDataBase = FireBaseUtils.getDatabase();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         myUserId = firebaseAuth.getUid();
-        mFirebaseDataBase = FirebaseDatabase.getInstance();
 
         myChatListReference = mFirebaseDataBase.getReference().child("agents").child(myUserId).child("chats");
 
@@ -126,6 +125,13 @@ public class ChatList extends AppCompatActivity {
             myChatListReference.addChildEventListener(myChatListEventListerner);
         }
     }
+
+    void detachedDbReadListener(){
+        if(myChatListEventListerner != null){
+            myChatListReference.removeEventListener(myChatListEventListerner);
+        }
+        myChatListEventListerner = null;
+    }
     void getProfileInfo(String uId, String chatRef){
         DatabaseReference querry = mFirebaseDataBase.getReference().child("agents").child(uId).child("info");
         ChildEventListener childEventListener = new ChildEventListener() {
@@ -171,7 +177,7 @@ public class ChatList extends AppCompatActivity {
                     ChatMeta chatMeta = dataSnapshot.getValue(ChatMeta.class);
                     if(chatMeta!= null){
                         Log.d("chatMeta",chatMeta.getLastMessage());
-                        chatList.add(new ChatMeta(name,chatMeta.getLastMessage(),picture,chatMeta.getDisplayTime(),chatRef,chatMeta.getMessageCount()));
+                        chatList.add(new ChatMeta(name,chatMeta.getLastMessage(),picture,chatMeta.getDisplayTime(),chatRef,chatMeta.getMessageCount(),chatMeta.getuId()));
                         chatListAdapter.notifyDataSetChanged();
                     }
                     else {
@@ -189,6 +195,18 @@ public class ChatList extends AppCompatActivity {
             chatMetaRef.addValueEventListener(otherChatListEventListerner);
         }
 
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        detachedDbReadListener();
+      chatList.clear();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        attachedMyChatListerner();
     }
 
 }

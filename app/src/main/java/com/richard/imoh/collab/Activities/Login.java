@@ -1,4 +1,4 @@
-package com.richard.imoh.collab;
+package com.richard.imoh.collab.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -16,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.richard.imoh.collab.R;
 
 /**
  * Created by LENOVO on 7/7/2018.
@@ -67,5 +67,9 @@ public class Login extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    public void registerInstead(View view){
+        startActivity(new Intent(Login.this,Registration.class));
     }
 }

@@ -1,4 +1,4 @@
-package com.richard.imoh.collab;
+package com.richard.imoh.collab.Activities;
 
 import android.graphics.Bitmap;
 

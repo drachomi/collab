@@ -1,4 +1,4 @@
-package com.richard.imoh.collab;
+package com.richard.imoh.collab.Activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.richard.imoh.collab.Pojo.User;
+import com.richard.imoh.collab.R;
+import com.richard.imoh.collab.Utils.FireBaseUtils;
 
 public class Registration extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
@@ -44,7 +46,7 @@ public class Registration extends AppCompatActivity {
         username = findViewById(R.id.reg_username);
         password = findViewById(R.id.reg_password);
         progressBar = findViewById(R.id.reg_progress_bar);
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase = FireBaseUtils.getDatabase();
         databaseReference = firebaseDatabase.getReference().child("agents");
 
 

@@ -1,4 +1,4 @@
-package com.richard.imoh.collab;
+package com.richard.imoh.collab.Activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,6 +35,8 @@ import com.google.firebase.storage.UploadTask;
 import com.richard.imoh.collab.Adapters.ChatAdapter;
 import com.richard.imoh.collab.Pojo.ChatMeta;
 import com.richard.imoh.collab.Pojo.UserMessage;
+import com.richard.imoh.collab.R;
+import com.richard.imoh.collab.Utils.FireBaseUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -62,15 +66,18 @@ public class Chat extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        Log.d("recyclerview", "Got to oncreate");
+        Toolbar myToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         editText  = findViewById(R.id.edittext_chatbox);
         sendBtn = findViewById(R.id.button_chatbox_send);
         mPhotoPicker = findViewById(R.id.gallery_send_btn);
-        mFirebaseDataBase = FirebaseDatabase.getInstance();
+        mFirebaseDataBase = FireBaseUtils.getDatabase();
         mFireBaseStorage = FirebaseStorage.getInstance();
         chatPhotoRference = mFireBaseStorage.getReference().child("chat-images");
         firebaseAuth = FirebaseAuth.getInstance();
@@ -79,7 +86,10 @@ public class Chat extends AppCompatActivity {
         messageCount =0;
         Bundle bundle = getIntent().getExtras();
         String chatRef = bundle.getString("chatRef");
+        String personName = bundle.getString("username");
+        getSupportActionBar().setTitle(personName);
         mChatReference = mFirebaseDataBase.getReference().child("chats").child(chatRef);
+
 
 
 
@@ -135,7 +145,7 @@ public class Chat extends AppCompatActivity {
            UserMessage userMessage = new UserMessage(username,null,time,editText.getText().toString(),null,firebaseAuth.getUid());
            mChatReference.child("messages").push().setValue(userMessage);
            messageCount++;
-           ChatMeta chatMeta = new ChatMeta(editText.getText().toString(),time,messageCount);
+           ChatMeta chatMeta = new ChatMeta(editText.getText().toString(),time,messageCount,firebaseAuth.getUid());
            mChatReference.child("chatMeta").setValue(chatMeta);
            editText.setText("");
        });
@@ -223,7 +233,7 @@ public class Chat extends AppCompatActivity {
                         UserMessage friendlyMessage = new UserMessage(username,null,time,null,downloadUri.toString(),firebaseAuth.getUid());
                         mChatReference.child("messages").push().setValue(friendlyMessage);
                         messageCount++;
-                        ChatMeta chatMeta = new ChatMeta("Image",time,messageCount);
+                        ChatMeta chatMeta = new ChatMeta("Image",time,messageCount,firebaseAuth.getUid());
                         mChatReference.child("chatMeta").setValue(chatMeta);
 
                     }

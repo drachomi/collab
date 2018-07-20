@@ -1,4 +1,4 @@
-package com.richard.imoh.collab;
+package com.richard.imoh.collab.Activities;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,7 +17,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.richard.imoh.collab.Adapters.FollowAdapter;
+import com.richard.imoh.collab.Utils.FollowTouchListerner;
 import com.richard.imoh.collab.Pojo.User;
+import com.richard.imoh.collab.R;
+import com.richard.imoh.collab.Utils.FireBaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +47,7 @@ public class Follow extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follow);
         Bundle extras = getIntent().getExtras();
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase = FireBaseUtils.getDatabase();
         databaseReference = firebaseDatabase.getReference().child("agents");
 
 

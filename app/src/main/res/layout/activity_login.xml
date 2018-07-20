@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.richard.imoh.collab.Login">
+    tools:context="com.richard.imoh.collab.Activities.Login">
     <ImageView
 
         android:layout_marginTop="50dp"
@@ -40,6 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
+        android:onClick="registerInstead"
         android:layout_gravity="center_horizontal"
         android:text="Dont have an account?, please register "
         android:layout_width="wrap_content"

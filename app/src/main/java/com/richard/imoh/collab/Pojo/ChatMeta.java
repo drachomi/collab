@@ -11,24 +11,28 @@ public class ChatMeta {
     String displayTime;
     String chatRef;
     int messageCount;
+    String uId;
 
 
-    public ChatMeta(String lastMessage, String displayTime, int messageCount) {
+    public ChatMeta(String lastMessage, String displayTime, int messageCount, String uId) {
         this.lastMessage = lastMessage;
         this.displayTime = displayTime;
         this.messageCount = messageCount;
+        this.uId = uId;
+
     }
 
     public ChatMeta() {
     }
 
-    public ChatMeta(String displayName, String lastMessage, String displayImg, String displayTime, String chatRef, int messageCount) {
+    public ChatMeta(String displayName, String lastMessage, String displayImg, String displayTime, String chatRef, int messageCount,String uId) {
         this.displayName = displayName;
         this.lastMessage = lastMessage;
         this.displayImg = displayImg;
         this.displayTime = displayTime;
         this.chatRef = chatRef;
         this.messageCount = messageCount;
+        this.uId = uId;
     }
 
     public String getChatRef() {
@@ -77,5 +81,13 @@ public class ChatMeta {
 
     public void setMessageCount(int messageCount) {
         this.messageCount = messageCount;
+    }
+
+    public String getuId() {
+        return uId;
+    }
+
+    public void setuId(String uId) {
+        this.uId = uId;
     }
 }

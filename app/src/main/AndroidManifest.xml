@@ -10,21 +10,20 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".FeedPage" />
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".Activities.FeedPage" />
         <activity
-            android:name=".PropertyDetails"
+            android:name=".Activities.PropertyDetails"
             android:label="@string/title_activity_property_details" />
-        <activity android:name=".AgentActivity" />
-        <activity android:name=".Registration"></activity>
-        <activity android:name=".Follow" />
-        <activity android:name=".Login"></activity>
-        <activity android:name=".Chat" />
-        <activity android:name=".ChatList"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        <activity android:name=".Activities.AgentActivity" />
+        <activity android:name=".Activities.Registration"></activity>
+        <activity android:name=".Activities.Follow" />
+        <activity android:name=".Activities.Login"></activity>
+        <activity android:name=".Activities.Chat" />
+        <activity android:name=".Activities.ChatList"
             android:label="Recent Chats"></activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ConnectionList"></activity>
+        <activity android:name=".Activities.ConnectionList"></activity>
     </application>
 
 </manifest>
