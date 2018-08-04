@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.richard.imoh.collab.Activities.EditProfile">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:layout_marginTop="40dp"
+            android:id="@+id/edit_image"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/edit_ic"
+
+            />
+        <TextView
+            android:onClick="cancel"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:onClick="updateProfile"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="Done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/edit_image"
+            android:layout_marginBottom="5dp"
+            android:textColor="#fff"
+            android:textSize="16sp"
+            android:layout_marginRight="10dp"
+           android:layout_centerHorizontal="true"
+            android:text="Change Picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/edit_image"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="115dp"
+            android:src="@drawable/edit_ic"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:textColor="#000"
+        android:textSize="15sp"
+        android:layout_marginBottom="-10dp"
+        android:layout_marginLeft="15dp"
+        android:text="First and Last Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:padding="10dp"
+        android:background="@drawable/rounded_edit_txt"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:id="@+id/edit_name"
+        android:hint="Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_marginTop="15sp"
+        android:textColor="#000"
+        android:textSize="15sp"
+        android:layout_marginBottom="-10dp"
+        android:layout_marginLeft="15dp"
+        android:text="Company"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:padding="10dp"
+        android:background="@drawable/rounded_edit_txt"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:id="@+id/edit_company"
+        android:hint="Company"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_marginTop="15sp"
+        android:textColor="#000"
+        android:textSize="15sp"
+        android:layout_marginBottom="-10dp"
+        android:layout_marginLeft="15dp"
+        android:text="Phone Number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:inputType="phone"
+        android:padding="10dp"
+        android:background="@drawable/rounded_edit_txt"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:id="@+id/edit_phone"
+        android:hint="Phone Number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="15sp"
+            android:textColor="#000"
+            android:textSize="15sp"
+            android:layout_marginBottom="-10dp"
+            android:layout_marginLeft="15dp"
+            android:text="Occupation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:inputType="phone"
+            android:padding="10dp"
+            android:background="@drawable/rounded_edit_txt"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/edit_occupation"
+            android:hint="Occupation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="15sp"
+            android:textColor="#000"
+            android:textSize="15sp"
+            android:layout_marginBottom="-10dp"
+            android:layout_marginLeft="15dp"
+            android:text="Professional Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:inputType="phone"
+            android:padding="10dp"
+            android:background="@drawable/rounded_edit_txt"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/edit_profBody"
+            android:hint="Professional Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    <Spinner
+        android:entries="@array/state_array"
+        android:background="@drawable/rounded_edit_txt"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:id="@+id/edit_state"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+    <Spinner
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/rounded_edit_txt"
+        android:entries="@array/city_array"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:id="@+id/edit_city"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+
+    </LinearLayout>
+</ScrollView>

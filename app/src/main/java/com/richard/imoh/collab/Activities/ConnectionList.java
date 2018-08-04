@@ -21,6 +21,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.hbb20.GThumb;
 import com.richard.imoh.collab.Adapters.ConnectionsAdapter;
 import com.richard.imoh.collab.Utils.FollowTouchListerner;
 import com.richard.imoh.collab.Pojo.User;
@@ -39,7 +41,7 @@ public class ConnectionList extends AppCompatActivity {
     RecyclerView recyclerView;
     ConnectionsAdapter connectionsAdapter;
     DatabaseReference connectionReference;
-    ChildEventListener connectionEventListerner;
+    ValueEventListener connectionEventListerner;
     DatabaseReference otherPersonChatRef;
 
 
@@ -67,35 +69,31 @@ public class ConnectionList extends AppCompatActivity {
             public void onClick(View view, int position) {
                ImageView img =  view.findViewById(R.id.follower_list_chat);
                 TextView personName = view.findViewById(R.id.follower_list_displayname);
+
+
                 User touchedUser = connections.get(position);
-               img.setOnClickListener(new View.OnClickListener() {
-                   @Override
-                   public void onClick(View view) {
-                       String chatRef = touchedUser.getuId() + myUserId;
-                       otherPersonChatRef = firebaseDatabase.getReference().child("agents").child(touchedUser.getuId()).child("chats");
-                       otherPersonChatRef.child(myUserId).setValue(chatRef);
-                       databaseReference.child("chats").child(touchedUser.getuId()).setValue(chatRef);
-                       Intent intent = new Intent(ConnectionList.this,Chat.class);
-                       intent.putExtra("chatRef",chatRef);
-                       startActivity(intent);
-                   }
-               });
-                personName.setOnClickListener(new View.OnClickListener() {
+                String chatRef = touchedUser.getuId() + myUserId;
+                otherPersonChatRef = firebaseDatabase.getReference().child("agents").child(touchedUser.getuId()).child("chats");
+                otherPersonChatRef.child(myUserId).setValue(chatRef);
+                databaseReference.child("chats").child(touchedUser.getuId()).setValue(chatRef);
+                Intent intent = new Intent(ConnectionList.this,Chat.class);
+                intent.putExtra("chatRef",chatRef);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                GThumb image = view.findViewById(R.id.follower_list_img);
+                image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        User touchedUser = connections.get(position);
                         Intent intent = new Intent(ConnectionList.this,AgentActivity.class);
                         intent.putExtra("user",touchedUser.getuId());
                         startActivity(intent);
                     }
                 });
-            }
 
-            @Override
-            public void onLongClick(View view, int position) {
-                User touchedUser = connections.get(position);
-                Intent intent = new Intent(ConnectionList.this,AgentActivity.class);
-                intent.putExtra("user",touchedUser.getuId());
-                startActivity(intent);
 
             }
         }));
@@ -139,27 +137,13 @@ public class ConnectionList extends AppCompatActivity {
     void connectionListen(String user){
         Log.d("ben","The user is "+user);
         connectionReference = firebaseDatabase.getReference().child("agents").child(user).child("info");
-        connectionEventListerner = new ChildEventListener() {
+        connectionEventListerner = new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User mUser = dataSnapshot.getValue(User.class);
                 Log.d("ben",mUser.getuId());
                 connections.add(mUser);
                 connectionsAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
             }
 
@@ -168,6 +152,6 @@ public class ConnectionList extends AppCompatActivity {
 
             }
         };
-        connectionReference.addChildEventListener(connectionEventListerner);
+        connectionReference.addValueEventListener(connectionEventListerner);
     }
 }

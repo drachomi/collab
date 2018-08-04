@@ -50,7 +50,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
             holder.chat_indicator.setText(" "+Integer.toString(chat.getMessageCount())+" ");
         }
         else {
-            holder.chat_indicator.setVisibility(View.GONE);
+            holder.chat_indicator.setVisibility(View.INVISIBLE);
         }
 
 //        imageView.loadThumbForName(imageURL, firstName, secondName)

@@ -38,7 +38,7 @@ public class ChatList extends AppCompatActivity {
     String myUserId;
     String otherUserId;
     ChildEventListener myChatListEventListerner;
-    ValueEventListener otherChatListEventListerner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +56,13 @@ public class ChatList extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new FollowTouchListerner(this, recyclerView, new FollowTouchListerner.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Intent intent = new Intent(ChatList.this,Chat.class);
-                intent.putExtra("chatRef",chatList.get(position).getChatRef());
-                intent.putExtra("username",chatList.get(position).getDisplayName());
-                startActivity(intent);
+                if(!chatList.isEmpty()){
+                    Intent intent = new Intent(ChatList.this,Chat.class);
+                    intent.putExtra("chatRef",chatList.get(position).getChatRef());
+                    intent.putExtra("username",chatList.get(position).getDisplayName());
+                    startActivity(intent);
+                    finish();
+                }
             }
 
             @Override
@@ -134,27 +137,15 @@ public class ChatList extends AppCompatActivity {
     }
     void getProfileInfo(String uId, String chatRef){
         DatabaseReference querry = mFirebaseDataBase.getReference().child("agents").child(uId).child("info");
-        ChildEventListener childEventListener = new ChildEventListener() {
+        ValueEventListener childEventListener = new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                Log.d("luke", user.getFullName());
-                listenToChat(user.getUserName(),user.getImage(),chatRef);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                if(user!=null){
+                    Log.d("luke", user.getFullName());
+                    Log.d("afoke",chatRef);
+                    listenToChat(user.getUserName(),user.getImage(),chatRef);
+                }
             }
 
             @Override
@@ -162,13 +153,13 @@ public class ChatList extends AppCompatActivity {
 
             }
         };
-        querry.addChildEventListener(childEventListener);
+        querry.addValueEventListener(childEventListener);
     }
 
     void listenToChat(String name,String picture, String chatRef){
+        ValueEventListener otherChatListEventListerner;
         DatabaseReference chatMetaRef;
         chatMetaRef = mFirebaseDataBase.getReference().child("chats").child(chatRef).child("chatMeta");
-        if (otherChatListEventListerner == null){
             otherChatListEventListerner = new ValueEventListener() {
 
                 @Override
@@ -176,9 +167,15 @@ public class ChatList extends AppCompatActivity {
                     Log.d("reeeeeeee",chatRef);
                     ChatMeta chatMeta = dataSnapshot.getValue(ChatMeta.class);
                     if(chatMeta!= null){
-                        Log.d("chatMeta",chatMeta.getLastMessage());
-                        chatList.add(new ChatMeta(name,chatMeta.getLastMessage(),picture,chatMeta.getDisplayTime(),chatRef,chatMeta.getMessageCount(),chatMeta.getuId()));
-                        chatListAdapter.notifyDataSetChanged();
+                        for(int a = 0; a<chatList.size();a++){
+                            if(chatList.get(a).getChatRef().equals(chatMeta.getChatRef())){
+                                chatList.remove(a);
+                                Log.d("chatMeta",chatMeta.getLastMessage());
+                            }
+                            chatList.add(new ChatMeta(name,chatMeta.getLastMessage(),picture,chatMeta.getDisplayTime(),chatRef,chatMeta.getMessageCount(),chatMeta.getuId()));
+                            chatListAdapter.notifyDataSetChanged();
+                        }
+
                     }
                     else {
                         Log.d("chatmeta","chat meta returned null");
@@ -194,13 +191,12 @@ public class ChatList extends AppCompatActivity {
             };
             chatMetaRef.addValueEventListener(otherChatListEventListerner);
         }
-
-    }
     @Override
     protected void onPause() {
         super.onPause();
-        detachedDbReadListener();
-      chatList.clear();
+//        detachedDbReadListener();
+//        chatList.clear();
+
     }
 
     @Override

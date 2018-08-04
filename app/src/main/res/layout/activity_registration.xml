@@ -1,148 +1,235 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-<LinearLayout
-    android:orientation="vertical"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.richard.imoh.collab.Activities.Registration">
-    <ImageView
-        android:id="@+id/reg_dp"
-        android:layout_marginTop="30dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="150dp"
-        android:layout_height="100dp"
-        android:src="@drawable/reg_camera"/>
-    <EditText
+
+
+    <LinearLayout
+        android:visibility="visible"
+        android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:id="@+id/reg_email"
-        android:hint="Email"
+        android:orientation="vertical"
+        android:id="@+id/first_linear"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <EditText
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:id="@+id/reg_first_name"
-        android:hint="First Name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <EditText
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:id="@+id/reg_last_name"
-        android:hint="Last Name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/upload_dp"
+            android:layout_marginTop="20dp"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="120dp"
+            android:layout_height="100dp"
+            android:src="@drawable/logo"/>
+        <EditText
+            android:inputType="textEmailAddress"
+            android:padding="10dp"
+            android:background="@drawable/rounded_edit_txt"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/reg_email"
+            android:hint="Email"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+        <EditText
+            android:inputType="text"
+            android:padding="10dp"
+            android:background="@drawable/rounded_edit_txt"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/reg_first_name"
+            android:hint="First and Last Name"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+        <EditText
+            android:padding="10dp"
+            android:background="@drawable/rounded_edit_txt"
+            android:inputType="textPassword"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/reg_password"
+            android:hint="Password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+        <Button
+            android:onClick="firstReg"
+            android:textColor="@color/colorText"
+            android:layout_margin="15dp"
+            android:layout_gravity="center_horizontal"
+            android:text="Next "
+            android:background="@color/colorAccent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal"
+            android:text="Have account? Please login "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-    <EditText
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:id="@+id/reg_username"
-        android:hint="Username"
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_marginTop="60dp"
+        android:orientation="vertical"
+        android:id="@+id/second_linear"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <EditText
-        android:inputType="phone"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:id="@+id/reg_phone_number"
-        android:hint="Phone Number"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal"
+            android:text="Personal Information"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:inputType="text"
+            android:padding="10dp"
+            android:background="@drawable/rounded_edit_txt"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/reg_username"
+            android:hint="Username"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+        <EditText
+            android:padding="10dp"
+            android:background="@drawable/rounded_edit_txt"
+            android:inputType="phone"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/reg_phone_number"
+            android:hint="Phone Number"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+        <android.support.v7.widget.AppCompatSpinner
+            android:background="@drawable/rounded_edit_txt"
+            android:entries="@array/gender_array"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/reg_gender"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+        <Spinner
+            android:background="@drawable/rounded_edit_txt"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/reg_state"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+        <Spinner
+            android:background="@drawable/rounded_edit_txt"
+            android:entries="@array/city_array"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/reg_city"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+        <Button
+            android:onClick="secondReg"
+            android:textColor="@color/colorText"
+            android:layout_margin="15dp"
+            android:layout_gravity="center_horizontal"
+            android:text="Next "
+            android:background="@color/colorAccent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="40dp"
+        android:id="@+id/last_linear"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <EditText
-        android:inputType="text"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:id="@+id/reg_occupation"
-        android:hint="Occupation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <EditText
-        android:inputType="text"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:id="@+id/reg_company"
-        android:hint="Company"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <EditText
-        android:inputType="text"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:id="@+id/reg_prof_body"
-        android:hint="Professional Body, e.g NBA"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <!--<Spinner-->
-        <!--android:spinnerMode="dialog"-->
-        <!--android:prompt="Gender"-->
-        <!--android:id="@+id/reg_gender"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
-    <!--<Spinner-->
-        <!--android:spinnerMode="dialog"-->
-        <!--android:prompt="Country"-->
-        <!--android:id="@+id/reg_country"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
-    <!--<Spinner-->
-        <!--android:spinnerMode="dialog"-->
-        <!--android:prompt="State"-->
-        <!--android:id="@+id/reg_state"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
-    <!--<Spinner-->
-        <!--android:spinnerMode="dialog"-->
-        <!--android:prompt="City"-->
-        <!--android:id="@+id/reg_city"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
-    <EditText
-        android:inputType="textPassword"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:id="@+id/reg_password"
-        android:hint="Password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+        <TextView
+            android:onClick="pickImage"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="20dp"
+            android:textSize="25sp"
+            android:text="Upload a profile picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:onClick="pickImage"
+            android:id="@+id/reg_dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:src="@drawable/reg_camera"/>
+        <TextView
+            android:onClick="pickImage"
+            android:layout_gravity="center_horizontal"
+            android:textSize="25sp"
+            android:layout_margin="5dp"
+            android:text="Professional Information"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:padding="10dp"
+            android:background="@drawable/rounded_edit_txt"
+            android:inputType="text"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/reg_occupation"
+            android:hint="Occupation"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+        <EditText
+            android:padding="10dp"
+            android:background="@drawable/rounded_edit_txt"
+            android:inputType="text"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/reg_company"
+            android:hint="Company"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+        <EditText
+            android:padding="10dp"
+            android:background="@drawable/rounded_edit_txt"
+            android:inputType="text"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/reg_prof_body"
+            android:hint="Professional Body, e.g NBA"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
 
 
+        <Button
+            android:onClick="register"
+            android:textColor="@color/colorText"
+            android:layout_margin="15dp"
+            android:layout_gravity="center_horizontal"
+            android:text="Finish "
+            android:background="@color/colorAccent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
-    <Button
-        android:onClick="register"
-        android:textColor="@color/colorText"
-        android:layout_margin="15dp"
+    <ProgressBar
+        android:visibility="gone"
         android:layout_gravity="center_horizontal"
-        android:text="Register "
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:layout_gravity="center_horizontal"
-        android:text="Have account?, Please login "
+        android:id="@+id/reg_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <ProgressBar
-        android:id="@+id/reg_progress_bar"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center|bottom"
-        android:layout_marginBottom="20dp"
-        android:visibility="gone" />
+
+
 </LinearLayout>
-</ScrollView>

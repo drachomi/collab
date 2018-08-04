@@ -53,9 +53,11 @@
 
 
     <LinearLayout
+        android:layout_marginTop="-25dp"
         android:layout_below="@+id/chat_list_displayname"
         android:layout_alignRight="@+id/chat_list_display_msg"
         android:layout_alignEnd="@+id/chat_list_display_msg"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <TextView
@@ -66,10 +68,10 @@
             android:textSize="10sp"
             android:text="22:30" />
         <TextView
+            android:textAlignment="center"
             android:id="@+id/chat_indicator"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_gravity="right"
             android:background="@drawable/rounded_rectangle_orange"
             />
 

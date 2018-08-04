@@ -12,15 +12,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="300dp"
         android:background="@color/colorPrimary">
         <ImageView
+            android:layout_marginTop="10dp"
+            android:src="@drawable/richy"
             android:id="@+id/profile_image"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_marginTop="50dp"
             android:layout_centerHorizontal="true"
 
             />
@@ -48,7 +62,7 @@
                 android:layout_gravity="center_horizontal"
                 android:text="Certified real estate agent"
                 android:textColor="#fff"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
             <TextView
                 android:id="@+id/profile_prof_body"
                 android:layout_width="wrap_content"
@@ -56,7 +70,7 @@
                 android:layout_gravity="center_horizontal"
                 android:text="Lawyer and Solicitor based in lagos Nigeria"
                 android:textColor="#fff"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -64,7 +78,6 @@
 
 
     <TabHost
-        android:layout_gravity="left"
         android:layout_marginTop="-53dp"
         android:id="@android:id/tabhost"
         android:layout_width="match_parent"
@@ -74,11 +87,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TabWidget
-                android:layout_gravity="left"
+                android:gravity="start|center_vertical"
                 android:id="@android:id/tabs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <FrameLayout
+                android:layout_gravity="left"
                 android:id="@android:id/tabcontent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -237,11 +251,7 @@
         </LinearLayout>
 
     </TabHost>
-    <Button
-        android:text="Chat"
-        android:layout_margin="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+   
 
 
 </LinearLayout>

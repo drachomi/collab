@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity
         firebaseDatabase = FirebaseDatabase.getInstance();
         FireBaseUtils.getDatabase();
         firebaseAuth = FirebaseAuth.getInstance();
-
         if(firebaseAuth.getCurrentUser()==null){
             startActivity(new Intent(MainActivity.this,Login.class));
         }
@@ -66,11 +65,6 @@ public class MainActivity extends AppCompatActivity
             childEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    User user = dataSnapshot.getValue(User.class);
-                    Gson gson = new Gson();
-                    String json = gson.toJson(user);
-                    editor.putString("user",json);
-                    editor.commit();
                 }
 
                 @Override
