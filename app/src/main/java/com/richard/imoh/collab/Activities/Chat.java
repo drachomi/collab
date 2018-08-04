@@ -55,6 +55,7 @@ public class Chat extends AppCompatActivity {
     Button sendBtn;
     String username;
     String time;
+
     static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
     static final int RC_PHOTO_PICKER = 2;
     ChildEventListener mChildEventListerner;
