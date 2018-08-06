@@ -23,12 +23,13 @@
         <activity
             android:name=".Activities.Login"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Chat"
-            android:parentActivityName=".Activities.ChatList"/>
         <activity
-            android:parentActivityName=".Activities.MainActivity"
+            android:name=".Activities.Chat"
+            android:parentActivityName=".Activities.ChatList" />
+        <activity
             android:name=".Activities.ChatList"
-            android:label="Recent Chats" />
+            android:label="Recent Chats"
+            android:parentActivityName=".Activities.MainActivity" />
         <activity
             android:name=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -38,10 +39,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.ConnectionList"
-            android:parentActivityName=".Activities.MainActivity"/>
+        <activity
+            android:name=".Activities.ConnectionList"
+            android:parentActivityName=".Activities.MainActivity" />
         <activity android:name=".Activities.SpinnerCountryActivity" />
-        <activity android:name=".Activities.EditProfile"></activity>
+        <activity android:name=".Activities.EditProfile" />
+        <activity android:name=".Request.RequestActivity" />
+        <activity android:name=".Request.AddRequest"></activity>
     </application>
 
 </manifest>

@@ -15,6 +15,59 @@
         <item>Male</item>
         <item>Female</item>
     </string-array>
+    <string-array name="price_array">
+        <item>Price</item>
+        <item>10k-50k</item>
+        <item>51k-100k</item>
+        <item>101k-200k</item>
+        <item>201k-350k</item>
+        <item>350k-450k</item>
+        <item>450k-550k</item>
+        <item>500k-1M</item>
+        <item>1M-2M</item>
+        <item>3M-10M</item>
+        <item>10M-Above</item>
+    </string-array>
+    <string-array name="priority_array">
+        <item>Priority</item>
+        <item> Very Urgent</item>
+        <item>Almost Urgent</item>
+        <item>Not so Urgent</item>
+    </string-array>
+    <string-array name="property_purpose_array">
+        <item> Purpose</item>
+        <item>Residential</item>
+        <item>Commercial</item>
+    </string-array>
+    <string-array name="residential_property_array">
+        <item>Single Room</item>
+        <item>Self Contain</item>
+        <item>Mini Flats</item>
+        <item>1 Bed Room Flats</item>
+        <item>2 Bed Room Flats</item>
+        <item>3 Bed Room Flats</item>
+        <item>4 Bed Room Flats</item>
+        <item> Duplex</item>
+        <item> Estate Block</item>
+        <item> Land</item>
+    </string-array>
+    <string-array name="commercial_property_array">
+        <item>Office Space</item>
+        <item>Co Working Space</item>
+        <item>Shop</item>
+        <item>WareHouse</item>
+        <item>Cemetery Space</item>
+    </string-array>
+
+    <string-array name="let_type_array">
+        <item>Let Type</item>
+        <item>Rent</item>
+        <item>Short Lease</item>
+        <item>Long Lease</item>
+        <item>Sale</item>
+    </string-array>
+
+
     <string-array name="state_array">
         <item>Current State</item>
         <item>Abia</item>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.richard.imoh.collab.Request.AddRequest">
+    <TextView
+        android:textSize="30sp"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Request"/>
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="0.5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Spinner
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_edit_txt"
+                android:id="@+id/add_req_purpose"
+                android:entries="@array/property_purpose_array"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <Spinner
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_edit_txt"
+                android:id="@+id/add_req_let_type"
+                android:entries="@array/let_type_array"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <EditText
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_edit_txt"
+                android:id="@+id/add_req_plots"
+                android:hint="No of Plots(If land)"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <Spinner
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_edit_txt"
+                android:id="@+id/add_req_state"
+                android:entries="@array/state_array"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="0.5"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Spinner
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_edit_txt"
+                android:id="@+id/add_req_prop_type"
+                android:entries="@array/residential_property_array"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <Spinner
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_edit_txt"
+                android:id="@+id/add_req_price"
+                android:entries="@array/price_array"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <EditText
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_edit_txt"
+                android:id="@+id/add_req_rooms"
+                android:hint="No of Rooms(If Applicable)"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <Spinner
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_edit_txt"
+                android:id="@+id/add_req_city"
+                android:entries="@array/city_array"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <EditText
+        android:id="@+id/add_req_description"
+        android:background="@drawable/rounded_edit_txt"
+        android:layout_margin="15dp"
+        android:hint="Additional Information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Spinner
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/rounded_edit_txt"
+        android:id="@+id/add_req_priority"
+        android:entries="@array/priority_array"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+    <Button
+        android:layout_margin="10dp"
+        android:textColor="#fff"
+        android:text="Submit"
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

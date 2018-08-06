@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.richard.imoh.collab.Pojo.User;
 import com.richard.imoh.collab.R;
+import com.richard.imoh.collab.Request.RequestActivity;
 import com.richard.imoh.collab.Utils.FireBaseUtils;
 
 public class MainActivity extends AppCompatActivity
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
             startActivity(new Intent(MainActivity.this,AgentActivity.class));
         } else if (id == R.id.nav_share) {
+            startActivity(new Intent(MainActivity.this,RequestActivity.class));
 
         } else if (id == R.id.nav_send) {
 
