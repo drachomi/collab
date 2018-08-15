@@ -60,7 +60,11 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
         return requestList.size();
     }
 
+    public void updateList(List<Request>request){
+        requestList = request;
+        notifyDataSetChanged();
 
+    }
     class RequestViewModel extends RecyclerView.ViewHolder{
         TextView title,location,agentName,price,regTime,verified;
         ImageView agentDp;

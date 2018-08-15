@@ -13,7 +13,7 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.richard.imoh.collab.Activities.Property;
+import com.richard.imoh.collab.Pojo.Property;
 import com.richard.imoh.collab.R;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageListener;

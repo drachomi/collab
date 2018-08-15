@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.richard.imoh.collab.Request.AddRequest">
+    tools:context="com.richard.imoh.collab.Property.AddProperty">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
@@ -13,6 +14,7 @@
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
     <ScrollView
+        android:id="@+id/add_prop_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -24,7 +26,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Feel out the form below with your requirements to notify other agents."/>
+                android:text="Feel out the form below with your requirements to add your property on PropAlly."/>
 
 
             <TextView
@@ -40,7 +42,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/rounded_edit_txt"
-                android:id="@+id/add_req_purpose"
+                android:id="@+id/add_prop_purpose"
                 android:entries="@array/property_purpose_array"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"/>
@@ -65,7 +67,7 @@
                     android:layout_marginBottom="7dp"
                     android:layout_marginLeft="123dp"
                     android:layout_marginRight="10dp"
-                    android:text="Budget(Naira)"
+                    android:text="Asking Price(Naira)"
                     android:textSize="17sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -74,18 +76,17 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="33dp"
                     android:background="@drawable/rounded_edit_txt"
-                    android:id="@+id/add_req_let_type"
+                    android:id="@+id/add_prop_let_type"
                     android:entries="@array/let_type_array"
                     android:layout_width="150dp"
                     android:layout_height="50dp"/>
-                <Spinner
-
+                <EditText
+                    android:inputType="number"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="33dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/rounded_edit_txt"
-                    android:id="@+id/add_req_price"
-                    android:entries="@array/price_array"
+                    android:id="@+id/add_prop_price"
                     android:layout_width="150dp"
                     android:layout_height="50dp"/>
 
@@ -102,7 +103,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/rounded_edit_txt"
-                android:id="@+id/add_req_prop_type"
+                android:id="@+id/add_prop_prop_type"
                 android:entries="@array/residential_property_array"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"/>
@@ -138,7 +139,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="33dp"
                     android:background="@drawable/rounded_edit_txt"
-                    android:id="@+id/add_req_plots"
+                    android:id="@+id/add_prop_plots"
                     android:layout_width="150dp"
                     android:layout_height="50dp"/>
                 <EditText
@@ -147,7 +148,7 @@
                     android:layout_marginTop="33dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/rounded_edit_txt"
-                    android:id="@+id/add_req_rooms"
+                    android:id="@+id/add_prop_rooms"
                     android:layout_width="150dp"
                     android:layout_height="50dp"/>
 
@@ -165,7 +166,7 @@
                 android:layout_marginTop="5dp"
                 android:gravity="top|left"
                 android:maxLines="3"
-                android:id="@+id/add_req_description"
+                android:id="@+id/add_prop_description"
                 android:background="@drawable/rounded_edit_txt"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -175,7 +176,7 @@
             <TextView
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
-                android:text="Priority"
+                android:text="Suitable For"
                 android:textSize="17sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -184,18 +185,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <RadioButton android:id="@+id/not_urgent"
+                <RadioButton android:id="@+id/bachelor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Urgent"
+                    android:text="Bachelor"
                     android:layout_margin="5dp"
-                    android:onClick="onRadioButtonClicked"/>
-                <RadioButton android:id="@+id/urgent"
+                    android:checked="true"
+                    android:onClick="suitableButton"/>
+                <RadioButton android:id="@+id/family"
                     android:layout_margin="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Normal"
-                    android:onClick="onRadioButtonClicked"/>
+                    android:text="Family"
+                    android:onClick="suitableButton"/>
+                <RadioButton android:id="@+id/bachelor_family"
+                    android:layout_margin="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bachelor/Family"
+                    android:onClick="suitableButton"/>
             </RadioGroup>
 
 
@@ -228,7 +236,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="33dp"
                     android:background="@drawable/rounded_edit_txt"
-                    android:id="@+id/add_req_state"
+                    android:id="@+id/add_prop_state"
                     android:entries="@array/state_array"
                     android:layout_width="150dp"
                     android:layout_height="50dp"/>
@@ -238,31 +246,67 @@
                     android:layout_marginTop="33dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/rounded_edit_txt"
-                    android:id="@+id/add_req_city"
+                    android:id="@+id/add_prop_city"
                     android:entries="@array/city_array"
                     android:layout_width="150dp"
                     android:layout_height="50dp"/>
 
             </RelativeLayout>
 
-            <ProgressBar
-                android:visibility="gone"
-                android:id="@+id/add_req_progress"
-                android:layout_width="70dp"
-                android:layout_height="70dp" />
+
             <Button
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
                 android:textColor="#fff"
-                android:text="Submit"
-                android:onClick="addRequestBtn"
+                android:text="Next"
+                android:onClick="addPictureBtn"
                 android:background="@color/colorPrimaryDark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
     </ScrollView>
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/add_prop_relative"
+        android:layout_gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:visibility="visible"
+            android:layout_centerInParent="true"
+            android:id="@+id/add_prop_progress"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+        <Button
+            android:visibility="invisible"
+            android:onClick="sendPropToServer"
+            android:textColor="#fff"
+            android:text="Finish"
+            android:layout_margin="10dp"
+            android:id="@+id/sendProToServerBtn"
+            android:background="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:onClick="addPropertyImages"
+            android:src="@drawable/add"
+            android:layout_centerInParent="true"
+            android:id="@+id/add_prop_image"
+            android:layout_width="120dp"
+            android:layout_height="120dp" />
+        <TextView
+            android:id="@+id/add_prop_instruction"
+            android:gravity="center"
+            android:textSize="17sp"
+            android:layout_below="@id/add_prop_image"
+            android:layout_margin="10dp"
+            android:text="Click Button to Add Image, Hold image to select multiple Images"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 
 </LinearLayout>

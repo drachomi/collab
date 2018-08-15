@@ -16,7 +16,6 @@
         <item>Female</item>
     </string-array>
     <string-array name="price_array">
-        <item>Price</item>
         <item>10k-50k</item>
         <item>51k-100k</item>
         <item>101k-200k</item>
@@ -35,7 +34,6 @@
         <item>Not so Urgent</item>
     </string-array>
     <string-array name="property_purpose_array">
-        <item> Purpose</item>
         <item>Residential</item>
         <item>Commercial</item>
     </string-array>
@@ -60,7 +58,6 @@
     </string-array>
 
     <string-array name="let_type_array">
-        <item>Let Type</item>
         <item>Rent</item>
         <item>Short Lease</item>
         <item>Long Lease</item>
@@ -109,4 +106,7 @@
     <string-array name="city_array">
         <item>Choose City</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

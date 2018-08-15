@@ -232,11 +232,6 @@ public class Registration extends AppCompatActivity {
             Uri selectedImageUri = data.getData();
             final StorageReference ref = storageReference.child(selectedImageUri.getLastPathSegment());
             UploadTask uploadTask = ref.putFile(selectedImageUri);
-            Log.d("visi-res","name is : "+regName);
-            Log.d("visi-res","location is : "+regLocation);
-            Log.d("visi-res","occupation is : "+regOccupation);
-
-
             Task<Uri> task = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -251,12 +246,7 @@ public class Registration extends AppCompatActivity {
                     if(task.isSuccessful()){
                         Uri downloadUri = task.getResult();
                         regImage = downloadUri.toString();
-                        Glide.with(photo.getContext())
-                                .load(regImage)
-                                .into(photo);
-                        Log.d("visi-resp","name is : "+regName);
-                        Log.d("visi-resp","location is : "+regLocation);
-                        Log.d("visi-resp","occupation is : "+regOccupation);
+
 
                     }
                 }

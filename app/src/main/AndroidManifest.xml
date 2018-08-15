@@ -45,7 +45,8 @@
         <activity android:name=".Activities.SpinnerCountryActivity" />
         <activity android:name=".Activities.EditProfile" />
         <activity android:name=".Request.RequestActivity" />
-        <activity android:name=".Request.AddRequest"></activity>
+        <activity android:name=".Request.AddRequest" />
+        <activity android:name=".Property.AddProperty"></activity>
     </application>
 
 </manifest>

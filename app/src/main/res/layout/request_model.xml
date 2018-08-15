@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+
+<android.support.v7.widget.CardView
+    app:cardCornerRadius="10dp"
+    android:layout_margin="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 <LinearLayout
     android:id="@+id/req_first_liner"
@@ -81,3 +89,4 @@
     </RelativeLayout>
 
 </RelativeLayout>
+</android.support.v7.widget.CardView>
