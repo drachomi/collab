@@ -47,6 +47,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
         holder.location.setText(request.city + " " + request.state);
         holder.price.setText(request.price);
         holder.agentName.setText(request.agentName);
+        holder.letType.setText(request.getLetType());
         Glide.with(holder.agentDp)
                 .load(request.agentDp)
                 .into(holder.agentDp);
@@ -66,7 +67,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
 
     }
     class RequestViewModel extends RecyclerView.ViewHolder{
-        TextView title,location,agentName,price,regTime,verified;
+        TextView title,location,agentName,price,regTime,letType;
         ImageView agentDp;
         public RequestViewModel(View itemView) {
             super(itemView);
@@ -75,7 +76,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
             agentName = itemView.findViewById(R.id.req_agent_name);
             price = itemView.findViewById(R.id.req_price);
             regTime = itemView.findViewById(R.id.req_time);
-            verified = itemView.findViewById(R.id.req_verified);
+            letType = itemView.findViewById(R.id.req_let_type);
             agentDp = itemView.findViewById(R.id.req_dp);
         }
     }

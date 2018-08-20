@@ -158,7 +158,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
                 //nameText.setText(message.getUsername());
                 profileImage.setVisibility(View.GONE);
 
-                // Insert the profile image from the URL into the ImageView.
+                // Insert the profile_menu image from the URL into the ImageView.
 
 //                Glide.with(profileImage.getContext())
 //                        .load(message.getProfilePicture())

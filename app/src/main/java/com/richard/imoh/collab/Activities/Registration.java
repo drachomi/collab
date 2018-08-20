@@ -88,7 +88,7 @@ public class Registration extends AppCompatActivity {
         firebaseDatabase = FireBaseUtils.getDatabase();
         databaseReference = firebaseDatabase.getReference().child("agents");
         firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference().child("profile");
+        storageReference = firebaseStorage.getReference().child("profile_menu");
         location = new Location();
 
 

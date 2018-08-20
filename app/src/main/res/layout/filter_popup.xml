@@ -15,8 +15,8 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/rounded_edit_txt"
-        android:id="@+id/add_req_prop_type"
-        android:entries="@array/residential_property_array"
+        android:id="@+id/filter_prop_type"
+        android:entries="@array/prop_type_array"
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
     <TextView
@@ -32,8 +32,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/rounded_edit_txt"
-        android:id="@+id/add_req_state"
-        android:entries="@array/state_array"
+        android:id="@+id/filter_state"
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
     <TextView
@@ -49,12 +48,12 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/rounded_edit_txt"
-        android:id="@+id/add_req_city"
-        android:entries="@array/city_array"
+        android:id="@+id/filter_city"
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
 
     <Button
+        android:id="@+id/search"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"

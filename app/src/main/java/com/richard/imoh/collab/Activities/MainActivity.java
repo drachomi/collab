@@ -13,6 +13,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,6 +25,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +49,7 @@ import com.richard.imoh.collab.Request.AddRequest;
 import com.richard.imoh.collab.Request.Request;
 import com.richard.imoh.collab.Request.RequestActivity;
 import com.richard.imoh.collab.Utils.FireBaseUtils;
+import com.richard.imoh.collab.Utils.Location;
 import com.richard.imoh.collab.Utils.Repository;
 
 import java.util.ArrayList;
@@ -60,13 +67,15 @@ public class MainActivity extends AppCompatActivity
     private TabLayout tabLayout;
     private ViewPager viewPager;
     Repository repo;
-
     ValueEventListener requestListerner;
     String location;
-    String state = "Lagos";
-    String city = "Festac";
     List<Request> mRequests = new ArrayList<>();
-   // PropertyFeed propertyFeedFragment;
+    Spinner stateSpinner,citySpinner,propertyType;
+    ArrayList<String> cityArray;
+    ArrayList<String> stateArray;
+    Location locale = new Location();
+    private ArrayAdapter<String> cityArrayAdapter;
+    private ArrayAdapter<String> stateArrayAdapter;
 
 
     @Override
@@ -77,8 +86,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         toolboxUtils();
         ChildEventListener childEventListener;
-        repo = new Repository(this);
-
         firebaseDatabase = FirebaseDatabase.getInstance();
         FireBaseUtils.getDatabase();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -116,36 +123,12 @@ public class MainActivity extends AppCompatActivity
 
                 }
             };
+            getAllConnection();
             databaseReference.addChildEventListener(childEventListener);
         }
 
         //TODO Change location to match what user select and delete this line
         location = "Badagry";
-
-       // fetchFromRepo();
-        requestRef = firebaseDatabase.getReference().child("requests").child(location);
-
-        requestListerner = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Request request = dataSnapshot.getValue(Request.class);
-                mRequests.add(request);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-        requestRef.addValueEventListener(requestListerner);
-
-
-
-
-
-
-
-
     }
 
     @Override
@@ -173,8 +156,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
             //TODO Add a dialog for selecting location and features
+            alertDialog();
             return true;
         }
 
@@ -188,7 +172,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            startActivity(new Intent(MainActivity.this,AgentActivity.class));
+            startActivity(new Intent(MainActivity.this,Profile.class));
         } else if (id == R.id.nav_connection) {
             startActivity(new Intent(MainActivity.this,ConnectionList.class));
         } else if (id == R.id.nav_post_property) {
@@ -197,6 +181,9 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this,AddRequest.class));
         } else if (id == R.id.nav_chats) {
             startActivity(new Intent(MainActivity.this,ChatList.class));
+        }
+        else if (id == R.id.nav_suggestion){
+            startActivity(new Intent(MainActivity.this,Follow.class));
         }
         else if (id == R.id.nav_sign_out){
             signOut();
@@ -262,9 +249,105 @@ public class MainActivity extends AppCompatActivity
         startActivity(new Intent(MainActivity.this,Login.class));
 
     }
-    void fetchFromRepo(){
-        repo.fetchProperty(state,city);
+//    void fetchFromRepo(){
+//        repo.fetchProperty(state,city);
+//    }
+    void alertDialog(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        View view1 = getLayoutInflater().inflate(R.layout.filter_popup,null);
+        stateSpinner = view1.findViewById(R.id.filter_state);
+        citySpinner = view1.findViewById(R.id.filter_city);
+        propertyType = view1.findViewById(R.id.filter_prop_type);
+        Button button = view1.findViewById(R.id.search);
+        firstSpinners();
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String state,city,type;
+                state = String.valueOf(stateSpinner.getSelectedItem());
+                city = String.valueOf(citySpinner.getSelectedItem());
+                type = String.valueOf(propertyType.getSelectedItem());
+                if(TextUtils.isEmpty(state) || state.equals("Choose State")){
+                    Toast.makeText(getApplicationContext(), "Select State Please!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(TextUtils.isEmpty(city)|| city.equals("Choose City")){
+                    Toast.makeText(getApplicationContext(), "Select City Please!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(TextUtils.isEmpty(type)){
+                    Toast.makeText(getApplicationContext(), "Select Property Type!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else {
+
+                }
+
+
+            }
+        });
+        builder.setView(view1);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+    }
+    public void firstSpinners(){
+        stateArray = locale.getStates();
+        stateArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stateArray);
+        stateArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        stateSpinner.setAdapter(stateArrayAdapter);
+        stateSpinner.setOnItemSelectedListener(stateClickListerner);
+    }
+    private AdapterView.OnItemSelectedListener stateClickListerner = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            citySpinner();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+    private AdapterView.OnItemSelectedListener cityClickListerner = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
+    void citySpinner(){
+        if(stateSpinner.getSelectedItem().toString().equals("Lagos")){
+            cityArray = locale.getLagos();
+        }
+        else {
+            cityArray = locale.getDefaultCity();
+        }
+        cityArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, cityArray);
+        cityArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        citySpinner.setAdapter(cityArrayAdapter);
+        citySpinner.setOnItemSelectedListener(cityClickListerner);
     }
 
+    void getAllConnection(){
+
+        repo = new Repository(this);
+        repo.fetchConnection();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(firebaseAuth.getCurrentUser()==null){
+            startActivity(new Intent(MainActivity.this,Login.class));
+        }
+
+    }
 
 }

@@ -37,7 +37,7 @@ import com.richard.imoh.collab.Utils.FireBaseUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AgentActivity extends AppCompatActivity {
+public class Profile extends AppCompatActivity {
     RecyclerView recyclerView;
     FeedAdapter feedAdapter;
     ConnectionsAdapter connectionsAdapter;
@@ -53,13 +53,12 @@ public class AgentActivity extends AppCompatActivity {
     ValueEventListener infoEventListerner;
     ChildEventListener propertyListerner;
     Toolbar toolbar;
-    String userId;
-    String myUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_agent);
+        setContentView(R.layout.activity_profile);
+        Bundle extras = getIntent().getExtras();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -75,17 +74,15 @@ public class AgentActivity extends AppCompatActivity {
         connectionListRecycler.setLayoutManager(connectionManager);
         connectionListRecycler.setItemAnimator(new DefaultItemAnimator());
         connectionListRecycler.setAdapter(connectionsAdapter);
-        Bundle extras = getIntent().getExtras();
-        userId = extras.getString("userId");
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         firebaseAuth = FirebaseAuth.getInstance();
-        myUserId = firebaseAuth.getUid();
-        databaseReference = firebaseDatabase.getReference().child("agents").child(userId);
+        String myUserId = firebaseAuth.getUid();
+        databaseReference = firebaseDatabase.getReference().child("agents").child(myUserId);
+
 
         tabHost();
         infoListen();
 
-
+        propertyListen();
 
         childEventListener = new ChildEventListener() {
             @Override
@@ -118,7 +115,6 @@ public class AgentActivity extends AppCompatActivity {
         };
         databaseReference.child("connections").addChildEventListener(childEventListener);
 
-        propertyListen();
     }
 
     void connectionListen(String user){
@@ -169,7 +165,7 @@ public class AgentActivity extends AppCompatActivity {
                 .apply(RequestOptions.circleCropTransform())
                 .apply(RequestOptions.placeholderOf(R.drawable.placeholder))
                 .into(profile_pics);
-       // profile_pics.loadThumbForName(user.getImage(),user.getUserName());
+        // profile_pics.loadThumbForName(user.getImage(),user.getUserName());
 
 
 
@@ -200,6 +196,7 @@ public class AgentActivity extends AppCompatActivity {
         }
     }
     void infoListen(){
+
         infoEventListerner = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -221,6 +218,7 @@ public class AgentActivity extends AppCompatActivity {
         };
         databaseReference.child("info").addValueEventListener(infoEventListerner);
     }
+
     void propertyListen(){
         propertyListerner = new ChildEventListener() {
             @Override
@@ -258,7 +256,7 @@ public class AgentActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.agent_menu, menu);
+        getMenuInflater().inflate(R.menu.profile_menu, menu);
         return true;
     }
 
@@ -270,25 +268,11 @@ public class AgentActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_chat) {
-            startChat();
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(Profile.this,EditProfile.class));
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-    void startChat(){
-        DatabaseReference myRef = firebaseDatabase.getReference().child("agents").child(myUserId).child("chats").child(userId);
-        String chatRef = userId + myUserId;
-
-        //TODO RUN A QUERRY TO DB AND CHECK IF USER IS ALREADY A CONNECTION BEFORE CREATING NEW REF
-        myRef.setValue(chatRef);
-        databaseReference.child("chats").child(myUserId).setValue(chatRef);
-        Intent intent = new Intent(AgentActivity.this,Chat.class);
-        intent.putExtra("chatRef",chatRef);
-        startActivity(intent);
-    }
-
 }
-

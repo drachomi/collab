@@ -17,6 +17,10 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="My Connections" />
         <item
+            android:id="@+id/nav_suggestion"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Suggestions" />
+        <item
             android:id="@+id/nav_post_property"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Post Property" />

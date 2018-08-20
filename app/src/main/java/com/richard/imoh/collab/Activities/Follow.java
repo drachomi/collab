@@ -1,5 +1,6 @@
 package com.richard.imoh.collab.Activities;
 
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
@@ -18,10 +20,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.richard.imoh.collab.Adapters.FollowAdapter;
+import com.richard.imoh.collab.DBUtils.Connection;
+import com.richard.imoh.collab.DBUtils.ConnectionDB;
+import com.richard.imoh.collab.DBUtils.ConnectionDao;
 import com.richard.imoh.collab.Utils.FollowTouchListerner;
 import com.richard.imoh.collab.Pojo.User;
 import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Utils.FireBaseUtils;
+import com.richard.imoh.collab.Utils.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,20 +45,23 @@ public class Follow extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     User obj;
     ValueEventListener valueEventListener;
-    List<String> suggestionsList = new ArrayList<>();
-    //String[] suggestionsList = {};
-
+    List<String> connectionList = new ArrayList<>();
+    List<Connection> connectionObj = new ArrayList<>();
+    ConnectionDao connectionDao;
+    ConnectionDB connectionDB;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follow);
+        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Suggestions");
         Bundle extras = getIntent().getExtras();
         firebaseDatabase = FireBaseUtils.getDatabase();
         databaseReference = firebaseDatabase.getReference().child("agents");
-
-
-
         firebaseAuth = FirebaseAuth.getInstance();
         myUserId = firebaseAuth.getUid();
 //        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
@@ -61,9 +70,9 @@ public class Follow extends AppCompatActivity {
 //        obj = gson.fromJson(json, User.class);
 //        Log.d("json",obj.uId);
 
-
+        connectionDB = ConnectionDB.getInstance(this);
+        connectionDao = connectionDB.connectionDao();
         mChatListReference = firebaseDatabase.getReference().child("agents").child(myUserId).child("connections");
-
         RecyclerView recyclerView = findViewById(R.id.follow_recycle);
         mAdampter = new FollowAdapter(mUser);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 4);
@@ -91,12 +100,37 @@ public class Follow extends AppCompatActivity {
 
         recyclerView.setAdapter(mAdampter);
 
+
+
+    getAll();
+
+    }
+
+    private void getAll (){
+        new AsyncTask<Void,Void,Void>(){
+            @Override
+            protected Void doInBackground(Void... voids) {
+                connectionObj = connectionDao.getAllConnection();
+                for (int i=0; i<connectionObj.size();i++){
+                    connectionList.add(connectionObj.get(i).Uid);
+                    Log.d("conlist",connectionList.get(i));
+                    Log.d("conObj",connectionObj.get(i).Uid + "  But size is "+connectionObj.size());
+
+                }
+                connectionUid();
+                return null;
+            }
+        }.execute();
+    }
+
+
+    void connectionUid(){
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String user =dataSnapshot.getKey();
-                Log.d("jonah",user);
                 connectionInfo(user);
+
 
 
             }
@@ -122,13 +156,8 @@ public class Follow extends AppCompatActivity {
             }
         };
         databaseReference.addChildEventListener(childEventListener);
-
-
-
     }
-
     void connectionInfo(String conId){
-        Log.d("yonah","got here");
         connectionInfoRef = firebaseDatabase.getReference().child("agents").child(conId).child("info");
         valueEventListener = new ValueEventListener() {
             @Override
@@ -136,13 +165,13 @@ public class Follow extends AppCompatActivity {
                 User user = dataSnapshot.getValue(User.class);
                 if (user != null) {
                     if(!user.getuId().equals(firebaseAuth.getUid())){
-                        Log.d("yonah",user.getuId());
-
                         mUser.add(user);
+                        getInfo(user);
+                    }
+                    else {
+                        Log.d("ljonah",user.getFullName());
                     }
                 }
-                mAdampter.notifyDataSetChanged();
-
             }
 
             @Override
@@ -154,5 +183,25 @@ public class Follow extends AppCompatActivity {
         connectionInfoRef.addValueEventListener(valueEventListener);
     }
 
+    void getInfo(User user){
+        for (String frien : connectionList){
+            if(frien.equals(user.getuId())){
+                Log.d("ejonah",user.getuId());
+                mUser.remove(user);
+            }
+            else {
+                Log.d("jonah",user.getuId());
+            }
+        }
+        mAdampter.notifyDataSetChanged();
+
+    }
+
+
+
+
 
 }
+
+
+

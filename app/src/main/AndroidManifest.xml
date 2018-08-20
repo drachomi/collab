@@ -46,7 +46,8 @@
         <activity android:name=".Activities.EditProfile" />
         <activity android:name=".Request.RequestActivity" />
         <activity android:name=".Request.AddRequest" />
-        <activity android:name=".Property.AddProperty"></activity>
+        <activity android:name=".Property.AddProperty" />
+        <activity android:name=".Activities.Profile"></activity>
     </application>
 
 </manifest>

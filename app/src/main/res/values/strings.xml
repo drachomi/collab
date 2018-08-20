@@ -49,6 +49,23 @@
         <item> Estate Block</item>
         <item> Land</item>
     </string-array>
+    <string-array name="prop_type_array">
+        <item>Single Room</item>
+        <item>Self Contain</item>
+        <item>Mini Flats</item>
+        <item>1 Bed Room Flats</item>
+        <item>2 Bed Room Flats</item>
+        <item>3 Bed Room Flats</item>
+        <item>4 Bed Room Flats</item>
+        <item> Duplex</item>
+        <item> Estate Block</item>
+        <item> Land</item>
+        <item>Office Space</item>
+        <item>Co Working Space</item>
+        <item>Shop</item>
+        <item>WareHouse</item>
+        <item>Cemetery Space</item>
+    </string-array>
     <string-array name="commercial_property_array">
         <item>Office Space</item>
         <item>Co Working Space</item>

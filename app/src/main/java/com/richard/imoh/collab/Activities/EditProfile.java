@@ -54,7 +54,7 @@ public class EditProfile extends AppCompatActivity {
         String userId = firebaseAuth.getUid();
         databaseReference = firebaseDatabase.getReference().child("agents").child(userId);
         firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference().child("profile");
+        storageReference = firebaseStorage.getReference().child("profile_menu");
         city = findViewById(R.id.edit_city);
         state = findViewById(R.id.edit_state);
         name = findViewById(R.id.edit_name);
