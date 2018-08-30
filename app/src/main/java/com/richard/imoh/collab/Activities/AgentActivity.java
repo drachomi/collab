@@ -69,7 +69,7 @@ public class AgentActivity extends AppCompatActivity {
         feedAdapter = new FeedAdapter(mProperty);
         connectionsAdapter = new ConnectionsAdapter(connections);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayout.HORIZONTAL,false);
-        RecyclerView.LayoutManager connectionManager = new LinearLayoutManager(getApplicationContext(), LinearLayout.HORIZONTAL,false);
+        RecyclerView.LayoutManager connectionManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(feedAdapter);
         connectionListRecycler.setLayoutManager(connectionManager);

@@ -29,7 +29,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="350dp"
                     app:fillColor="#FFFFFFFF"
-
                     app:pageColor="#00000000"
                     app:radius="6dp"
                     app:slideInterval="3000"
@@ -37,6 +36,7 @@
                     app:strokeWidth="1dp" />
 
                 <TextView
+                    android:id="@+id/prop_details_title"
                     android:layout_marginTop="15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -47,6 +47,7 @@
                     android:typeface="sans" />
 
                 <TextView
+                    android:id="@+id/prop_details_location"
                     android:layout_marginTop="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -67,6 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <TextView
+                        android:id="@+id/prop_details_price"
                         android:textColor="#000000"
                         android:textSize="30sp"
                         android:text="$2000"
@@ -74,22 +76,15 @@
                         android:layout_height="wrap_content" />
                     <TextView
                         android:textSize="15sp"
-                        android:text="per Month"
+                        android:text="Per Year"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
-                <TextView
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:textSize="15sp"
-                    android:text=" @14 per Sq feet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
             </LinearLayout>
 
 
             <LinearLayout
+                android:id="@+id/prop_details_linear_bedroom"
                 android:layout_margin="10dp"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
@@ -110,8 +105,9 @@
                         android:textColor="@color/colorPrimary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Configuration"/>
+                        android:text="Bedrooms"/>
                     <TextView
+                        android:id="@+id/prop_details_roomNo"
                         android:textSize="16sp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="-8dp"
@@ -123,6 +119,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/prop_details_linear_price"
                 android:layout_margin="10dp"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
@@ -145,6 +142,7 @@
                         android:layout_height="wrap_content"
                         android:text="Rent in Details"/>
                     <TextView
+                        android:id="@+id/prop_details_price_details"
                         android:textSize="16sp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="-8dp"
@@ -156,12 +154,13 @@
                         android:layout_marginLeft="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Maintenance $90,00(monthly)"/>
+                        android:text="Charged Yearly"/>
 
                 </LinearLayout>
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/prop_details_linear_urgency"
                 android:layout_margin="10dp"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
@@ -217,6 +216,7 @@
                         android:layout_height="wrap_content"
                         android:text="Available for"/>
                     <TextView
+                        android:id="@+id/prop_details_availablefor"
                         android:textSize="16sp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="-8dp"
@@ -228,6 +228,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/prop_details_linear_status"
                 android:layout_margin="10dp"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
@@ -250,6 +251,7 @@
                         android:layout_height="wrap_content"
                         android:text="Furnishing"/>
                     <TextView
+                        android:id="@+id/prop_details_date_posted"
                         android:textSize="16sp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="-8dp"
@@ -261,6 +263,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/prop_details_linear_plotNo"
                 android:layout_margin="10dp"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
@@ -281,8 +284,9 @@
                         android:textColor="@color/colorPrimary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Areas"/>
+                        android:text="No Of Plots Available"/>
                     <TextView
+                        android:id="@+id/prop_details_plotNo"
                         android:textSize="16sp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="-8dp"
@@ -314,29 +318,25 @@
                         android:textColor="@color/colorPrimary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Address"/>
+                        android:text="Additional Information"/>
                     <TextView
+                        android:id="@+id/additional_info"
                         android:textSize="16sp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="-8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="30 Olorunkemi Steert Olorunona"/>
-                    <TextView
-                        android:textSize="16sp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Shomolu Lagos"/>
+                        android:text="The house is available under the licence agreed upon by discussant prior ro the ammendmdnt"/>
 
                 </LinearLayout>
 
             </LinearLayout>
 
             <Button
+                android:onClick="connectWithAgent"
                 android:textSize="16sp"
                 android:textColor="#ffffff"
-                android:text="Contact Owner"
+                android:text="Chat With Agent"
                 android:background="@color/colorPrimary"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"

@@ -68,7 +68,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyViewHolder> 
     }
     public void updateList(List<Property> mPropertyList){
         mProperty = mPropertyList;
-        Log.d("bing2",mProperty.get(0).getAgentName());
         notifyDataSetChanged();
 
     }

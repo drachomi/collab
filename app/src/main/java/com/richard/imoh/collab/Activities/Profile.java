@@ -68,7 +68,7 @@ public class Profile extends AppCompatActivity {
         feedAdapter = new FeedAdapter(mProperty);
         connectionsAdapter = new ConnectionsAdapter(connections);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayout.HORIZONTAL,false);
-        RecyclerView.LayoutManager connectionManager = new LinearLayoutManager(getApplicationContext(), LinearLayout.HORIZONTAL,false);
+        RecyclerView.LayoutManager connectionManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(feedAdapter);
         connectionListRecycler.setLayoutManager(connectionManager);
@@ -83,7 +83,6 @@ public class Profile extends AppCompatActivity {
         infoListen();
 
         propertyListen();
-
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -250,8 +249,6 @@ public class Profile extends AppCompatActivity {
         };
         databaseReference.child("properties").addChildEventListener(propertyListerner);
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

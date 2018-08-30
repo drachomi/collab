@@ -36,21 +36,6 @@ public class User {
         this.uId = uId;
     }
 
-//    public User(String fullName, String image, String email, String location, String userName,String uId) {
-//        this.fullName = fullName;
-//        this.image = image;
-//        this.email = email;
-//        this.location = location;
-//        this.userName = userName;
-//        this.uId = uId;
-//    }
-
-//    public User(String fullName, String email, String userName,String uId) {
-//        this.fullName = fullName;
-//        this.email = email;
-//        this.userName = userName;
-//        this.uId = uId;
-//    }
 
     public String getuId() {
         return uId;

@@ -19,12 +19,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.richard.imoh.collab.Pojo.User;
 import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Utils.FireBaseUtils;
 import com.richard.imoh.collab.Utils.Location;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class AddRequest extends AppCompatActivity {
@@ -32,7 +38,8 @@ public class AddRequest extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference userDatabaseReference;
-    DatabaseReference propertyRequestReference;
+    FirebaseFirestore firestore;
+    CollectionReference propertyRequestReference;
     ValueEventListener requestEventListerner;
     ValueEventListener valueEventListener;
     String agentName,agentDp,letType,state,city,propertyType,description,price;
@@ -62,10 +69,11 @@ public class AddRequest extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Add Request");
         firebaseDatabase = FireBaseUtils.getDatabase();
+        firestore = FireBaseUtils.getFireStore();
         firebaseAuth = FirebaseAuth.getInstance();
         String userId = firebaseAuth.getUid();
         userDatabaseReference = firebaseDatabase.getReference().child("agents").child(userId).child("info");
-        propertyRequestReference = firebaseDatabase.getReference().child("request");
+        propertyRequestReference = firestore.collection("request");
         letTypeSpinner = findViewById(R.id.add_req_let_type);
         propertyTySpinner = findViewById(R.id.add_req_prop_type);
         purposeSpinner = findViewById(R.id.add_req_purpose);
@@ -103,7 +111,7 @@ public class AddRequest extends AppCompatActivity {
         userDatabaseReference.addValueEventListener(valueEventListener);
     }
     void stateSpinner(){
-        stateArray = location.getStates();
+        stateArray = location.getLocation("States");
         stateArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stateArray);
         stateArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         stateSpinner.setAdapter(stateArrayAdapter);
@@ -111,13 +119,7 @@ public class AddRequest extends AppCompatActivity {
 
     }
     void citySpinner(){
-
-        if(stateSpinner.getSelectedItem().toString().equals("Lagos")){
-            cityArray = location.getLagos();
-        }
-        else {
-            cityArray = location.getDefaultCity();
-        }
+        cityArray = location.getLocation(stateSpinner.getSelectedItem().toString());
         cityArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cityArray);
         cityArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         citySpinner.setAdapter(cityArrayAdapter);
@@ -222,11 +224,14 @@ public class AddRequest extends AppCompatActivity {
         description = descriptionEditText.getText().toString();
         roomNo = Integer.valueOf(roomEditText.getText().toString());
         plotNo = Integer.valueOf(plotEditText.getText().toString());
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate = df.format(Calendar.getInstance().getTime());
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        String reqId = timestamp.getTime() + firebaseAuth.getUid();
         //Set priority as true when user selects item at position 1 and false in other occasion
 
-        Request request = new Request(description,price,state,city,priority,propertyType,letType,plotNo,roomNo,agentName,agentDp);
-        propertyRequestReference.child(state).child(city).push().setValue(request);
-
+        Request request = new Request(description,price,state,city,priority,propertyType,letType,plotNo,roomNo,agentName,agentDp,firebaseAuth.getUid(),currentDate,reqId);
+        propertyRequestReference.add(request);
         Toast.makeText(AddRequest.this,"Added request",Toast.LENGTH_LONG).show();
         finish();
 

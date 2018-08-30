@@ -19,11 +19,15 @@ public class Request {
     int resRoomNo;
     String agentName;
     String agentDp;
+    String userId;
+    String requestTime;
+    String reqId;
+
 
     public Request() {
     }
 
-    public Request(String description, String price, String state, String city, Boolean isUrgent, String propertyType, String letType, int size, int resRoomNo, String agentName, String agentDp) {
+    public Request(String description, String price, String state, String city, Boolean isUrgent, String propertyType, String letType, int size, int resRoomNo, String agentName, String agentDp, String userId, String requestTime, String reqId) {
         this.description = description;
         this.price = price;
         this.state = state;
@@ -35,6 +39,9 @@ public class Request {
         this.resRoomNo = resRoomNo;
         this.agentName = agentName;
         this.agentDp = agentDp;
+        this.userId = userId;
+        this.requestTime = requestTime;
+        this.reqId = reqId;
     }
 
     public String getDescription() {
@@ -123,5 +130,29 @@ public class Request {
 
     public void setAgentDp(String agentDp) {
         this.agentDp = agentDp;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getRequestTime() {
+        return requestTime;
+    }
+
+    public void setRequestTime(String requestTime) {
+        this.requestTime = requestTime;
+    }
+
+    public String getReqId() {
+        return reqId;
+    }
+
+    public void setReqId(String reqId) {
+        this.reqId = reqId;
     }
 }

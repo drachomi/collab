@@ -14,10 +14,21 @@ public class Connection {
     @NonNull public String Uid;
     public String agentName;
     public String agentDp;
+    public String chatRef;
+
+    public Connection() {
+    }
 
     public Connection(String Uid, String agentName, String agentDp) {
         this.Uid = Uid;
         this.agentName = agentName;
         this.agentDp = agentDp;
+    }
+
+    public Connection(@NonNull String uid, String agentName, String agentDp, String chatRef) {
+        Uid = uid;
+        this.agentName = agentName;
+        this.agentDp = agentDp;
+        this.chatRef = chatRef;
     }
 }

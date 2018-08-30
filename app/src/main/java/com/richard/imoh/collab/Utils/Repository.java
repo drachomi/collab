@@ -3,7 +3,9 @@ package com.richard.imoh.collab.Utils;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -39,12 +41,12 @@ public class Repository {
     ChildEventListener propListerner;
     ChildEventListener reqListerner;
     Context context;
-    List<Property>propertyList = new ArrayList<>();
+    List<Property> propertyList = new ArrayList<>();
     MutableLiveData<List<Property>> propertyLiveDataList = new MutableLiveData<>();
-    List<Request>requestList = new ArrayList<>();
+    List<Request> requestList = new ArrayList<>();
     MutableLiveData<List<Request>> requestLiveDataList = new MutableLiveData<>();
     ConnectionDao connectionDao;
-    List<Connection>connectionList;
+    List<Connection> connectionList;
 
     public Repository(Context context) {
         this.context = context;
@@ -54,28 +56,29 @@ public class Repository {
 
     }
 
-    public LiveData<List<Property>>getAllProperty(String state, String city){
-        fetchProperty(state,city);
-        return propertyLiveDataList;
+    public List<Property> getAllProperty(String state, String city) {
+        fetchProperty(state, city);
+        return propertyList;
     }
-    public LiveData<List<Request>>getAllRequest(String state, String city){
-        fetchRequest(state,city);
+
+    public LiveData<List<Request>> getAllRequest(String state, String city) {
+        fetchRequest(state, city);
         return requestLiveDataList;
     }
-    public List<Connection>getAllConnection(){
 
-
-        new AsyncTask<Void,Void,Void>(){
+    public List<Connection> getAllConnection() {
+        new AsyncTask<Void, Void, List<Connection>>() {
             @Override
-            protected Void doInBackground(Void... voids) {
+            protected List<Connection> doInBackground(Void... voids) {
                 connectionList = connectionDao.getAllConnection();
-                Log.d("connect ",connectionList.get(0).agentName);
-                return null;
+                Log.d("connect ", connectionList.get(0).agentName);
+                return connectionList;
             }
         }.execute();
-       return connectionList;
+        return connectionList;
     }
-    public void fetchProperty(String state, String city){
+
+    public void fetchProperty(String state, String city) {
 
         propertyRef = database.getReference().child("properties").child(state).child(city);
 
@@ -83,10 +86,10 @@ public class Repository {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Property property = dataSnapshot.getValue(Property.class);
-                if(property!=null){
-                    Log.d("property: ",property.getAgentName());
+                if (property != null) {
+                    Log.d("property: ", property.getAgentName());
                     propertyList.add(property);
-                    propertyLiveDataList.setValue(propertyList);
+                    //propertyLiveDataList.setValue(propertyList);
 
                 }
             }
@@ -112,51 +115,53 @@ public class Repository {
             }
         };
         propertyRef.addChildEventListener(propListerner);
-}
-    public void fetchRequest(String state, String city){
-       requestRef = database.getReference().child("request").child(state).child(city);
-       reqListerner = new ChildEventListener() {
-           @Override
-           public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-               Request request = dataSnapshot.getValue(Request.class);
-               if(request!=null){
-                   requestList.add(request);
-                   requestLiveDataList.setValue(requestList);
-               }
-           }
+    }
 
-           @Override
-           public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+    public void fetchRequest(String state, String city) {
+        requestRef = database.getReference().child("request").child(state).child(city);
+        reqListerner = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Request request = dataSnapshot.getValue(Request.class);
+                if (request != null) {
+                    requestList.add(request);
+                    requestLiveDataList.setValue(requestList);
+                }
+            }
 
-           }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-           @Override
-           public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            }
 
-           }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-           @Override
-           public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
 
-           }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-           @Override
-           public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
 
-           }
-       };
-       requestRef.addChildEventListener(reqListerner);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-}
-    public void fetchConnection(){
+            }
+        };
+        requestRef.addChildEventListener(reqListerner);
+
+    }
+
+    public void fetchConnection() {
         nukeTable();
         connectionRef = database.getReference().child("agents").child(firebaseAuth.getUid()).child("connections");
         connectionListerner = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String user = (String) dataSnapshot.getValue();
-                if(dataSnapshot.exists()){
-                    connectionListen(user.trim());
+                Connection connection =  dataSnapshot.getValue(Connection.class);
+                if (dataSnapshot.exists()) {
+                    addConnnection(connection);
                 }
             }
 
@@ -184,7 +189,7 @@ public class Repository {
 
     }
 
-    void connectionListen(String user){
+    void connectionListen(String user) {
         ValueEventListener connectionEventListerner;
         DatabaseReference connectionReference;
         connectionReference = database.getReference().child("agents").child(user).child("info");
@@ -192,7 +197,7 @@ public class Repository {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User mUser = dataSnapshot.getValue(User.class);
-                addConnnection(mUser);
+                //addConnnection(mUser);
 
             }
 
@@ -204,26 +209,57 @@ public class Repository {
         connectionReference.addValueEventListener(connectionEventListerner);
     }
 
-    void addConnnection(User user){
-        new AsyncTask<Void,Void,Void>(){
+    void addConnnection(Connection connection) {
+        new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                Connection connection = new Connection(user.getuId(),user.getFullName(),user.getImage());
-                Log.d("jeph ",connection.agentName);
+                Log.d("jeph ", connection.agentName);
                 connectionDao.insertAll(connection);
                 return null;
             }
         }.execute();
     }
 
-    void nukeTable(){
-        new AsyncTask<Void,Void,Void>(){
+    void nukeTable() {
+        new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
                 connectionDao.nukeTable();
                 return null;
             }
         }.execute();
+    }
+
+    public void getCurrentUser() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        Log.d("userY","gote here");
+        database.getReference().child("agents").child(firebaseAuth.getUid()).child("info").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if (user != null) {
+                        Log.d("userY",user.getuId());
+                        editor.putString("myUserId", user.getuId());
+                        editor.putString("myDp", user.getImage());
+                        editor.putString("myFullname", user.getFullName());
+                        editor.putString("myUserName", user.getUserName());
+                        editor.apply();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("userY","error here");
+            }
+        });
+
+
+    }
+
+    public void addToConnectionNode(String userId,Connection connection){
+        Log.d("userId",userId);
+        database.getReference().child("agents").child(userId).child("connections").push().setValue(connection);
     }
 
 }

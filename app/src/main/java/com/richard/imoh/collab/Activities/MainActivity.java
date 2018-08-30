@@ -47,9 +47,7 @@ import com.richard.imoh.collab.Property.AddProperty;
 import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Request.AddRequest;
 import com.richard.imoh.collab.Request.Request;
-import com.richard.imoh.collab.Request.RequestActivity;
 import com.richard.imoh.collab.Utils.FireBaseUtils;
-import com.richard.imoh.collab.Utils.Location;
 import com.richard.imoh.collab.Utils.Repository;
 
 import java.util.ArrayList;
@@ -70,13 +68,6 @@ public class MainActivity extends AppCompatActivity
     ValueEventListener requestListerner;
     String location;
     List<Request> mRequests = new ArrayList<>();
-    Spinner stateSpinner,citySpinner,propertyType;
-    ArrayList<String> cityArray;
-    ArrayList<String> stateArray;
-    Location locale = new Location();
-    private ArrayAdapter<String> cityArrayAdapter;
-    private ArrayAdapter<String> stateArrayAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,23 +137,6 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            //TODO Add a dialog for selecting location and features
-            alertDialog();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -249,96 +223,12 @@ public class MainActivity extends AppCompatActivity
         startActivity(new Intent(MainActivity.this,Login.class));
 
     }
-//    void fetchFromRepo(){
-//        repo.fetchProperty(state,city);
-//    }
-    void alertDialog(){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        View view1 = getLayoutInflater().inflate(R.layout.filter_popup,null);
-        stateSpinner = view1.findViewById(R.id.filter_state);
-        citySpinner = view1.findViewById(R.id.filter_city);
-        propertyType = view1.findViewById(R.id.filter_prop_type);
-        Button button = view1.findViewById(R.id.search);
-        firstSpinners();
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String state,city,type;
-                state = String.valueOf(stateSpinner.getSelectedItem());
-                city = String.valueOf(citySpinner.getSelectedItem());
-                type = String.valueOf(propertyType.getSelectedItem());
-                if(TextUtils.isEmpty(state) || state.equals("Choose State")){
-                    Toast.makeText(getApplicationContext(), "Select State Please!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(city)|| city.equals("Choose City")){
-                    Toast.makeText(getApplicationContext(), "Select City Please!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(type)){
-                    Toast.makeText(getApplicationContext(), "Select Property Type!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                else {
-
-                }
-
-
-            }
-        });
-        builder.setView(view1);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-    }
-    public void firstSpinners(){
-        stateArray = locale.getStates();
-        stateArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stateArray);
-        stateArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        stateSpinner.setAdapter(stateArrayAdapter);
-        stateSpinner.setOnItemSelectedListener(stateClickListerner);
-    }
-    private AdapterView.OnItemSelectedListener stateClickListerner = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            citySpinner();
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> adapterView) {
-
-        }
-    };
-    private AdapterView.OnItemSelectedListener cityClickListerner = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> adapterView) {
-
-        }
-    };
-
-    void citySpinner(){
-        if(stateSpinner.getSelectedItem().toString().equals("Lagos")){
-            cityArray = locale.getLagos();
-        }
-        else {
-            cityArray = locale.getDefaultCity();
-        }
-        cityArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, cityArray);
-        cityArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        citySpinner.setAdapter(cityArrayAdapter);
-        citySpinner.setOnItemSelectedListener(cityClickListerner);
-    }
 
     void getAllConnection(){
-
         repo = new Repository(this);
         repo.fetchConnection();
+        repo.getCurrentUser();
     }
 
     @Override

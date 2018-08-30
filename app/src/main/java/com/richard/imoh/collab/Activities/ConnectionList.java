@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hbb20.GThumb;
 import com.richard.imoh.collab.Adapters.ConnectionsAdapter;
+import com.richard.imoh.collab.DBUtils.Connection;
 import com.richard.imoh.collab.Utils.FollowTouchListerner;
 import com.richard.imoh.collab.Pojo.User;
 import com.richard.imoh.collab.R;
@@ -67,34 +69,42 @@ public class ConnectionList extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new FollowTouchListerner(this, recyclerView, new FollowTouchListerner.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                LinearLayout linear = view.findViewById(R.id.follow_list_linear);
                ImageView img =  view.findViewById(R.id.follower_list_chat);
                 TextView personName = view.findViewById(R.id.follower_list_displayname);
-
-
+                GThumb image = view.findViewById(R.id.follower_list_img);
                 User touchedUser = connections.get(position);
                 String chatRef = touchedUser.getuId() + myUserId;
-                otherPersonChatRef = firebaseDatabase.getReference().child("agents").child(touchedUser.getuId()).child("chats");
-                otherPersonChatRef.child(myUserId).setValue(chatRef);
-                databaseReference.child("chats").child(touchedUser.getuId()).setValue(chatRef);
-                Intent intent = new Intent(ConnectionList.this,Chat.class);
-                intent.putExtra("chatRef",chatRef);
-                startActivity(intent);
-            }
 
-            @Override
-            public void onLongClick(View view, int position) {
-                GThumb image = view.findViewById(R.id.follower_list_img);
+                linear.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        otherPersonChatRef = firebaseDatabase.getReference().child("agents").child(touchedUser.getuId()).child("chats");
+                        otherPersonChatRef.child(myUserId).setValue(chatRef);
+                        databaseReference.child("chats").child(touchedUser.getuId()).setValue(chatRef);
+                        Intent intent = new Intent(ConnectionList.this,Chat.class);
+                        intent.putExtra("chatRef",chatRef);
+                        startActivity(intent);
+
+                    }
+                });
+
                 image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        User touchedUser = connections.get(position);
                         Intent intent = new Intent(ConnectionList.this,AgentActivity.class);
-                        intent.putExtra("user",touchedUser.getuId());
+                        intent.putExtra("userId",touchedUser.getuId());
                         startActivity(intent);
                     }
                 });
 
 
+
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
             }
         }));
         recyclerView.setAdapter(connectionsAdapter);
@@ -105,9 +115,9 @@ public class ConnectionList extends AppCompatActivity {
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String user = (String) dataSnapshot.getValue();
-                Log.d("ebojele",user.trim());
-                connectionListen(user.trim());
+                Connection user = dataSnapshot.getValue(Connection.class);
+//                Log.d("ebojele",user.trim());
+                connectionListen(user.Uid);
 
             }
 

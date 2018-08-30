@@ -17,18 +17,22 @@ import java.util.List;
 
 public class PropertyFeedViewModel extends AndroidViewModel {
     Repository repository;
-    LiveData<List<Property>>allHotels;
-    public PropertyFeedViewModel(@NonNull Application application) {
+    LiveData<List<Property>>allProperty;
+    String mCity,mState;
+    public PropertyFeedViewModel(@NonNull Application application,String state,String city) {
         super(application);
-        String state = "Lagos";
-        String city = "Festac";
+        mState = state;
+        mCity = city;
         repository = new Repository(application);
-        allHotels = repository.getAllProperty(state,city);
+       // allProperty = repository.getAllProperty(mState,mCity);
     }
 
-    public LiveData<List<Property>>getAllHotels(){
+    public LiveData<List<Property>>getAllProperty(){
 //        Log.d("binga ",allHotels.getValue().get(0).getAgentName());
-        return allHotels;
+        Log.d("chukc","in the viewmodel method");
+        Log.d("chukc","in the view model class, city is "+mCity);
+
+        return allProperty;
     }
 
 }

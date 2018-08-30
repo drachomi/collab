@@ -11,7 +11,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.richard.imoh.collab.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by LENOVO on 8/4/2018.
@@ -48,6 +54,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
         holder.price.setText(request.price);
         holder.agentName.setText(request.agentName);
         holder.letType.setText(request.getLetType());
+        holder.regTime.setText(getDate(request.getRequestTime())+"d");
         Glide.with(holder.agentDp)
                 .load(request.agentDp)
                 .into(holder.agentDp);
@@ -64,6 +71,26 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
     public void updateList(List<Request>request){
         requestList = request;
         notifyDataSetChanged();
+
+    }
+
+    //This method checks how long a request has been in the DB. It gets the date from db and compare with current date and returns the difference.
+    private String getDate(String requestDate){
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate = df.format(Calendar.getInstance().getTime());
+        String howLong;
+        Date date1=null;
+        Date date2 = null;
+        try {
+            date1 = df.parse(currentDate);
+            date2 = df.parse(requestDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long dateInMilis = Math.abs(date2.getTime() - date1.getTime());
+        howLong =Long.toString(TimeUnit.DAYS.convert(dateInMilis,TimeUnit.MILLISECONDS));
+
+        return howLong;
 
     }
     class RequestViewModel extends RecyclerView.ViewHolder{

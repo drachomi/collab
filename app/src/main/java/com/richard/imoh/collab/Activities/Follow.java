@@ -1,6 +1,8 @@
 package com.richard.imoh.collab.Activities;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +31,7 @@ import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Utils.FireBaseUtils;
 import com.richard.imoh.collab.Utils.Repository;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +53,7 @@ public class Follow extends AppCompatActivity {
     ConnectionDao connectionDao;
     ConnectionDB connectionDB;
     Toolbar toolbar;
-
+    Repository repository;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,11 +67,10 @@ public class Follow extends AppCompatActivity {
         databaseReference = firebaseDatabase.getReference().child("agents");
         firebaseAuth = FirebaseAuth.getInstance();
         myUserId = firebaseAuth.getUid();
-//        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
-//        Gson gson = new Gson();
-//        String json = sharedPref.getString("user", "");
-//        obj = gson.fromJson(json, User.class);
-//        Log.d("json",obj.uId);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        repository = new Repository(this);
+
+
 
         connectionDB = ConnectionDB.getInstance(this);
         connectionDao = connectionDB.connectionDao();
@@ -83,13 +85,32 @@ public class Follow extends AppCompatActivity {
             public void onClick(View view, int position) {
                 Log.d(" userO", "getting there");
                 //TODO Add action to be taken when user clicks to follow
+                String myNmae = preferences.getString("myFullname", "");
+                String myId = preferences.getString("myUserId", "");
+                String myDp = preferences.getString("myDp", "");
                 String userId = mUser.get(position).getuId();
+                String agentName = mUser.get(position).getFullName();
+                String dp = mUser.get(position).getImage();
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+                //Create chatref using time stamp and individual userId
+                String chatRef = timestamp.getTime() + userId + myId;
+
+                //Create new connection objects for both
+                Connection otherUser = new Connection(userId,agentName,dp,chatRef);
+                Connection mine = new Connection(myId,myNmae,myDp,chatRef);
                 Log.d(" userO", userId);
+
+                //Send the new connections to repository class  to add to their respective nodes
+                repository.addToConnectionNode(userId,mine);
+                repository.addToConnectionNode(myId,otherUser);
+
+                //Make the user disappear from the list and update the adapter to reflect changes
                 mUser.remove(position);
-                otherChatListRef = firebaseDatabase.getReference().child("agents").child(userId).child("connections");
-                otherChatListRef.push().setValue(firebaseAuth.getUid());
-                mChatListReference.push().setValue(userId);
                 mAdampter.notifyDataSetChanged();
+
+
+
             }
 
             @Override

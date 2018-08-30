@@ -270,13 +270,9 @@ public class Registration extends AppCompatActivity {
 
 
     public void secondSpinners(){
+        //Get city to display on city spinner
+        cityArray = location.getLocation(state.getSelectedItem().toString());
 
-        if(state.getSelectedItem().toString().equals("Lagos")){
-            cityArray = location.getLagos();
-        }
-        else {
-            cityArray = location.getDefaultCity();
-        }
         cityArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cityArray);
         cityArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         city.setAdapter(cityArrayAdapter);
@@ -285,7 +281,7 @@ public class Registration extends AppCompatActivity {
 
     public void firstSpinners(){
 
-        stateArray = location.getStates();
+        stateArray = location.getLocation("States");
 
 
 

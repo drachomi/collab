@@ -17,12 +17,13 @@ import java.util.List;
 public class RequestFeedViewModel extends AndroidViewModel {
     Repository repository;
     LiveData<List<Request>>allRequest;
-    public RequestFeedViewModel(@NonNull Application application) {
+    String mCity,mState;
+    public RequestFeedViewModel(@NonNull Application application,String state,String city) {
         super(application);
-        String state = "Lagos";
-        String city = "Festac";
+        mState = state;
+        mCity = city;
         repository = new Repository(application);
-        allRequest = repository.getAllRequest(state,city);
+        allRequest = repository.getAllRequest(mState,mCity);
 
     }
     public LiveData<List<Request>>getAllRequest(){

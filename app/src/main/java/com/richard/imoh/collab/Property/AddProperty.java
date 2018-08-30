@@ -30,6 +30,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -39,7 +41,11 @@ import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Utils.FireBaseUtils;
 import com.richard.imoh.collab.Utils.Location;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,9 +56,10 @@ public class AddProperty extends AppCompatActivity {
     Toolbar toolbar;
     FirebaseDatabase firebaseDatabase;
     FirebaseStorage firebaseStorage;
+    FirebaseFirestore firestore;
+    CollectionReference propertyRef;
     FirebaseAuth firebaseAuth;
     StorageReference storageReference;
-    DatabaseReference propertyRef;
     DatabaseReference agentDataRef;
     ValueEventListener valueEventListener;
     String propertyImage1;
@@ -191,10 +198,14 @@ public class AddProperty extends AppCompatActivity {
     }
 
     public void sendPropToServer(View view){
-        Property property = new Property(agentName,agentDp,propertyImage1,propertyImage2,propertyImage3,price,state,city,roomNo,plotNo,suitableFor,propertyType,letType,additionalInfo);
-        propertyRef.child(state).child(city).push().setValue(property);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate = df.format(Calendar.getInstance().getTime());
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        String propId = timestamp.getTime() + firebaseAuth.getUid();
+        String propertyPurpose = purposeSpinner.getSelectedItem().toString();
+        Property property = new Property(agentName,agentDp,propertyImage1,propertyImage2,propertyImage3,price,state,city,roomNo,plotNo,suitableFor,propertyType,propertyPurpose,letType,additionalInfo,firebaseAuth.getUid(),currentDate,propId);
+        propertyRef.add(property);
         agentDataRef.child("properties").push().setValue(property);
-
         finish();
 
 
@@ -202,10 +213,11 @@ public class AddProperty extends AppCompatActivity {
 
     void initializeFirebaseAuth(){
         firebaseDatabase = FireBaseUtils.getDatabase();
+        firestore = FireBaseUtils.getFireStore();
+        propertyRef = firestore.collection("properties");
         firebaseStorage = FirebaseStorage.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         agentDataRef = firebaseDatabase.getReference().child("agents").child(firebaseAuth.getUid());
-         propertyRef = firebaseDatabase.getReference().child("properties");
         storageReference = firebaseStorage.getReference().child("propertyImage");
 
         getUserName();
@@ -248,7 +260,7 @@ public class AddProperty extends AppCompatActivity {
         }
     }
     void stateSpinner(){
-        stateArray = location.getStates();
+        stateArray = location.getLocation("States");
         stateArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stateArray);
         stateArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         stateSpinner.setAdapter(stateArrayAdapter);
@@ -256,13 +268,8 @@ public class AddProperty extends AppCompatActivity {
 
     }
     void citySpinner(){
+        cityArray = location.getLocation(stateSpinner.getSelectedItem().toString());
 
-        if(stateSpinner.getSelectedItem().toString().equals("Lagos")){
-            cityArray = location.getLagos();
-        }
-        else {
-            cityArray = location.getDefaultCity();
-        }
         cityArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cityArray);
         cityArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         citySpinner.setAdapter(cityArrayAdapter);

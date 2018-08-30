@@ -7,6 +7,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp" />
     <LinearLayout
+        android:id="@+id/follow_list_linear"
         android:layout_margin="10dp"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/follower_list_img"

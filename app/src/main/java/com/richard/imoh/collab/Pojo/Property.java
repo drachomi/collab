@@ -24,13 +24,17 @@ public class Property {
      String plotNo;
      String suitableFor;
      String propertyType;
+     String propertyKind;
      String letType;
      String additionalInfo;
+     String userId;
+     String time;
+     String propId;
 
     public Property() {
     }
 
-    public Property(String agentName, String agentDp, String propertyImage1, String propertyImage2, String propertyImage3, String price, String state, String city, String roomNo, String plotNo, String suitableFor, String propertyType, String letType, String additionalInfo) {
+    public Property(String agentName, String agentDp, String propertyImage1, String propertyImage2, String propertyImage3, String price, String state, String city, String roomNo, String plotNo, String suitableFor, String propertyType,String  propertyKind,String letType, String additionalInfo, String userId, String time, String propId) {
         this.agentName = agentName;
         this.agentDp = agentDp;
         this.propertyImage1 = propertyImage1;
@@ -43,8 +47,12 @@ public class Property {
         this.plotNo = plotNo;
         this.suitableFor = suitableFor;
         this.propertyType = propertyType;
+        this.propertyKind = propertyKind;
         this.letType = letType;
         this.additionalInfo = additionalInfo;
+        this.userId = userId;
+        this.time = time;
+        this.propId = propId;
     }
 
     public String getAgentName() {
@@ -157,5 +165,37 @@ public class Property {
 
     public void setAdditionalInfo(String additionalInfo) {
         this.additionalInfo = additionalInfo;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getPropId() {
+        return propId;
+    }
+
+    public void setPropId(String propId) {
+        this.propId = propId;
+    }
+
+    public String getPropertyKind() {
+        return propertyKind;
+    }
+
+    public void setPropertyKind(String propertyKind) {
+        this.propertyKind = propertyKind;
     }
 }
