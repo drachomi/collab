@@ -11,7 +11,7 @@ public class User {
     String phone;
     String occupation;
     String company;
-    String ProfessionalQalification;
+    String professionalQalification;
     String gender;
     String profileDescription;
     String location;
@@ -28,7 +28,7 @@ public class User {
         this.phone = phone;
         this.occupation = occupation;
         this.company = company;
-        ProfessionalQalification = professionalQalification;
+        this.professionalQalification = professionalQalification;
         this.gender = gender;
         this.profileDescription = profileDescription;
         this.location = location;
@@ -102,11 +102,11 @@ public class User {
     }
 
     public String getProfessionalQalification() {
-        return ProfessionalQalification;
+        return professionalQalification;
     }
 
     public void setProfessionalQalification(String professionalQalification) {
-        ProfessionalQalification = professionalQalification;
+        this.professionalQalification = professionalQalification;
     }
 
     public String getGender() {

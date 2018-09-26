@@ -161,6 +161,7 @@ public class Repository {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Connection connection =  dataSnapshot.getValue(Connection.class);
                 if (dataSnapshot.exists()) {
+                    Log.d(getClass().getCanonicalName(),"Finished getting connections from firebase");
                     addConnnection(connection);
                 }
             }
@@ -213,7 +214,8 @@ public class Repository {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                Log.d("jeph ", connection.agentName);
+                Log.d(getClass().getCanonicalName(),"About to insert connection");
+                Log.d(getClass().getCanonicalName(),"Inserted connection :"+connection.agentName);
                 connectionDao.insertAll(connection);
                 return null;
             }
@@ -244,6 +246,9 @@ public class Repository {
                         editor.putString("myDp", user.getImage());
                         editor.putString("myFullname", user.getFullName());
                         editor.putString("myUserName", user.getUserName());
+                        editor.putString("myLocation", user.getLocation());
+                        editor.putString("myState",user.getLocation().split(",")[1]);
+                        editor.putBoolean("notNewUser",true);
                         editor.apply();
                 }
             }
@@ -260,6 +265,7 @@ public class Repository {
     public void addToConnectionNode(String userId,Connection connection){
         Log.d("userId",userId);
         database.getReference().child("agents").child(userId).child("connections").push().setValue(connection);
+
     }
 
 }

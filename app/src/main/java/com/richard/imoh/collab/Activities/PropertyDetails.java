@@ -46,7 +46,7 @@ public class PropertyDetails extends AppCompatActivity {
     ImageListener imageListener;
     List<Bitmap> imageToDisplay = new ArrayList<>();
     List<String> imageString = new ArrayList<>();
-    Property property;
+    String agentFullname;
     TextView propTitle, propLocation, propPrice, propPriceDetail, bedroomNo, availableFor, datePosted, plotNo, addInfo;
     LinearLayout priceLayout, bedromLayout, urgencyLinear, plotLayout;
     String propId;
@@ -98,6 +98,7 @@ public class PropertyDetails extends AppCompatActivity {
     }
 
     void displayOnView(Property property) {
+        agentFullname = property.getAgentName();
         imageString.add(property.getPropertyImage1());
         imageString.add(property.getPropertyImage2());
         imageString.add(property.getPropertyImage3());
@@ -179,6 +180,7 @@ public class PropertyDetails extends AppCompatActivity {
                 chatRef = conn.chatRef;
                 Intent intent = new Intent(PropertyDetails.this,Chat.class);
                 intent.putExtra("chatRef",chatRef);
+                intent.putExtra("username",conn.agentName);
                 startActivity(intent);
             }
         }
@@ -187,6 +189,7 @@ public class PropertyDetails extends AppCompatActivity {
             firebaseDatabase.getReference().child("agents").child(firebaseAuth.getUid()).child("chats").child(userId).setValue(chatRef);
             Intent intent = new Intent(PropertyDetails.this,Chat.class);
             intent.putExtra("chatRef",chatRef);
+            intent.putExtra("username",agentFullname);
             startActivity(intent);
         }
     }

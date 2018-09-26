@@ -2,6 +2,7 @@ package com.richard.imoh.collab.Activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -29,11 +30,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.richard.imoh.collab.Adapters.ConnectionsAdapter;
 import com.richard.imoh.collab.Adapters.FeedAdapter;
+import com.richard.imoh.collab.DBUtils.Connection;
+import com.richard.imoh.collab.DBUtils.ConnectionDB;
+import com.richard.imoh.collab.DBUtils.ConnectionDao;
 import com.richard.imoh.collab.Pojo.Property;
 import com.richard.imoh.collab.Pojo.User;
 import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Utils.FireBaseUtils;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +47,7 @@ public class AgentActivity extends AppCompatActivity {
     FeedAdapter feedAdapter;
     ConnectionsAdapter connectionsAdapter;
     List<Property> mProperty = new ArrayList<>();
-    List<User>connections = new ArrayList<>();
+    List<Connection>connections = new ArrayList<>();
     RecyclerView connectionListRecycler;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
@@ -55,6 +60,9 @@ public class AgentActivity extends AppCompatActivity {
     Toolbar toolbar;
     String userId;
     String myUserId;
+    ConnectionDB connectionDB;
+    ConnectionDao  connectionDao;
+    String agentFullName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,71 +88,35 @@ public class AgentActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         firebaseAuth = FirebaseAuth.getInstance();
         myUserId = firebaseAuth.getUid();
+        connectionDB = ConnectionDB.getInstance(this);
+        connectionDao = connectionDB.connectionDao();
         databaseReference = firebaseDatabase.getReference().child("agents").child(userId);
 
         tabHost();
         infoListen();
 
+        getAllConnection();
 
 
-        childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String user = (String) dataSnapshot.getValue();
-                Log.d("ebojele",user.trim());
-                connectionListen(user.trim());
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-        databaseReference.child("connections").addChildEventListener(childEventListener);
 
         propertyListen();
     }
 
-    void connectionListen(String user){
-        Log.d("ben","The user is "+user);
-        connectionReference = firebaseDatabase.getReference().child("agents").child(user).child("info");
-        connectionEventListerner = new ValueEventListener() {
+    void getAllConnection(){
+
+        new AsyncTask<Void,Void,Void>(){
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User mUser = dataSnapshot.getValue(User.class);
-                Log.d("ben",mUser.getuId());
-                connections.add(mUser);
+            protected Void doInBackground(Void... voids) {
+                connections = connectionDao.getAllConnection();
                 connectionsAdapter.notifyDataSetChanged();
-
+                return null;
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-        };
-        connectionReference.addValueEventListener(connectionEventListerner);
+        }.execute();
     }
 
 
     void bindAgentInfo(User user){
+        agentFullName = user.getFullName();
         ImageView profile_pics;
         getSupportActionBar().setTitle(user.getUserName());
         TextView username,fullname,location,email,phoneNo,occupation,profBody;
@@ -279,15 +251,28 @@ public class AgentActivity extends AppCompatActivity {
     }
 
     void startChat(){
-        DatabaseReference myRef = firebaseDatabase.getReference().child("agents").child(myUserId).child("chats").child(userId);
-        String chatRef = userId + myUserId;
-
-        //TODO RUN A QUERRY TO DB AND CHECK IF USER IS ALREADY A CONNECTION BEFORE CREATING NEW REF
-        myRef.setValue(chatRef);
-        databaseReference.child("chats").child(myUserId).setValue(chatRef);
-        Intent intent = new Intent(AgentActivity.this,Chat.class);
-        intent.putExtra("chatRef",chatRef);
-        startActivity(intent);
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        String chatRef = timestamp.getTime() + userId + firebaseAuth.getUid();
+        int counter = -1;
+        for (Connection conn : connections){
+            if(conn.Uid.equals(userId)){
+                counter++;
+                //User is already a connection;
+                chatRef = conn.chatRef;
+                Intent intent = new Intent(AgentActivity.this,Chat.class);
+                intent.putExtra("chatRef",chatRef);
+                intent.putExtra("username",agentFullName);
+                startActivity(intent);
+            }
+        }
+        if(counter == -1){
+            firebaseDatabase.getReference().child("agents").child(userId).child("chats").child(firebaseAuth.getUid()).setValue(chatRef);
+            firebaseDatabase.getReference().child("agents").child(firebaseAuth.getUid()).child("chats").child(userId).setValue(chatRef);
+            Intent intent = new Intent(AgentActivity.this,Chat.class);
+            intent.putExtra("chatRef",chatRef);
+            intent.putExtra("username",agentFullName);
+            startActivity(intent);
+        }
     }
 
 }

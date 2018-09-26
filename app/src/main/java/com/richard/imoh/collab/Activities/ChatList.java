@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.richard.imoh.collab.Adapters.ChatListAdapter;
+import com.richard.imoh.collab.DBUtils.Connection;
 import com.richard.imoh.collab.Utils.FollowTouchListerner;
 import com.richard.imoh.collab.Pojo.ChatMeta;
 import com.richard.imoh.collab.Pojo.User;
@@ -31,13 +32,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatList extends AppCompatActivity {
-    List<ChatMeta>chatList = new ArrayList<>();
+    List<ChatMeta> chatList = new ArrayList<>();
     ChatListAdapter chatListAdapter;
     FirebaseDatabase mFirebaseDataBase;
-    DatabaseReference myChatListReference;
+    DatabaseReference myConnectionListRef;
     String myUserId;
     String otherUserId;
+    List<Connection> connectionList = new ArrayList<>();
     ChildEventListener myChatListEventListerner;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +60,12 @@ public class ChatList extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new FollowTouchListerner(this, recyclerView, new FollowTouchListerner.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                if(!chatList.isEmpty()){
-                    Intent intent = new Intent(ChatList.this,Chat.class);
-                    intent.putExtra("chatRef",chatList.get(position).getChatRef());
-                    intent.putExtra("username",chatList.get(position).getDisplayName());
+                if (!chatList.isEmpty()) {
+                    Intent intent = new Intent(ChatList.this, Chat.class);
+                    intent.putExtra("personId",chatList.get(position).getuId());
+                    intent.putExtra("chatRef", chatList.get(position).getChatRef());
+                    intent.putExtra("username", chatList.get(position).getDisplayName());
                     startActivity(intent);
-                    finish();
                 }
             }
 
@@ -76,33 +80,22 @@ public class ChatList extends AppCompatActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         myUserId = firebaseAuth.getUid();
 
-        myChatListReference = mFirebaseDataBase.getReference().child("agents").child(myUserId).child("chats");
-
-
-
-
+        myConnectionListRef = mFirebaseDataBase.getReference().child("agents").child(myUserId).child("connections");
         attachedMyChatListerner();
-        //attachedOtherChatListListerner();
-
-
-
     }
 
 
-    void attachedMyChatListerner(){
-        if (myChatListEventListerner == null){
+    void attachedMyChatListerner() {
+        if (myChatListEventListerner == null) {
             myChatListEventListerner = new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    String chatRef = (String) dataSnapshot.getValue();
-                    String personUid = dataSnapshot.getKey();
-                    Log.d("chatRefv",chatRef);
-                    Log.d("chatRefk",personUid);
-                    getProfileInfo(personUid,chatRef);
+                    Connection connection = dataSnapshot.getValue(Connection.class);
+                    Log.d("chatRefv", "Gotten the connecton object of " + connection.agentName);
+                    connectionList.add(connection);
 
-//                ChatMeta myChatList = dataSnapshot.getValue(ChatMeta.class);
-//                chatList.add(myChatList);
-//                chatListAdapter.notifyDataSetChanged();
+                    listenToChat(connection);
+
                 }
 
                 @Override
@@ -125,26 +118,50 @@ public class ChatList extends AppCompatActivity {
 
                 }
             };
-            myChatListReference.addChildEventListener(myChatListEventListerner);
+            myConnectionListRef.addChildEventListener(myChatListEventListerner);
         }
+
     }
 
-    void detachedDbReadListener(){
-        if(myChatListEventListerner != null){
-            myChatListReference.removeEventListener(myChatListEventListerner);
-        }
-        myChatListEventListerner = null;
-    }
-    void getProfileInfo(String uId, String chatRef){
-        DatabaseReference querry = mFirebaseDataBase.getReference().child("agents").child(uId).child("info");
-        ValueEventListener childEventListener = new ValueEventListener() {
+
+    void listenToChat(Connection connection) {
+        mFirebaseDataBase.getReference().child("chats").child(connection.chatRef).child("chatMeta").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                if(user!=null){
-                    Log.d("luke", user.getFullName());
-                    Log.d("afoke",chatRef);
-                    listenToChat(user.getUserName(),user.getImage(),chatRef);
+                Log.d("ChatMeta", "Gotten inside on dataChanged");
+                ChatMeta chatMeta = dataSnapshot.getValue(ChatMeta.class);
+                if (chatMeta != null) {
+                    Log.d("ChatMeta", "Chat Meta is not null");
+
+                    //Checks for old mesg when a new one arrives and removes the old ones
+                    for (ChatMeta meta : chatList) {
+                        if (meta.getChatRef().equals(chatMeta.getChatRef())) {
+                            Log.d("chatMeta", "removed " + meta.getDisplayName());
+                            chatList.remove(meta);
+                        }
+
+                    }
+                    Log.d("chatMeta", "about to add " + chatMeta.getuId());
+                    //chatList.add(chatMeta);
+                    //Check for the last message for that chat
+                    mFirebaseDataBase.getReference().child("chats").child(connection.chatRef).child(myUserId+"unread").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()){
+                                int msgCount = Integer.parseInt(dataSnapshot.getValue().toString()) ;
+                                chatList.add(new ChatMeta(connection.agentName, chatMeta.getLastMessage(), connection.agentDp, chatMeta.getDisplayTime(), connection.chatRef, msgCount, connection.Uid));
+                                chatListAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                } else {
+                    Log.d("chatmeta", "chat meta returned null");
                 }
             }
 
@@ -152,57 +169,9 @@ public class ChatList extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        };
-        querry.addValueEventListener(childEventListener);
-    }
-
-    void listenToChat(String name,String picture, String chatRef){
-        ValueEventListener otherChatListEventListerner;
-        DatabaseReference chatMetaRef;
-        chatMetaRef = mFirebaseDataBase.getReference().child("chats").child(chatRef).child("chatMeta");
-            otherChatListEventListerner = new ValueEventListener() {
-
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Log.d("reeeeeeee",chatRef);
-                    ChatMeta chatMeta = dataSnapshot.getValue(ChatMeta.class);
-                    if(chatMeta!= null){
-                        for(int a = 0; a<chatList.size();a++){
-                            if(chatList.get(a).getChatRef().equals(chatMeta.getChatRef())){
-                                chatList.remove(a);
-                                Log.d("chatMeta",chatMeta.getLastMessage());
-                            }
-                            chatList.add(new ChatMeta(name,chatMeta.getLastMessage(),picture,chatMeta.getDisplayTime(),chatRef,chatMeta.getMessageCount(),chatMeta.getuId()));
-                            chatListAdapter.notifyDataSetChanged();
-                        }
-
-                    }
-                    else {
-                        Log.d("chatmeta","chat meta returned null");
-                    }
-
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            };
-            chatMetaRef.addValueEventListener(otherChatListEventListerner);
-        }
-    @Override
-    protected void onPause() {
-        super.onPause();
-//        detachedDbReadListener();
-//        chatList.clear();
+        });
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        attachedMyChatListerner();
-    }
 
 }

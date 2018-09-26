@@ -43,7 +43,6 @@ public class Follow extends AppCompatActivity {
     DatabaseReference databaseReference;
     ChildEventListener childEventListener;
     DatabaseReference mChatListReference;
-    DatabaseReference otherChatListRef;
     DatabaseReference connectionInfoRef;
     FirebaseAuth firebaseAuth;
     User obj;
@@ -92,13 +91,15 @@ public class Follow extends AppCompatActivity {
                 String agentName = mUser.get(position).getFullName();
                 String dp = mUser.get(position).getImage();
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                String myLocation = preferences.getString("myLocation", "");
+                String userLocation = mUser.get(position).getLocation();
 
                 //Create chatref using time stamp and individual userId
                 String chatRef = timestamp.getTime() + userId + myId;
 
                 //Create new connection objects for both
-                Connection otherUser = new Connection(userId,agentName,dp,chatRef);
-                Connection mine = new Connection(myId,myNmae,myDp,chatRef);
+                Connection otherUser = new Connection(userId,agentName,dp,chatRef,userLocation);
+                Connection mine = new Connection(myId,myNmae,myDp,chatRef,myLocation);
                 Log.d(" userO", userId);
 
                 //Send the new connections to repository class  to add to their respective nodes

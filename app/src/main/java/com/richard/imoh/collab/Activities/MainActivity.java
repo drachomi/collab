@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -61,7 +62,6 @@ public class MainActivity extends AppCompatActivity
     DatabaseReference databaseReference;
     DatabaseReference propertyRef;
     DatabaseReference requestRef;
-    public static final String MyPREFERENCES = "MyPrefs" ;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     Repository repo;
@@ -79,44 +79,9 @@ public class MainActivity extends AppCompatActivity
         ChildEventListener childEventListener;
         firebaseDatabase = FirebaseDatabase.getInstance();
         FireBaseUtils.getDatabase();
-        firebaseAuth = FirebaseAuth.getInstance();
-        if(firebaseAuth.getCurrentUser()==null){
-            startActivity(new Intent(MainActivity.this,Login.class));
-        }
-        else {
-            String userId = firebaseAuth.getUid();
-            Log.d("mere","User id is "+userId);
-            databaseReference = firebaseDatabase.getReference().child("agents").child(userId).child("info");
-            SharedPreferences sharedPref = getSharedPreferences(MyPREFERENCES,Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            childEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                }
+        firebaseAuth = FireBaseUtils.getFirebaseAuth();
 
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            };
-            getAllConnection();
-            databaseReference.addChildEventListener(childEventListener);
-        }
 
         //TODO Change location to match what user select and delete this line
         location = "Badagry";
@@ -147,17 +112,12 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_profile) {
             startActivity(new Intent(MainActivity.this,Profile.class));
-        } else if (id == R.id.nav_connection) {
-            startActivity(new Intent(MainActivity.this,ConnectionList.class));
-        } else if (id == R.id.nav_post_property) {
+        }  else if (id == R.id.nav_post_property) {
             startActivity(new Intent(MainActivity.this,AddProperty.class));
         } else if (id == R.id.nav_post_request) {
             startActivity(new Intent(MainActivity.this,AddRequest.class));
         } else if (id == R.id.nav_chats) {
             startActivity(new Intent(MainActivity.this,ChatList.class));
-        }
-        else if (id == R.id.nav_suggestion){
-            startActivity(new Intent(MainActivity.this,Follow.class));
         }
         else if (id == R.id.nav_sign_out){
             signOut();
@@ -225,11 +185,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    void getAllConnection(){
-        repo = new Repository(this);
-        repo.fetchConnection();
-        repo.getCurrentUser();
-    }
+
 
     @Override
     public void onResume(){

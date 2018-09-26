@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hbb20.GThumb;
+import com.richard.imoh.collab.DBUtils.Connection;
 import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Pojo.User;
 
@@ -17,9 +18,9 @@ import java.util.List;
  */
 
 public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.MyViewHolder> {
-    List<User> mUser;
+    List<Connection> mUser;
 
-    public ConnectionsAdapter(List<User> mUser) {
+    public ConnectionsAdapter(List<Connection> mUser) {
         this.mUser = mUser;
     }
 
@@ -34,14 +35,14 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
     @Override
     public void onBindViewHolder(ConnectionsAdapter.MyViewHolder holder, int position) {
-        User user = mUser.get(position);
-        holder.name.setText(user.getFullName());
-        holder.location.setText(user.getLocation());
-        if(user.getImage().equals("none")){
-            user.setImage("");
+        Connection user = mUser.get(position);
+        holder.name.setText(user.agentName);
+        holder.location.setText(user.location);
+        if(user.agentDp.equals("none")){
+            user.agentDp = "";
         }
 
-        holder.imageView.loadThumbForName(user.getImage(),user.getFullName());
+        holder.imageView.loadThumbForName(user.agentDp,user.agentName);
 //        Glide.with(holder.imageView.getContext())
 //                .load(user.getImage())
 //                .apply(RequestOptions.circleCropTransform())

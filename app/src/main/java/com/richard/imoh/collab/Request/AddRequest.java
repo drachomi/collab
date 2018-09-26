@@ -25,6 +25,7 @@ import com.richard.imoh.collab.Pojo.User;
 import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Utils.FireBaseUtils;
 import com.richard.imoh.collab.Utils.Location;
+import com.richard.imoh.collab.Utils.PropertyTypeList;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -58,6 +59,7 @@ public class AddRequest extends AppCompatActivity {
     List<String> purposeList =  new ArrayList<String>();
     List<String>residentialList = new ArrayList<>();
     List<String>commercialList = new ArrayList<>();
+    PropertyTypeList typeList = new PropertyTypeList();
 
 
     @Override
@@ -86,8 +88,6 @@ public class AddRequest extends AppCompatActivity {
 
         priority = false;
 
-
-        addSpinnerString();
         attachValueListerner();
         stateSpinner();
         purposeSpinner();
@@ -126,14 +126,14 @@ public class AddRequest extends AppCompatActivity {
         citySpinner.setOnItemSelectedListener(cityClickListerner);
     }
     void purposeSpinner(){
-        purposeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, purposeList);
+        purposeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeList.getPurposeList());
         purposeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         purposeSpinner.setAdapter(purposeAdapter);
         purposeSpinner.setOnItemSelectedListener(purposeClickListerner);
 
     }
-    void propertyTySpinner(){
-        propertyTypeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, propertyTypeList);
+    void propertyTySpinner(List<String>propType){
+        propertyTypeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, propType);
         propertyTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         propertyTySpinner.setAdapter(propertyTypeAdapter);
         propertyTySpinner.setOnItemSelectedListener(propertyClickListerner);
@@ -144,12 +144,11 @@ public class AddRequest extends AppCompatActivity {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             if(purposeSpinner.getSelectedItem().toString().equals("Residential")){
-                propertyTypeList = residentialList;
+                propertyTySpinner(typeList.getResidential());
             }
             if(purposeSpinner.getSelectedItem().toString().equals("Commercial")){
-                propertyTypeList = commercialList;
+                propertyTySpinner(typeList.getCommercialList());
             }
-            propertyTySpinner();
 
         }
 
@@ -197,25 +196,7 @@ public class AddRequest extends AppCompatActivity {
 
         }
     };
-    void addSpinnerString(){
-        purposeList.add("Commercial");
-        purposeList.add("Residential");
-        residentialList.add("Single Room");
-        residentialList.add("Self Contain");
-        residentialList.add("Mini Flats");
-        residentialList.add("1 Bed Room Flats");
-        residentialList.add("2 Bed Room Flats");
-        residentialList.add("3 Bed Room Flats");
-        residentialList.add("4 Bed Room Flats");
-        residentialList.add("Duplex");
-        residentialList.add("Estate Block");
-        residentialList.add("Land");
-        commercialList.add("Office Space");
-        commercialList.add("Co Working Space");
-        commercialList.add("Shop");
-        commercialList.add("Ware House");
-        commercialList.add("Cemetery");
-    }
+
     public void addRequestBtn(View view){
         ProgressBar bar = findViewById(R.id.add_req_progress);
         bar.setVisibility(View.VISIBLE);

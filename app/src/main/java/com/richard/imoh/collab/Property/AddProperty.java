@@ -1,8 +1,12 @@
 package com.richard.imoh.collab.Property;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,90 +17,64 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.richard.imoh.collab.Pojo.Property;
-import com.richard.imoh.collab.Pojo.User;
 import com.richard.imoh.collab.R;
-import com.richard.imoh.collab.Utils.FireBaseUtils;
+
+import com.richard.imoh.collab.Utils.GetFilePath;
 import com.richard.imoh.collab.Utils.Location;
+import com.richard.imoh.collab.Utils.SaveImageInFireStore;
+import com.richard.imoh.collab.Utils.SavePropertyInFireStore;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 public class AddProperty extends AppCompatActivity {
-    ImageView imageView ;
-    ProgressBar progressBar;
-    Toolbar toolbar;
-    FirebaseDatabase firebaseDatabase;
-    FirebaseStorage firebaseStorage;
-    FirebaseFirestore firestore;
-    CollectionReference propertyRef;
-    FirebaseAuth firebaseAuth;
-    StorageReference storageReference;
-    DatabaseReference agentDataRef;
-    ValueEventListener valueEventListener;
     String propertyImage1;
     String propertyImage2;
     String propertyImage3;
-    Spinner letTypeSpinner,stateSpinner,citySpinner,purposeSpinner,propertyTySpinner;
-    EditText plotEditText,roomEditText,addInfo,priceEdit;
-    String agentName,agentDp,price,state,city,roomNo,plotNo,suitableFor,propertyType,letType,additionalInfo;
+    Spinner letTypeSpinner, stateSpinner, citySpinner, purposeSpinner, propertyTySpinner,suitableForSpinner;
+    EditText plotEditText, addInfo, priceEdit;
+    String agentName, agentDp, price, state, city, plotNo, suitableFor, propertyType, letType, additionalInfo,userId;
     private ArrayAdapter<String> cityArrayAdapter;
     private ArrayAdapter<String> stateArrayAdapter;
-    private ArrayAdapter<String>purposeAdapter;
-    private ArrayAdapter<String>propertyTypeAdapter;
-    RelativeLayout relativeLayout;
-    Boolean priority;
+    private ArrayAdapter<String> purposeAdapter;
+    private ArrayAdapter<String> propertyTypeAdapter;
+
     Location location = new Location();
     ArrayList<String> cityArray;
     ArrayList<String> stateArray;
-    List<String>propertyTypeList = new ArrayList<>();
-    List<String> purposeList =  new ArrayList<String>();
-    List<String>residentialList = new ArrayList<>();
-    List<String>commercialList = new ArrayList<>();
-    ScrollView scrollView;
+    List<String> propertyTypeList = new ArrayList<>();
+    List<String> purposeList = new ArrayList<String>();
+    List<String> residentialList = new ArrayList<>();
+    List<String> commercialList = new ArrayList<>();
+    ImageView image1,image2,image3;
+    RelativeLayout firstR,secondR,thirdR;
     static final int IMAGE_PICKER = 9;
+    int imgCounter = 0;
+    SaveImageInFireStore imageInFireStore = new SaveImageInFireStore();
 
+    GetFilePath getFilePath = new GetFilePath();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_property);
-        imageView = findViewById(R.id.add_prop_image);
-        toolbar = findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Add Property");
+        firstR = findViewById(R.id.add_prop_first_relative);
+        secondR = findViewById(R.id.add_prop_second_relative);
+        thirdR = findViewById(R.id.add_prop_third_relative);
         plotEditText = findViewById(R.id.add_prop_plots);
-        roomEditText = findViewById(R.id.add_prop_rooms);
         addInfo = findViewById(R.id.add_prop_description);
         priceEdit = findViewById(R.id.add_prop_price);
         letTypeSpinner = findViewById(R.id.add_prop_let_type);
@@ -104,72 +82,30 @@ public class AddProperty extends AppCompatActivity {
         citySpinner = findViewById(R.id.add_prop_city);
         purposeSpinner = findViewById(R.id.add_prop_purpose);
         propertyTySpinner = findViewById(R.id.add_prop_prop_type);
-        scrollView = findViewById(R.id.add_prop_scroll);
-        relativeLayout = findViewById(R.id.add_prop_relative);
-        progressBar = findViewById(R.id.add_prop_progress);
-        suitableFor = "Both Family and Bachelor";
+        suitableForSpinner = findViewById(R.id.add_prop_suitable);
+        image1 = findViewById(R.id.add_prop_image1);
+        image2 = findViewById(R.id.add_prop_image2);
+        image3 = findViewById(R.id.add_prop_image3);
         propertyImage1 = "";
         propertyImage2 = "";
         propertyImage3 = "";
-        initializeFirebaseAuth();
-        addSpinnerString();
-        stateSpinner();
-        purposeSpinner();
+          getUserName();
+          addSpinnerString();
+          stateSpinner();
+          purposeSpinner();
 
     }
 
-   public void addPictureBtn(View view){
+    public void addPictureBtn(View view) {
 
-       price = priceEdit.getText().toString();
-       state = String.valueOf(stateSpinner.getSelectedItem());
-       city = String.valueOf(citySpinner.getSelectedItem());
-       roomNo = roomEditText.getText().toString();
-       plotNo = plotEditText.getText().toString();
-       propertyType = String.valueOf(propertyTySpinner.getSelectedItem());
-       letType = String.valueOf(letTypeSpinner.getSelectedItem());
-       additionalInfo = addInfo.getText().toString();
-        if(TextUtils.isEmpty(price)){
-            Toast.makeText(getApplicationContext(), "Choose Price Please", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(TextUtils.isEmpty(state)){
-            Toast.makeText(getApplicationContext(), "Choose State Please", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(TextUtils.isEmpty(city)){
-            Toast.makeText(getApplicationContext(), "Choose City Please", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(TextUtils.isEmpty(roomNo)||TextUtils.isEmpty(plotNo)){
-            Toast.makeText(getApplicationContext(), "Choose Either roomNo or PlotNo Please", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if(TextUtils.isEmpty(propertyType)){
-            Toast.makeText(getApplicationContext(), "Choose Property Type Please", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(TextUtils.isEmpty(letType)){
-            Toast.makeText(getApplicationContext(), "Choose Let Type Please", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(TextUtils.isEmpty(additionalInfo)){
-            Toast.makeText(getApplicationContext(), "Additional Info Should not be blank", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        else {
 
-            scrollView.setVisibility(View.GONE);
-            relativeLayout.setVisibility(View.VISIBLE);
-
-        }
     }
 
-    public  void addPropertyImages(View view){
+    public void addPropertyImages(View view) {
         // TODO: Fire an intent to show an image picker
-        Log.d("dayo","Got to the onclick listerner method");
+        Log.d("dayo", "Got to the onclick listerner method");
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/jpeg");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         startActivityForResult(Intent.createChooser(intent, "Complete action using"), IMAGE_PICKER);
     }
@@ -178,88 +114,52 @@ public class AddProperty extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        imageView.setVisibility(View.GONE);
+//        imageView.setVisibility(View.GONE);
 
-        if(requestCode == IMAGE_PICKER && resultCode == RESULT_OK){
-            if(data.getClipData() != null){
+        if (requestCode == IMAGE_PICKER && resultCode == RESULT_OK) {
+            if (data.getClipData() != null) {
                 int count = data.getClipData().getItemCount(); //evaluate the count before the for loop --- otherwise, the count is evaluated every loop.
-                for(int i = 0; i < count; i++){
+                for (int i = 0; i < count; i++) {
                     Uri selectedImageUri = data.getClipData().getItemAt(i).getUri();
-                    getMultipleImage(selectedImageUri,i,count);
+                    showDialog(selectedImageUri);
+//                    getMultipleImage(selectedImageUri, i, count);
                 }
-            }
-            else if(data.getData() != null){
+            } else if (data.getData() != null) {
                 Uri selectedImageUri = data.getData();
-                getMultipleImage(selectedImageUri,0,1);
+                showDialog(selectedImageUri);
+//                getMultipleImage(selectedImageUri, 0, 1);
 
             }
 
         }
     }
 
-    public void sendPropToServer(View view){
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDate = df.format(Calendar.getInstance().getTime());
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        String propId = timestamp.getTime() + firebaseAuth.getUid();
-        String propertyPurpose = purposeSpinner.getSelectedItem().toString();
-        Property property = new Property(agentName,agentDp,propertyImage1,propertyImage2,propertyImage3,price,state,city,roomNo,plotNo,suitableFor,propertyType,propertyPurpose,letType,additionalInfo,firebaseAuth.getUid(),currentDate,propId);
-        propertyRef.add(property);
-        agentDataRef.child("properties").push().setValue(property);
-        finish();
-
-
-    }
-
-    void initializeFirebaseAuth(){
-        firebaseDatabase = FireBaseUtils.getDatabase();
-        firestore = FireBaseUtils.getFireStore();
-        propertyRef = firestore.collection("properties");
-        firebaseStorage = FirebaseStorage.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        agentDataRef = firebaseDatabase.getReference().child("agents").child(firebaseAuth.getUid());
-        storageReference = firebaseStorage.getReference().child("propertyImage");
-
-        getUserName();
-
-    }
-    void getUserName(){
-        valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                agentName = user.getFullName();
-                agentDp = user.getImage();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-        agentDataRef.child("info").addValueEventListener(valueEventListener);
-
-    }
-   public void suitableButton(View view){
-        boolean checked = ((RadioButton) view).isChecked();
-
-        // Check which radio button was clicked
-        switch(view.getId()) {
-            case R.id.bachelor:
-                if (checked)
-                    suitableFor = "Bachelor";
-                break;
-            case R.id.family:
-                if (checked)
-                    suitableFor = "Family";
-                break;
-            case R.id.bachelor_family:
-                if (checked)
-                    suitableFor = "Both Family and Bachelor";
-                break;
+    public void sendPropToServer(View view) {
+        if(TextUtils.isEmpty(propertyImage1)||TextUtils.isEmpty(propertyImage2)||TextUtils.isEmpty(propertyImage3)){
+            Toast.makeText(getApplicationContext(), "Please Select 3 Pictures", Toast.LENGTH_SHORT).show();
+            return;
         }
+        else {
+            sendToGetImage();
+        }
+
+
+
+
     }
-    void stateSpinner(){
+
+
+
+    void getUserName() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        agentName = preferences.getString("myFullname", "");
+        agentDp = preferences.getString("myDp", "");
+        userId = preferences.getString("myUserId", "");
+
+    }
+
+
+    void stateSpinner() {
         stateArray = location.getLocation("States");
         stateArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stateArray);
         stateArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -267,7 +167,8 @@ public class AddProperty extends AppCompatActivity {
         stateSpinner.setOnItemSelectedListener(stateClickListerner);
 
     }
-    void citySpinner(){
+
+    void citySpinner() {
         cityArray = location.getLocation(stateSpinner.getSelectedItem().toString());
 
         cityArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cityArray);
@@ -275,28 +176,31 @@ public class AddProperty extends AppCompatActivity {
         citySpinner.setAdapter(cityArrayAdapter);
         citySpinner.setOnItemSelectedListener(cityClickListerner);
     }
-    void purposeSpinner(){
+
+    void purposeSpinner() {
         purposeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, purposeList);
         purposeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         purposeSpinner.setAdapter(purposeAdapter);
         purposeSpinner.setOnItemSelectedListener(purposeClickListerner);
 
     }
-    void propertyTySpinner(){
+
+    void propertyTySpinner() {
         propertyTypeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, propertyTypeList);
         propertyTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         propertyTySpinner.setAdapter(propertyTypeAdapter);
         propertyTySpinner.setOnItemSelectedListener(propertyClickListerner);
     }
-    private AdapterView.OnItemSelectedListener purposeClickListerner = new AdapterView.OnItemSelectedListener(){
+
+    private AdapterView.OnItemSelectedListener purposeClickListerner = new AdapterView.OnItemSelectedListener() {
 
 
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            if(purposeSpinner.getSelectedItem().toString().equals("Residential")){
+            if (purposeSpinner.getSelectedItem().toString().equals("Residential")) {
                 propertyTypeList = residentialList;
             }
-            if(purposeSpinner.getSelectedItem().toString().equals("Commercial")){
+            if (purposeSpinner.getSelectedItem().toString().equals("Commercial")) {
                 propertyTypeList = commercialList;
             }
             propertyTySpinner();
@@ -343,7 +247,8 @@ public class AddProperty extends AppCompatActivity {
 
         }
     };
-    void addSpinnerString(){
+
+    void addSpinnerString() {
         purposeList.add("Commercial");
         purposeList.add("Residential");
         residentialList.add("Single Room");
@@ -353,6 +258,7 @@ public class AddProperty extends AppCompatActivity {
         residentialList.add("2 Bed Room Flats");
         residentialList.add("3 Bed Room Flats");
         residentialList.add("4 Bed Room Flats");
+        residentialList.add("Bungalow");
         residentialList.add("Duplex");
         residentialList.add("Estate Block");
         residentialList.add("Land");
@@ -367,25 +273,24 @@ public class AddProperty extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString("name", agentName);
         outState.putString("agentDp", agentDp);
-        outState.putString("price",price);
+        outState.putString("price", price);
         outState.putString("state", state);
         outState.putString("city", city);
-        outState.putString("roomNo",roomNo);
-        outState.putString("plotNo",plotNo);
+        outState.putString("plotNo", plotNo);
         outState.putString("suitableFor", suitableFor);
         outState.putString("propertyType", propertyType);
-        outState.putString("letType",letType);
-        outState.putString("addInfo",additionalInfo);
+        outState.putString("letType", letType);
+        outState.putString("addInfo", additionalInfo);
         super.onSaveInstanceState(outState);
     }
-    public void onRestoreInstanceState(Bundle savedInstanceState){
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         agentName = savedInstanceState.getString("name");
         agentDp = savedInstanceState.getString("agentDp");
         price = savedInstanceState.getString("price");
         state = savedInstanceState.getString("state");
         city = savedInstanceState.getString("city");
-        roomNo = savedInstanceState.getString("roomNo");
         plotNo = savedInstanceState.getString("plotNo");
         suitableFor = savedInstanceState.getString("suitableFor");
         propertyType = savedInstanceState.getString("propertyType");
@@ -395,43 +300,167 @@ public class AddProperty extends AppCompatActivity {
     }
 
 
-    void getMultipleImage(Uri selectedImageUri,int i, int count){
-        final StorageReference ref = storageReference.child(selectedImageUri.getLastPathSegment());
-        UploadTask uploadTask = ref.putFile(selectedImageUri);
-        Task<Uri> task = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+    private long getTime() {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        return timestamp.getTime();
+
+    }
+
+    public void addBtn1(View view){
+        plotNo = plotEditText.getText().toString();
+        state = String.valueOf(stateSpinner.getSelectedItem());
+        city = String.valueOf(citySpinner.getSelectedItem());
+        if (TextUtils.isEmpty(state)) {
+            Toast.makeText(getApplicationContext(), "Choose State Please", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(city)) {
+            Toast.makeText(getApplicationContext(), "Choose City Please", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(plotNo)) {
+            Toast.makeText(getApplicationContext(), "Please enter roomNo or PlotNo Please", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (TextUtils.isEmpty(propertyType)) {
+            Toast.makeText(getApplicationContext(), "Choose Property Type Please", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else {
+            firstR.setVisibility(View.GONE);
+            secondR.setVisibility(View.VISIBLE);
+        }
+
+
+
+    }
+    public void addBtn2(View view){
+        suitableFor = String.valueOf(suitableForSpinner.getSelectedItem());
+        propertyType = String.valueOf(propertyTySpinner.getSelectedItem());
+        price = priceEdit.getText().toString();
+        letType = String.valueOf(letTypeSpinner.getSelectedItem());
+        additionalInfo = addInfo.getText().toString();
+        if (TextUtils.isEmpty(price)) {
+            Toast.makeText(getApplicationContext(), "Choose Price Please", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(suitableFor)|| suitableFor.equals("Suitable For")){
+            Toast.makeText(getApplicationContext(), "Choose Suitable For Please", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(letType)) {
+            Toast.makeText(getApplicationContext(), "Choose Let Type Please", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(additionalInfo)) {
+            Toast.makeText(getApplicationContext(), "Additional Info Should not be blank", Toast.LENGTH_SHORT).show();
+            return;
+        }else {
+            secondR.setVisibility(View.GONE);
+            thirdR.setVisibility(View.VISIBLE);
+        }
+
+
+
+    }
+
+    void showDialog(Uri uri){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog alertDialog;
+        View view = getLayoutInflater().inflate(R.layout.image_dialog,null);
+        ImageView img = view.findViewById(R.id.image_dialog_image);
+        Button ok = view.findViewById(R.id.image_dialog_ok);
+        Button nok = view.findViewById(R.id.image_dialog_nok);
+        Glide.with(img.getContext())
+                .load(uri)
+                .into(img);
+        builder.setView(view);
+        alertDialog = builder.create();
+        alertDialog.show();
+
+        ok.setOnClickListener(new View.OnClickListener() {
             @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if(!task.isSuccessful()){
-                    throw  task.getException();
-                }
-                return ref.getDownloadUrl();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if(task.isSuccessful()){
-                    Uri downloadUri = task.getResult();
-                    switch (i){
-                        case 1:
-                            propertyImage1 = downloadUri.toString();
-                        case 2:
-                            propertyImage2 = downloadUri.toString();
-                        case 3:
-                            propertyImage3 = downloadUri.toString();
-                    }
-
-                    if(i == count-1){
-                        Button button = findViewById(R.id.sendProToServerBtn);
-                        button.setVisibility(View.VISIBLE);
-                        progressBar.setVisibility(View.GONE);
-                        imageView.setVisibility(View.VISIBLE);
-                        imageView.setImageResource(R.drawable.complete);
-                        imageView.setOnClickListener(null);
-
-                    }
+            public void onClick(View view) {
+                imgCounter = imgCounter + 1;
+                switch (imgCounter){
+                    case 1:
+                        Log.d("imagecounter","Image counter is:  " +uri.toString());
+                        propertyImage1 = getFilePath.getPath(getApplicationContext(),uri);
+                       // propertyImage1 = getPath(uri);
+                        Log.d("imagecounter","Image counter is:  " +propertyImage1);
+                        break;
+                    case 2:
+                        Log.d("imagecounter","Image counter is:  " +uri.toString());
+                        propertyImage2 = getFilePath.getPath(getApplicationContext(),uri);
+                        Log.d("imagecounter","Image counter is:  " +propertyImage2);
+                        break;
+                    case 3:
+                        Log.d("imagecounter","Image counter is:  " +uri.toString());
+                        propertyImage3 = getFilePath.getPath(getApplicationContext(),uri);
+                        Log.d("imagecounter","Image counter is:  " +propertyImage3);
+                        break;
 
                 }
+                alertDialog.dismiss();
+                displayImages();
             }
         });
+
+        nok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+
     }
+    void displayImages(){
+        Glide.with(image1.getContext())
+                .load(propertyImage1)
+                .apply(RequestOptions.placeholderOf(R.drawable.addhome))
+                .into(image1);
+        Glide.with(image2.getContext())
+                .load(propertyImage2)
+                .apply(RequestOptions.placeholderOf(R.drawable.addhome))
+                .into(image2);
+        Glide.with(image3.getContext())
+                .load(propertyImage3)
+                .apply(RequestOptions.placeholderOf(R.drawable.addhome))
+                .into(image3);
+    }
+    void sendToGetImage(){
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate = df.format(Calendar.getInstance().getTime());
+        String propId = getTime() + userId;
+        String propertyPurpose = purposeSpinner.getSelectedItem().toString();
+
+        Log.d("propimage","image is :"+propertyImage1);
+        Property property = new Property(agentName, agentDp, propertyImage1, propertyImage2, propertyImage3, price, state, city, plotNo, suitableFor, propertyType, propertyPurpose, letType, additionalInfo, userId, currentDate, propId);
+        imageInFireStore.saveImage(property);
+        finish();
+    }
+
+
+//    public String getPath(Uri uri){
+//        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+//
+//        cursor.moveToFirst();
+//        String document_id = cursor.getString(0);
+//        document_id = document_id.substring(document_id.lastIndexOf(":")+1);
+//        cursor.close();
+//        cursor = getContentResolver().query(
+//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+//        cursor.moveToFirst();
+//        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+//        if(cursor.moveToNext()){
+//            cursor.close();
+//        }
+//
+//
+//        return path;
+//    }
+
 }

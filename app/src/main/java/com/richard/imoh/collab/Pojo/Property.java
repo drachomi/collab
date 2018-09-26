@@ -34,7 +34,27 @@ public class Property {
     public Property() {
     }
 
-    public Property(String agentName, String agentDp, String propertyImage1, String propertyImage2, String propertyImage3, String price, String state, String city, String roomNo, String plotNo, String suitableFor, String propertyType,String  propertyKind,String letType, String additionalInfo, String userId, String time, String propId) {
+    public Property(String agentName, String agentDp, String propertyImage1, String propertyImage2, String propertyImage3, String price, String state, String city, String plotNo, String suitableFor, String propertyType, String propertyKind, String letType, String additionalInfo, String userId, String time, String propId) {
+        this.agentName = agentName;
+        this.agentDp = agentDp;
+        this.propertyImage1 = propertyImage1;
+        this.propertyImage2 = propertyImage2;
+        this.propertyImage3 = propertyImage3;
+        this.price = price;
+        this.state = state;
+        this.city = city;
+        this.plotNo = plotNo;
+        this.suitableFor = suitableFor;
+        this.propertyType = propertyType;
+        this.propertyKind = propertyKind;
+        this.letType = letType;
+        this.additionalInfo = additionalInfo;
+        this.userId = userId;
+        this.time = time;
+        this.propId = propId;
+    }
+
+    public Property(String agentName, String agentDp, String propertyImage1, String propertyImage2, String propertyImage3, String price, String state, String city, String roomNo, String plotNo, String suitableFor, String propertyType, String  propertyKind, String letType, String additionalInfo, String userId, String time, String propId) {
         this.agentName = agentName;
         this.agentDp = agentDp;
         this.propertyImage1 = propertyImage1;

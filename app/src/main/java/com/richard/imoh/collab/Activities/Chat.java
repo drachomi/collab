@@ -29,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -55,6 +56,7 @@ public class Chat extends AppCompatActivity {
     Button sendBtn;
     String username;
     String time;
+    String isRead;
 
     static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
     static final int RC_PHOTO_PICKER = 2;
@@ -64,6 +66,7 @@ public class Chat extends AppCompatActivity {
     private ImageView mPhotoPicker;
     String myUserId;
     int messageCount;
+    String personUserId;
 
 
 
@@ -88,15 +91,9 @@ public class Chat extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         String chatRef = bundle.getString("chatRef");
         String personName = bundle.getString("username");
+        personUserId = bundle.getString("personId");
         getSupportActionBar().setTitle(personName);
         mChatReference = mFirebaseDataBase.getReference().child("chats").child(chatRef);
-
-
-
-
-//        Date date = new Date(location.getTime());
-//        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(mContext);
-//        mTimeText.setText("Time: " + dateFormat.format(date));
         recyclerView = findViewById(R.id.reyclerview_message_list);
         mChatAdpater = new ChatAdapter(getApplicationContext(), messages);
         Log.d("recyclerview", "Create chat adapter");
@@ -106,6 +103,9 @@ public class Chat extends AppCompatActivity {
         Log.d("recyclerview", "Finished Creating layout manager");
         recyclerView.setAdapter(mChatAdpater);
         Log.d("recyclerview", "Finish set recycler view to adapter");
+
+        //Indicate that i have read  the messages in this chats
+        mChatReference.child(myUserId+"unread").setValue(0);
 
 
         DateFormat df = new SimpleDateFormat("h:mm a");
@@ -148,6 +148,9 @@ public class Chat extends AppCompatActivity {
            messageCount++;
            ChatMeta chatMeta = new ChatMeta(editText.getText().toString(),time,messageCount,firebaseAuth.getUid());
            mChatReference.child("chatMeta").setValue(chatMeta);
+
+           //Increment message count for the recipient
+           mChatReference.child(personUserId+"unread").setValue(messageCount);
            editText.setText("");
        });
        attachDbReadListener();
@@ -156,6 +159,7 @@ public class Chat extends AppCompatActivity {
 
     }
     void attachDbReadListener(){
+
         if(mChildEventListerner == null){
 
             mChildEventListerner = new ChildEventListener() {
@@ -201,6 +205,7 @@ public class Chat extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         detachedDbReadListener();
+        mChatReference.child(myUserId+"unread").setValue(0);
         messages.clear();
     }
 
@@ -235,6 +240,10 @@ public class Chat extends AppCompatActivity {
                         mChatReference.child("messages").push().setValue(friendlyMessage);
                         messageCount++;
                         ChatMeta chatMeta = new ChatMeta("Image",time,messageCount,firebaseAuth.getUid());
+
+                        //Increment message count for the recipient
+                        mChatReference.child(personUserId+"unread").setValue(messageCount);
+
                         mChatReference.child("chatMeta").setValue(chatMeta);
 
                     }

@@ -2,6 +2,7 @@ package com.richard.imoh.collab.Activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.richard.imoh.collab.Adapters.ConnectionsAdapter;
 import com.richard.imoh.collab.Adapters.FeedAdapter;
+import com.richard.imoh.collab.DBUtils.Connection;
+import com.richard.imoh.collab.DBUtils.ConnectionDB;
+import com.richard.imoh.collab.DBUtils.ConnectionDao;
 import com.richard.imoh.collab.Pojo.Property;
 import com.richard.imoh.collab.Pojo.User;
 import com.richard.imoh.collab.R;
@@ -42,7 +46,7 @@ public class Profile extends AppCompatActivity {
     FeedAdapter feedAdapter;
     ConnectionsAdapter connectionsAdapter;
     List<Property> mProperty = new ArrayList<>();
-    List<User>connections = new ArrayList<>();
+    List<Connection>connections = new ArrayList<>();
     RecyclerView connectionListRecycler;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
@@ -53,6 +57,8 @@ public class Profile extends AppCompatActivity {
     ValueEventListener infoEventListerner;
     ChildEventListener propertyListerner;
     Toolbar toolbar;
+    ConnectionDB connectionDB;
+    ConnectionDao connectionDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,65 +83,31 @@ public class Profile extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         String myUserId = firebaseAuth.getUid();
         databaseReference = firebaseDatabase.getReference().child("agents").child(myUserId);
+        connectionDB = ConnectionDB.getInstance(this);
+        connectionDao = connectionDB.connectionDao();
 
 
         tabHost();
         infoListen();
+        getAllConnection();
 
         propertyListen();
-        childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String user = (String) dataSnapshot.getValue();
-                Log.d("ebojele",user.trim());
-                connectionListen(user.trim());
 
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-        databaseReference.child("connections").addChildEventListener(childEventListener);
 
     }
 
-    void connectionListen(String user){
-        Log.d("ben","The user is "+user);
-        connectionReference = firebaseDatabase.getReference().child("agents").child(user).child("info");
-        connectionEventListerner = new ValueEventListener() {
+
+    void getAllConnection(){
+
+        new AsyncTask<Void,Void,Void>(){
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User mUser = dataSnapshot.getValue(User.class);
-                Log.d("ben",mUser.getuId());
-                connections.add(mUser);
+            protected Void doInBackground(Void... voids) {
+                connections = connectionDao.getAllConnection();
+//                Log.d("rich",connections.get(0).agentName);
                 connectionsAdapter.notifyDataSetChanged();
-
+                return null;
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-        };
-        connectionReference.addValueEventListener(connectionEventListerner);
+        }.execute();
     }
 
 

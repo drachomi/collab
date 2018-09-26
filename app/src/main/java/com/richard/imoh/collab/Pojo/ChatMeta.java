@@ -14,6 +14,7 @@ public class ChatMeta {
     String uId;
 
 
+
     public ChatMeta(String lastMessage, String displayTime, int messageCount, String uId) {
         this.lastMessage = lastMessage;
         this.displayTime = displayTime;
@@ -25,7 +26,9 @@ public class ChatMeta {
     public ChatMeta() {
     }
 
-    public ChatMeta(String displayName, String lastMessage, String displayImg, String displayTime, String chatRef, int messageCount,String uId) {
+
+
+    public ChatMeta(String displayName, String lastMessage, String displayImg, String displayTime, String chatRef, int messageCount, String uId) {
         this.displayName = displayName;
         this.lastMessage = lastMessage;
         this.displayImg = displayImg;
@@ -90,4 +93,5 @@ public class ChatMeta {
     public void setuId(String uId) {
         this.uId = uId;
     }
+
 }

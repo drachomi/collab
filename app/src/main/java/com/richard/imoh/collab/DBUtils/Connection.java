@@ -15,20 +15,17 @@ public class Connection {
     public String agentName;
     public String agentDp;
     public String chatRef;
+    public String location;
 
     public Connection() {
     }
 
-    public Connection(String Uid, String agentName, String agentDp) {
-        this.Uid = Uid;
-        this.agentName = agentName;
-        this.agentDp = agentDp;
-    }
 
-    public Connection(@NonNull String uid, String agentName, String agentDp, String chatRef) {
+    public Connection(@NonNull String uid, String agentName, String agentDp, String chatRef, String location) {
         Uid = uid;
         this.agentName = agentName;
         this.agentDp = agentDp;
         this.chatRef = chatRef;
+        this.location = location;
     }
 }

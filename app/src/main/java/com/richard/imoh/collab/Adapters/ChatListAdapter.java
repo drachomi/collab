@@ -44,7 +44,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
         holder.time.setText(chat.getDisplayTime());
 
         holder.imageView.loadThumbForName(chat.getDisplayImg(),chat.getDisplayName());
-        if((!chat.getuId().equals(firebaseAuth.getCurrentUser().getUid())&& chat.getMessageCount() > 0 )){
+        if(chat.getMessageCount() > 0){
             Log.d("currentUser ","mine  "+firebaseAuth.getCurrentUser().getUid());
             Log.d("currentUser ","other  "+chat.getuId());
             holder.chat_indicator.setText(" "+Integer.toString(chat.getMessageCount())+" ");
@@ -53,11 +53,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
             holder.chat_indicator.setVisibility(View.INVISIBLE);
         }
 
-//        imageView.loadThumbForName(imageURL, firstName, secondName)
-//        Glide.with(holder.imageView.getContext())
-//                .load(chat.getDisplayImg())
-//                .apply(RequestOptions.circleCropTransform())
-//                .into(holder.imageView);
 
 
     }

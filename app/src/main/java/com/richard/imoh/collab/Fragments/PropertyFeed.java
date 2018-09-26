@@ -4,7 +4,9 @@ package com.richard.imoh.collab.Fragments;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -51,6 +53,7 @@ import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Utils.FireBaseUtils;
 import com.richard.imoh.collab.Utils.FollowTouchListerner;
 import com.richard.imoh.collab.Utils.Location;
+import com.richard.imoh.collab.Utils.PropertyTypeList;
 import com.richard.imoh.collab.Utils.Repository;
 import com.richard.imoh.collab.Utils.ViewModels.PropertyViewModelFactory;
 import com.richard.imoh.collab.Utils.ViewModels.PropertyFeedViewModel;
@@ -65,18 +68,23 @@ public class PropertyFeed extends Fragment {
     FeedAdapter mFeedAdapter;
     List<Property> mProperty = new ArrayList<>();
     PropertyFeedViewModel viewModel;
-    Spinner stateSpinner, citySpinner, propertyType;
+    Spinner stateSpinner, citySpinner, propertyType,propPurpose;
+    String tyOfPro;
     ArrayList<String> cityArray;
     ArrayList<String> stateArray;
+    List<String>purposeList;
     Location locale = new Location();
     DocumentReference propertyRef;
     ChildEventListener propListerner;
     private ArrayAdapter<String> cityArrayAdapter;
     private ArrayAdapter<String> stateArrayAdapter;
+    private ArrayAdapter<String>purposeAdapter;
+    private ArrayAdapter<String>propertyTypeAdapter;
     Repository repository;
     FirebaseDatabase database = FireBaseUtils.getDatabase();
     FirebaseFirestore firestore = FireBaseUtils.getFireStore();
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    PropertyTypeList typeList = new PropertyTypeList();
 
 
     public PropertyFeed() {
@@ -98,7 +106,8 @@ public class PropertyFeed extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mFeedAdapter = new FeedAdapter(mProperty);
 
-        fetchProperty("Lagos", "Badagry","Shop");
+
+        fetchAllProperty();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.feed_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -159,8 +168,10 @@ public class PropertyFeed extends Fragment {
         stateSpinner = view1.findViewById(R.id.filter_state);
         citySpinner = view1.findViewById(R.id.filter_city);
         propertyType = view1.findViewById(R.id.filter_prop_type);
+        propPurpose = view1.findViewById(R.id.filter_prop_purpose);
         Button button = view1.findViewById(R.id.search);
         firstSpinners();
+        purposeSpinner(view1);
         builder.setView(view1);
         alertDialog = builder.create();
         alertDialog.show();
@@ -231,6 +242,41 @@ public class PropertyFeed extends Fragment {
 
         }
     };
+    void purposeSpinner(View root){
+        purposeList = new ArrayList<>(typeList.getPurposeList());
+        purposeAdapter = new ArrayAdapter<String>(root.getContext(), android.R.layout.simple_spinner_item, purposeList);
+        purposeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        propPurpose.setAdapter(purposeAdapter);
+        propPurpose.setOnItemSelectedListener(purposeClickListerner);
+
+    }
+    void propertyTySpinner(List<String>propType){
+        propertyTypeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, propType);
+        propertyTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        propertyType.setAdapter(propertyTypeAdapter);
+
+    }
+    private AdapterView.OnItemSelectedListener purposeClickListerner = new AdapterView.OnItemSelectedListener(){
+
+
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            if(propPurpose.getSelectedItem().toString().equals("Residential")){
+                propertyTySpinner(typeList.getResidential());
+            }
+            if(propPurpose.getSelectedItem().toString().equals("Commercial")){
+                propertyTySpinner(typeList.getCommercialList());
+            }
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
+
 
     public void citySpinner() {
         cityArray = locale.getLocation(stateSpinner.getSelectedItem().toString());
@@ -257,24 +303,6 @@ public class PropertyFeed extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    void attachViewModel(String state, String city) {
-        if (viewModel != null) {
-            viewModel.getAllProperty().removeObservers(this);
-        } else {
-            Log.d("chukc", "entered attached view model");
-            viewModel = ViewModelProviders.of(this, new PropertyViewModelFactory(getActivity().getApplication(), state, city)).get(PropertyFeedViewModel.class);
-            viewModel.getAllProperty().observe(this, new Observer<List<Property>>() {
-                @Override
-                public void onChanged(@Nullable List<Property> propertyList) {
-                    if (!mProperty.isEmpty()) {
-                        mProperty.clear();
-                    }
-                    mProperty = propertyList;
-                    mFeedAdapter.updateList(mProperty);
-                }
-            });
-        }
-    }
 
 
     public void fetchProperty(String state,String city,String type) {
@@ -300,6 +328,33 @@ public class PropertyFeed extends Fragment {
 
 
     }
+
+    public void fetchAllProperty() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String state = preferences.getString("myState","");
+        firestore.collection("properties")
+                .whereEqualTo("state", state)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                            Property property = documentSnapshot.toObject(Property.class);
+                            if (property != null) {
+                                Log.d("property: ", property.getAgentName());
+                                mProperty.add(property);
+                                Log.d("spread", mProperty.get(0).getAgentName());
+                                mFeedAdapter.updateList(mProperty);
+                            }
+                        }
+                    }
+                });
+
+
+    }
+
+
+
 
 
 }
