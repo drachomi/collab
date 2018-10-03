@@ -1,6 +1,9 @@
 package com.richard.imoh.collab.Activities;
 
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,15 +26,22 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.richard.imoh.collab.Adapters.FollowAdapter;
+import com.richard.imoh.collab.DBUtils.Connection;
+import com.richard.imoh.collab.DBUtils.ConnectionDB;
+import com.richard.imoh.collab.DBUtils.ConnectionDao;
 import com.richard.imoh.collab.Pojo.User;
 import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Utils.FireBaseUtils;
+import com.richard.imoh.collab.Utils.FollowTouchListerner;
 import com.richard.imoh.collab.Utils.Location;
+import com.richard.imoh.collab.Utils.Repository;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +57,13 @@ public class SearchConnectionActivity extends AppCompatActivity {
     ArrayList<String> stateArray;
     private ArrayAdapter<String> cityArrayAdapter;
     private ArrayAdapter<String> stateArrayAdapter;
+    List<String> connectionList = new ArrayList<>();
     Location location = new Location();
+    List<Connection> connectionObj = new ArrayList<>();
+    ConnectionDao connectionDao;
+    ConnectionDB connectionDB;
+    Repository repository;
+    FirebaseAuth firebaseAuth = FireBaseUtils.getFirebaseAuth();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,15 +72,61 @@ public class SearchConnectionActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Search");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        connectionDB = ConnectionDB.getInstance(this);
+        connectionDao = connectionDB.connectionDao();
+        repository = new Repository(this);
 
         followAdapter = new FollowAdapter(mUserList);
         RecyclerView recyclerView = findViewById(R.id.conn_search_recyle);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(followAdapter);
+        recyclerView.addOnItemTouchListener(new FollowTouchListerner(getApplicationContext(), recyclerView, new FollowTouchListerner.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Log.d(" userO", "getting there");
+                //TODO Add action to be taken when user clicks to follow
+                String myNmae = preferences.getString("myFullname", "");
+                String myId = preferences.getString("myUserId", "");
+                String myDp = preferences.getString("myDp", "");
+                String userId = mUserList.get(position).getuId();
+                String agentName = mUserList.get(position).getFullName();
+                String dp = mUserList.get(position).getImage();
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                String myLocation = preferences.getString("myLocation", "");
+                String userLocation = mUserList.get(position).getLocation();
 
-        displayList("Apapa,Lagos");
+                //Create chatref using time stamp and individual userId
+                String chatRef = timestamp.getTime() + userId + myId;
+
+                //Create new connection objects for both
+                Connection otherUser = new Connection(userId,agentName,dp,chatRef,userLocation);
+                Connection mine = new Connection(myId,myNmae,myDp,chatRef,myLocation);
+                Log.d(" userO", userId);
+
+                //Send the new connections to repository class  to add to their respective nodes
+                repository.addToConnectionNode(userId,mine);
+                repository.addToConnectionNode(myId,otherUser);
+
+                //Make the user disappear from the list and update the adapter to reflect changes
+                mUserList.remove(position);
+                followAdapter.notifyDataSetChanged();
+
+
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+        recyclerView.setAdapter(followAdapter);
+        getAll();
+
+
 
 
 
@@ -190,9 +252,14 @@ public class SearchConnectionActivity extends AppCompatActivity {
                             User mUser = documentSnapshot.toObject(User.class);
                             if (mUser != null) {
                                 mUserList.clear();
-                                mUserList.add(mUser);
-                                Log.d("madox","user is :"+mUser.getUserName());
-                                followAdapter.notifyDataSetChanged();
+                                if(!mUser.getuId().equals(firebaseAuth.getUid())){
+                                    mUserList.add(mUser);
+                                    getInfo(mUser);
+                                }
+                                else {
+                                    Log.d("ljonah",mUser.getFullName());
+                                }
+
                             }
                         }
                     }
@@ -213,12 +280,46 @@ public class SearchConnectionActivity extends AppCompatActivity {
                             User mUser = documentSnapshot.toObject(User.class);
                             if (mUser != null) {
                                 mUserList.clear();
-                                mUserList.add(mUser);
-                                Log.d("madox","user is :"+mUser.getUserName());
-                                followAdapter.notifyDataSetChanged();
+                                if(!mUser.getuId().equals(firebaseAuth.getUid())){
+                                    mUserList.add(mUser);
+                                    getInfo(mUser);
+                                }
+                                else {
+                                    Log.d("ljonah",mUser.getFullName());
+                                }
+
                             }
                         }
                     }
                 });
+    }
+    private void getAll (){
+        new AsyncTask<Void,Void,Void>(){
+            @Override
+            protected Void doInBackground(Void... voids) {
+                connectionObj = connectionDao.getAllConnection();
+                for (int i=0; i<connectionObj.size();i++){
+                    connectionList.add(connectionObj.get(i).Uid);
+                    Log.d("conlist",connectionList.get(i));
+                    Log.d("conObj",connectionObj.get(i).Uid + "  But size is "+connectionObj.size());
+
+                }
+                displayList("Apapa,Lagos");
+                return null;
+            }
+        }.execute();
+    }
+    void getInfo(User user){
+        for (String frien : connectionList){
+            if(frien.equals(user.getuId())){
+                Log.d("ejonah",user.getuId());
+                mUserList.remove(user);
+            }
+            else {
+                Log.d("jonah",user.getuId());
+            }
+        }
+        followAdapter.notifyDataSetChanged();
+
     }
 }
