@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.hbb20.GThumb;
 import com.richard.imoh.collab.Pojo.ChatMeta;
 import com.richard.imoh.collab.R;
+import com.richard.imoh.collab.Utils.ToCamdlCase;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import java.util.List;
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatListViewHolder> {
     List<ChatMeta>chatList;
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    ToCamdlCase toCamalCase = new ToCamdlCase();
 
     public ChatListAdapter(List<ChatMeta> chatList) {
         this.chatList = chatList;
@@ -39,9 +41,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
     @Override
     public void onBindViewHolder(@NonNull ChatListViewHolder holder, int position) {
         ChatMeta chat = chatList.get(position);
-        holder.name.setText(chat.getDisplayName());
-        holder.shortMsg.setText(chat.getLastMessage());
-        holder.time.setText(chat.getDisplayTime());
+        holder.name.setText(toCamalCase.camelCase(chat.getDisplayName()));
+        holder.shortMsg.setText(toCamalCase.camelCase(chat.getLastMessage()));
+        holder.time.setText(toCamalCase.camelCase(chat.getDisplayTime()));
 
         holder.imageView.loadThumbForName(chat.getDisplayImg(),chat.getDisplayName());
         if(chat.getMessageCount() > 0){

@@ -1,21 +1,23 @@
 package com.richard.imoh.collab.Request;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -26,6 +28,7 @@ import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Utils.FireBaseUtils;
 import com.richard.imoh.collab.Utils.Location;
 import com.richard.imoh.collab.Utils.PropertyTypeList;
+import com.richard.imoh.collab.Utils.SaveRequestInFireStore;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -35,23 +38,20 @@ import java.util.Calendar;
 import java.util.List;
 
 public class AddRequest extends AppCompatActivity {
-    Toolbar toolbar;
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference userDatabaseReference;
     FirebaseFirestore firestore;
     CollectionReference propertyRequestReference;
-    ValueEventListener requestEventListerner;
-    ValueEventListener valueEventListener;
-    String agentName,agentDp,letType,state,city,propertyType,description,price;
-    Spinner letTypeSpinner,stateSpinner,citySpinner,purposeSpinner,propertyTySpinner,priceSpinner;
-    EditText plotEditText,roomEditText,descriptionEditText;
-    int roomNo,plotNo;
+    String agentName,agentDp,letType,state,city,propertyType,description,price,priority;
+    Spinner letTypeSpinner,stateSpinner,citySpinner,purposeSpinner,propertyTySpinner,prioritySpiner;
+    EditText plotEditText,priceEdit,additionalInfo;
+    String plotNo;
+    int roomNo;
     private ArrayAdapter<String> cityArrayAdapter;
     private ArrayAdapter<String> stateArrayAdapter;
     private ArrayAdapter<String>purposeAdapter;
     private ArrayAdapter<String>propertyTypeAdapter;
-    Boolean priority;
     Location location = new Location();
     ArrayList<String> cityArray;
     ArrayList<String> stateArray;
@@ -60,56 +60,52 @@ public class AddRequest extends AppCompatActivity {
     List<String>residentialList = new ArrayList<>();
     List<String>commercialList = new ArrayList<>();
     PropertyTypeList typeList = new PropertyTypeList();
+    SaveRequestInFireStore inFireStore = new SaveRequestInFireStore();
+    RelativeLayout first,second;
+    String userId;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_request);
-        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Add Request");
+
         firebaseDatabase = FireBaseUtils.getDatabase();
         firestore = FireBaseUtils.getFireStore();
         firebaseAuth = FirebaseAuth.getInstance();
         String userId = firebaseAuth.getUid();
         userDatabaseReference = firebaseDatabase.getReference().child("agents").child(userId).child("info");
         propertyRequestReference = firestore.collection("request");
-        letTypeSpinner = findViewById(R.id.add_req_let_type);
-        propertyTySpinner = findViewById(R.id.add_req_prop_type);
-        purposeSpinner = findViewById(R.id.add_req_purpose);
-        priceSpinner = findViewById(R.id.add_req_price);
-        descriptionEditText = findViewById(R.id.add_req_description);
-        plotEditText = findViewById(R.id.add_req_plots);
-        roomEditText = findViewById(R.id.add_req_rooms);
-        stateSpinner = findViewById(R.id.add_req_state);
-        citySpinner = findViewById(R.id.add_req_city);
+        letTypeSpinner = findViewById(R.id.add_prop_let_type);
+        propertyTySpinner = findViewById(R.id.add_prop_prop_type);
+        purposeSpinner = findViewById(R.id.add_prop_purpose);
+        additionalInfo = findViewById(R.id.add_prop_description);
+        plotEditText = findViewById(R.id.add_prop_plots);
+        priceEdit = findViewById(R.id.add_prop_price);
+        stateSpinner = findViewById(R.id.add_prop_state);
+        citySpinner = findViewById(R.id.add_prop_city);
+        prioritySpiner = findViewById(R.id.add_prop_priority);
 
-        priority = false;
 
-        attachValueListerner();
+
+        first = findViewById(R.id.add_prop_first_relative);
+        second = findViewById(R.id.add_prop_second_relative);
+
+        getUserName();
         stateSpinner();
         purposeSpinner();
 
     }
 
-    void attachValueListerner(){
-        valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                agentName = user.getFullName();
-                agentDp = user.getImage();
-            }
+    void getUserName() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        agentName = preferences.getString("myFullname", "");
+        agentDp = preferences.getString("myDp", "");
+        userId = preferences.getString("myUserId", "");
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-        userDatabaseReference.addValueEventListener(valueEventListener);
     }
+
+
     void stateSpinner(){
         stateArray = location.getLocation("States");
         stateArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stateArray);
@@ -197,43 +193,78 @@ public class AddRequest extends AppCompatActivity {
         }
     };
 
-    public void addRequestBtn(View view){
-        ProgressBar bar = findViewById(R.id.add_req_progress);
-        bar.setVisibility(View.VISIBLE);
-        letType = String.valueOf(letTypeSpinner.getSelectedItem());
-        price = String.valueOf(priceSpinner.getSelectedItem());
-        description = descriptionEditText.getText().toString();
-        roomNo = Integer.valueOf(roomEditText.getText().toString());
-        plotNo = Integer.valueOf(plotEditText.getText().toString());
+    public void addRequestBtn(){
+
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = df.format(Calendar.getInstance().getTime());
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         String reqId = timestamp.getTime() + firebaseAuth.getUid();
         //Set priority as true when user selects item at position 1 and false in other occasion
 
-        Request request = new Request(description,price,state,city,priority,propertyType,letType,plotNo,roomNo,agentName,agentDp,firebaseAuth.getUid(),currentDate,reqId);
+        Request request = new Request(description,price,state,city,priority,propertyType,letType,Integer.parseInt(plotNo),roomNo,agentName,agentDp,firebaseAuth.getUid(),currentDate,reqId);
         propertyRequestReference.add(request);
+        inFireStore.saveReq(request);
+        inFireStore.saveToAgentReq(request);
         Toast.makeText(AddRequest.this,"Added request",Toast.LENGTH_LONG).show();
         finish();
 
     }
-    public void onRadioButtonClicked(View view) {
-        // Is the button now checked?
-        boolean checked = ((RadioButton) view).isChecked();
 
-        // Check which radio button was clicked
-        switch(view.getId()) {
-            case R.id.not_urgent:
-                if (checked)
-                    // Pirates are the best
-                    priority = true;
-                    break;
-            case R.id.urgent:
-                if (checked)
-                    // Ninjas rule
-                    priority = false;
-                    break;
+    public void reqBtn1(View view){
+        plotNo = plotEditText.getText().toString();
+        state = String.valueOf(stateSpinner.getSelectedItem());
+        city = String.valueOf(citySpinner.getSelectedItem());
+        if (TextUtils.isEmpty(state)) {
+            Toast.makeText(getApplicationContext(), "Choose State Please", Toast.LENGTH_SHORT).show();
+            return;
         }
-    }
+        if (TextUtils.isEmpty(city)) {
+            Toast.makeText(getApplicationContext(), "Choose City Please", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(plotNo)) {
+            Toast.makeText(getApplicationContext(), "Please enter roomNo or PlotNo Please", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (TextUtils.isEmpty(propertyType)) {
+            Toast.makeText(getApplicationContext(), "Choose Property Type Please", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else {
+            first.setVisibility(View.GONE);
+            second.setVisibility(View.VISIBLE);
+        }
 
+
+
+    }
+    public void reqBtn2(View view){
+        priority = String.valueOf(prioritySpiner.getSelectedItem());
+        propertyType = String.valueOf(propertyTySpinner.getSelectedItem());
+        price = priceEdit.getText().toString();
+        letType = String.valueOf(letTypeSpinner.getSelectedItem());
+        description = additionalInfo.getText().toString();
+        if (TextUtils.isEmpty(price)) {
+            Toast.makeText(getApplicationContext(), "Choose Price Please", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(priority)|| priority.equals("Priority Level")){
+            Toast.makeText(getApplicationContext(), "Choose Suitable For Please", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(letType)) {
+            Toast.makeText(getApplicationContext(), "Choose Let Type Please", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(description)) {
+            Toast.makeText(getApplicationContext(), "Additional Info Should not be blank", Toast.LENGTH_SHORT).show();
+            return;
+        }else {
+            addRequestBtn();
+        }
+
+
+
+    }
 }

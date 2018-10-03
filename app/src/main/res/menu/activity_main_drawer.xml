@@ -6,39 +6,42 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/agent_icon"
             android:title="My Profile" />
         <item
             android:id="@+id/nav_chats"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/negotiation"
             android:title="My Chats" />
-        <item
-            android:id="@+id/nav_connection"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="My Connections" />
-        <item
-            android:id="@+id/nav_suggestion"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Suggestions" />
+
         <item
             android:id="@+id/nav_post_property"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/house_icon"
             android:title="Post Property" />
         <item
             android:id="@+id/nav_post_request"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/house_icon"
             android:title="Post Request" />
         <item
-            android:id="@+id/nav_view_property"
-            android:icon="@drawable/ic_menu_send"
-            android:title="View My Properties" />
+            android:id="@+id/nav_my_property"
+            android:icon="@drawable/imac"
+            android:title="My Properties" />
+        <item
+            android:id="@+id/nav_my_request"
+            android:icon="@drawable/house_icon"
+            android:title="My Requests" />
+        <item
+            android:id="@+id/nav_search_agents"
+            android:icon="@drawable/house_icon"
+            android:title="Search For Agents" />
         <item
             android:id="@+id/nav_feed_back"
             android:icon="@drawable/ic_menu_share"
             android:title="Feed Back" />
+
+
         <item
             android:id="@+id/nav_sign_out"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@drawable/key"
             android:title="Sign Out" />
 
     </group>

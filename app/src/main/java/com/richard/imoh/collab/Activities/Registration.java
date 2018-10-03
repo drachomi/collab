@@ -29,18 +29,18 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.richard.imoh.collab.Pojo.ChatMeta;
 import com.richard.imoh.collab.Pojo.User;
-import com.richard.imoh.collab.Pojo.UserMessage;
 import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Utils.FireBaseUtils;
 import com.richard.imoh.collab.Utils.Location;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class Registration extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
@@ -63,6 +63,8 @@ public class Registration extends AppCompatActivity {
     ArrayList<String> cityArray;
     ArrayList<String> stateArray;
     Location location;
+    FirebaseFirestore firestore;
+    CollectionReference userCollection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +88,13 @@ public class Registration extends AppCompatActivity {
         progressBar = findViewById(R.id.reg_progress);
         photo = findViewById(R.id.reg_dp);
         firebaseDatabase = FireBaseUtils.getDatabase();
+        firestore = FireBaseUtils.getFireStore();
         databaseReference = firebaseDatabase.getReference().child("agents");
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference().child("profile_menu");
+        profiledp = findViewById(R.id.reg_dp);
+
+        userCollection =  firestore.collection("users");
         location = new Location();
 
 
@@ -127,9 +133,9 @@ public class Registration extends AppCompatActivity {
            Log.d("visi-thir","occupa is : "+regOccupation);
 
            currentUser =  firebaseAuth.getUid();
-           User user = new User(regName,regImage,regEmail,regPhoneNumber,regOccupation,regCompany,regProfbody,regGender,"none",regLocation,regUsername,currentUser);
-           //User user = new User(regName,"none",regEmail,"lagos",regUsername,currentUser);
+           User user = new User(regName,regImage,regEmail,regPhoneNumber,regOccupation,regCompany,regProfbody,regGender,"none",regLocation,regUsername.toLowerCase(),currentUser);
            databaseReference.child(currentUser).child("info").setValue(user);
+           userCollection.add(user);
            Intent intent = new Intent(Registration.this,MainActivity.class);
            intent.putExtra("userId", currentUser);
            startActivity(intent);
@@ -193,11 +199,11 @@ public class Registration extends AppCompatActivity {
                                    throw task.getException();
 
                                } catch (FirebaseAuthWeakPasswordException weakPassword) {
-                                   Toast.makeText(getApplicationContext(),  "Password must be up to 6 Characters." , Toast.LENGTH_SHORT).show();
+                                   Toast.makeText(getApplicationContext(),  "Password must be up to 6 Characters." , Toast.LENGTH_LONG).show();
                                }catch (FirebaseAuthInvalidCredentialsException e){
-                                   Toast.makeText(getApplicationContext(),  "Please choose a correct Email." , Toast.LENGTH_SHORT).show();
+                                   Toast.makeText(getApplicationContext(),  "Please choose a correct Email." , Toast.LENGTH_LONG).show();
                                }catch (FirebaseAuthUserCollisionException e){
-                                   Toast.makeText(getApplicationContext(),  "Email already in use by another user" , Toast.LENGTH_SHORT).show();
+                                   Toast.makeText(getApplicationContext(),  "Email already in use by another user" , Toast.LENGTH_LONG).show();
                                } catch (Exception e) {
                                    e.printStackTrace();
                                }
@@ -246,6 +252,7 @@ public class Registration extends AppCompatActivity {
                     if(task.isSuccessful()){
                         Uri downloadUri = task.getResult();
                         regImage = downloadUri.toString();
+                        addImage();
 
 
                     }
@@ -338,5 +345,10 @@ public class Registration extends AppCompatActivity {
         regLocation = savedInstanceState.getString("location");
         regPhoneNumber = savedInstanceState.getString("phone");
 
+    }
+    void addImage(){
+        Glide.with(profiledp.getContext())
+                .load(regImage)
+                .into(profiledp);
     }
 }

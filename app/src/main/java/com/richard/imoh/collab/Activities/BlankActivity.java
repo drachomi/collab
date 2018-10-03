@@ -155,6 +155,7 @@ public class BlankActivity extends AppCompatActivity {
         repo = new Repository(this);
         repo.fetchConnection();
         repo.getCurrentUser();
+        repo.specificUser("yeeba");
     }
 
 }

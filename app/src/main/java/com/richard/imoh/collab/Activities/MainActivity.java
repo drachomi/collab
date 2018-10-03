@@ -121,6 +121,12 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_sign_out){
             signOut();
+        }else if (id==R.id.nav_search_agents){
+            startActivity(new Intent(MainActivity.this,SearchConnectionActivity.class));
+        }else if (id==R.id.nav_my_property){
+            startActivity(new Intent(MainActivity.this,MyProperty.class));
+        }else if (id==R.id.nav_my_request){
+            startActivity(new Intent(MainActivity.this,MyRequest.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 import com.google.android.gms.tasks.Continuation;
@@ -63,7 +64,6 @@ public class Chat extends AppCompatActivity {
     ChildEventListener mChildEventListerner;
     private FirebaseStorage mFireBaseStorage;
     private StorageReference chatPhotoRference;
-    private ImageView mPhotoPicker;
     String myUserId;
     int messageCount;
     String personUserId;
@@ -80,7 +80,6 @@ public class Chat extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         editText  = findViewById(R.id.edittext_chatbox);
         sendBtn = findViewById(R.id.button_chatbox_send);
-        mPhotoPicker = findViewById(R.id.gallery_send_btn);
         mFirebaseDataBase = FireBaseUtils.getDatabase();
         mFireBaseStorage = FirebaseStorage.getInstance();
         chatPhotoRference = mFireBaseStorage.getReference().child("chat-images");
@@ -130,17 +129,6 @@ public class Chat extends AppCompatActivity {
             }
         });
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(DEFAULT_MSG_LENGTH_LIMIT)});
-
-        mPhotoPicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: Fire an intent to show an image picker
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/jpeg");
-                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
-            }
-        });
 
        sendBtn.setOnClickListener(view -> {
            UserMessage userMessage = new UserMessage(username,null,time,editText.getText().toString(),null,firebaseAuth.getUid());
@@ -218,38 +206,84 @@ public class Chat extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RC_PHOTO_PICKER && resultCode == RESULT_OK){
+
+        if(resultCode == RESULT_OK){
             Uri selectedImageUri = data.getData();
-            final StorageReference storageReference = chatPhotoRference.child(selectedImageUri.getLastPathSegment());
-            UploadTask uploadTask = storageReference.putFile(selectedImageUri);
+            switch (requestCode){
+                case RC_PHOTO_PICKER:
+                    sentItemToServer(selectedImageUri,"Image");
+                default:
+                    sentItemToServer(selectedImageUri,"Image");
+            }
 
-            Task<Uri> task = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if(!task.isSuccessful()){
-                        throw  task.getException();
-                    }
-                    return storageReference.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if(task.isSuccessful()){
-                        Uri downloadUri = task.getResult();
-                        UserMessage friendlyMessage = new UserMessage(username,null,time,null,downloadUri.toString(),firebaseAuth.getUid());
-                        mChatReference.child("messages").push().setValue(friendlyMessage);
-                        messageCount++;
-                        ChatMeta chatMeta = new ChatMeta("Image",time,messageCount,firebaseAuth.getUid());
-
-                        //Increment message count for the recipient
-                        mChatReference.child(personUserId+"unread").setValue(messageCount);
-
-                        mChatReference.child("chatMeta").setValue(chatMeta);
-
-                    }
-                }
-            });
 
         }
+    }
+
+
+    void sentItemToServer(Uri data,String caller){
+        final StorageReference storageReference = chatPhotoRference.child(data.getLastPathSegment());
+        UploadTask uploadTask = storageReference.putFile(data);
+
+        Task<Uri> task = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if(!task.isSuccessful()){
+                    throw  task.getException();
+                }
+                return storageReference.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if(task.isSuccessful()){
+                    Uri downloadUri = task.getResult();
+                    UserMessage friendlyMessage = new UserMessage(username,null,time,null,downloadUri.toString(),firebaseAuth.getUid());
+                    mChatReference.child("messages").push().setValue(friendlyMessage);
+                    messageCount++;
+                    ChatMeta chatMeta = new ChatMeta("Image",time,messageCount,firebaseAuth.getUid());
+
+                    //Increment message count for the recipient
+                    mChatReference.child(personUserId+"unread").setValue(messageCount);
+
+                    mChatReference.child("chatMeta").setValue(chatMeta);
+
+                }
+            }
+        });
+
+    }
+
+    public void getPdf(View view){
+        Toast.makeText(this,"We are working hard to make this feature available soon",Toast.LENGTH_LONG).show();
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//        intent.setType("application/pdf");
+//        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+//        startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+
+    }
+    public void getMsword(View view){
+        Toast.makeText(this,"We are working hard to make this feature available soon",Toast.LENGTH_LONG).show();
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//        intent.setType("application/msword");
+//        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+//        startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+    }
+    public void getCamera(View view){
+        Toast.makeText(this,"We are working hard to make this feature availale soon",Toast.LENGTH_LONG).show();
+
+    }
+    public void getGallery(View view){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/jpeg");
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+
+    }
+    public void getMic(View view){
+        Toast.makeText(this,"We are working hard to make this feature available soon",Toast.LENGTH_LONG).show();
+    }
+    public void getVideo(View view){
+        Toast.makeText(this,"We are working hard to make this feature available soon",Toast.LENGTH_LONG).show();
     }
 }

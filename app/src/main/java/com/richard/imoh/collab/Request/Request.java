@@ -9,7 +9,7 @@ public class Request {
     String price;
     String state;
     String city;
-    Boolean isUrgent;
+    String isUrgent;
     //Property type being either flat, self contain as in the case of residential or office space in the case of commercial
     String propertyType;
     //Let type being rent, lease or sell
@@ -27,7 +27,7 @@ public class Request {
     public Request() {
     }
 
-    public Request(String description, String price, String state, String city, Boolean isUrgent, String propertyType, String letType, int size, int resRoomNo, String agentName, String agentDp, String userId, String requestTime, String reqId) {
+    public Request(String description, String price, String state, String city, String isUrgent, String propertyType, String letType, int size, int resRoomNo, String agentName, String agentDp, String userId, String requestTime, String reqId) {
         this.description = description;
         this.price = price;
         this.state = state;
@@ -76,11 +76,11 @@ public class Request {
         this.city = city;
     }
 
-    public Boolean getUrgent() {
+    public String getUrgent() {
         return isUrgent;
     }
 
-    public void setUrgent(Boolean urgent) {
+    public void setUrgent(String urgent) {
         isUrgent = urgent;
     }
 

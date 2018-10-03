@@ -55,40 +55,46 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
+                android:onClick="getGallery"
                 android:id="@+id/gallery_send_btn"
                 android:layout_marginRight="15dp"
                 android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_menu_gallery"
+                android:src="@drawable/ic_icon_gallery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <ImageView
+                android:onClick="getCamera"
                 android:layout_marginRight="15dp"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_menu_camera"
+                android:src="@drawable/ic_icon_camera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <ImageView
+                android:onClick="getMsword"
                 android:layout_marginRight="15dp"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_menu_share"
+                android:src="@drawable/ic_icon_msword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <ImageView
+                android:onClick="getPdf"
                 android:layout_marginRight="15dp"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_menu_send"
+                android:src="@drawable/ic_icon_pdf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <ImageView
+                android:onClick="getVideo"
                 android:layout_marginRight="15dp"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_menu_camera"
+                android:src="@drawable/ic_icon_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <ImageView
+                android:onClick="getMic"
                 android:layout_marginRight="15dp"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_menu_camera"
+                android:src="@drawable/ic_icon_mic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

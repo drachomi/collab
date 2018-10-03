@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_marginTop="60dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:src="@drawable/house"
+        android:id="@+id/onboard_image"
+        android:layout_width="300dp"
+        android:layout_height="300dp" />
+    <TextView
+        android:textColor="#fff"
+        android:layout_margin="17dp"
+        android:layout_gravity="center_horizontal"
+        android:textSize="30sp"
+        android:text="Collaborate"
+        android:id="@+id/onboard_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:textColor="#fff"
+        android:lineSpacingExtra="3dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textAlignment="center"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/onboard_text"
+        android:textSize="17sp"
+        android:text="Collaborate with agents around you, Share listing, post request and share commisions."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

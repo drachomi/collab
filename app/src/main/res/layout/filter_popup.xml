@@ -2,6 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="Purpose of  Property"
+        android:textSize="17sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Spinner
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded_edit_txt"
+        android:id="@+id/filter_prop_purpose"
+        android:entries="@array/prop_type_array"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
     <TextView
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"

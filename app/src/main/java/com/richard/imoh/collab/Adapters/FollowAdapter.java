@@ -4,11 +4,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hbb20.GThumb;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Pojo.User;
+import com.richard.imoh.collab.Utils.ToCamdlCase;
 
 import java.util.List;
 
@@ -18,6 +22,9 @@ import java.util.List;
 
 public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.MyViewHolder> {
     List<User>mUser;
+
+    //Class used to capitalize first letter of any word
+    ToCamdlCase toCamdlCase = new ToCamdlCase();
 
     public FollowAdapter(List<User> mUser) {
         this.mUser = mUser;
@@ -35,16 +42,13 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.MyViewHold
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         User user = mUser.get(position);
-        holder.name.setText(user.getFullName());
-        if(user.getImage().equals("none")){
-            user.setImage("");
-        }
-        holder.imageView.loadThumbForName(user.getImage(),user.getFullName());
+        holder.name.setText(toCamdlCase.camelCase(user.getFullName()));
+        holder.location.setText(toCamdlCase.camelCase(user.getLocation()));
 
-//        Glide.with(holder.imageView.getContext())
-//                .load(user.getImage())
-//                .apply(RequestOptions.circleCropTransform())
-//                .into(holder.imageView);
+        Glide.with(holder.imageView.getContext())
+                .load(user.getImage())
+                .apply(RequestOptions.placeholderOf(R.drawable.home))
+                .into(holder.imageView);
 
     }
 
@@ -56,13 +60,15 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.MyViewHold
 
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView name;
-        GThumb imageView;
+        TextView name,location;
+        ImageView imageView;
+        Button button;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.follow_image);
             name = itemView.findViewById(R.id.follow_name);
+            location = itemView.findViewById(R.id.follower_list_location);
 
         }
     }

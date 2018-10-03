@@ -1,35 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
 
+    <ImageView
+        android:scaleType="centerCrop"
+        android:id="@+id/follow_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/richy" />
 
-    <android.support.v7.widget.CardView
-        android:layout_margin="10dp"
-        android:layout_width="80dp"
-        android:layout_height="120dp">
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <com.hbb20.GThumb
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/follow_image"
-                android:layout_width="60dp"
-                android:layout_height="90dp"/>
-            <TextView
-                android:id="@+id/follow_name"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/colorPrimaryText"
-                android:text="Imoh Richard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/follow_list_linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/follow_image"
+        android:orientation="vertical">
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/follow_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Imoh Richard"
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
+        <TextView
+            android:textSize="18sp"
+            android:id="@+id/follower_list_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello There" />
+    </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    <Button
+        android:layout_marginTop="15dp"
+        android:id="@+id/follow_connect_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/rounded_edit_txt"
+        android:src="@drawable/chat_icon"
+        android:text="Connect"
+        android:textColor="@color/colorPrimary" />
 
-</LinearLayout>
+</RelativeLayout>

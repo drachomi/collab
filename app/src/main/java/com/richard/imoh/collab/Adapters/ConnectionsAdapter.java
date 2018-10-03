@@ -10,6 +10,7 @@ import com.hbb20.GThumb;
 import com.richard.imoh.collab.DBUtils.Connection;
 import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Pojo.User;
+import com.richard.imoh.collab.Utils.ToCamdlCase;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
 
 public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.MyViewHolder> {
     List<Connection> mUser;
+    ToCamdlCase toCamalCase = new ToCamdlCase();
 
     public ConnectionsAdapter(List<Connection> mUser) {
         this.mUser = mUser;
@@ -36,8 +38,8 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     @Override
     public void onBindViewHolder(ConnectionsAdapter.MyViewHolder holder, int position) {
         Connection user = mUser.get(position);
-        holder.name.setText(user.agentName);
-        holder.location.setText(user.location);
+        holder.name.setText(toCamalCase.camelCase(user.agentName));
+        holder.location.setText(toCamalCase.camelCase(user.location));
         if(user.agentDp.equals("none")){
             user.agentDp = "";
         }

@@ -3,6 +3,7 @@
     package="com.richard.imoh.collab">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".Activities.FeedPage" />
         <activity
             android:name=".Activities.PropertyDetails"
             android:label="@string/title_activity_property_details" />
@@ -32,7 +32,16 @@
             android:parentActivityName=".Activities.MainActivity" />
         <activity
             android:name=".Activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.ConnectionList"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity android:name=".Activities.SpinnerCountryActivity" />
+        <activity android:name=".Activities.EditProfile" />
+        <activity android:name=".Request.AddRequest" />
+        <activity android:name=".Property.AddProperty" />
+        <activity android:name=".Activities.Profile" />
+        <activity android:name=".Activities.BlankActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,14 +49,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.ConnectionList"
-            android:parentActivityName=".Activities.MainActivity" />
-        <activity android:name=".Activities.SpinnerCountryActivity" />
-        <activity android:name=".Activities.EditProfile" />
-        <activity android:name=".Request.RequestActivity" />
-        <activity android:name=".Request.AddRequest" />
-        <activity android:name=".Property.AddProperty" />
-        <activity android:name=".Activities.Profile"></activity>
+            android:name=".Activities.SearchConnectionActivity"
+            android:label="@string/title_activity_search_connection"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.MyProperty" />
+        <activity android:name=".Activities.MyRequest"></activity>
     </application>
 
 </manifest>

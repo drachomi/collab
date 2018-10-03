@@ -46,6 +46,7 @@ import com.richard.imoh.collab.Request.RequestAdapter;
 import com.richard.imoh.collab.Utils.FireBaseUtils;
 import com.richard.imoh.collab.Utils.FollowTouchListerner;
 import com.richard.imoh.collab.Utils.Location;
+import com.richard.imoh.collab.Utils.PropertyTypeList;
 import com.richard.imoh.collab.Utils.ViewModels.PropertyFeedViewModel;
 import com.richard.imoh.collab.Utils.ViewModels.PropertyViewModelFactory;
 import com.richard.imoh.collab.Utils.ViewModels.RequestFeedViewModel;
@@ -60,14 +61,18 @@ import java.util.List;
 public class RequestFeeds extends Fragment {
     List<Request> mRequestList = new ArrayList<>();
     RequestAdapter requestAdapter;
-    Spinner stateSpinner,citySpinner,propertyType;
+    Spinner stateSpinner,citySpinner,propertyType,propPurpose;
     ArrayList<String> cityArray;
     ArrayList<String> stateArray;
     Location locale = new Location();
     private ArrayAdapter<String> cityArrayAdapter;
     private ArrayAdapter<String> stateArrayAdapter;
+    private ArrayAdapter<String>purposeAdapter;
+    private ArrayAdapter<String>propertyTypeAdapter;
     FirebaseFirestore firestore = FireBaseUtils.getFireStore();
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    PropertyTypeList typeList = new PropertyTypeList();
+    List<String>purposeList;
 
 
 
@@ -135,8 +140,10 @@ public class RequestFeeds extends Fragment {
         stateSpinner = view1.findViewById(R.id.filter_state);
         citySpinner = view1.findViewById(R.id.filter_city);
         propertyType = view1.findViewById(R.id.filter_prop_type);
+        propPurpose = view1.findViewById(R.id.filter_prop_purpose);
         Button button = view1.findViewById(R.id.search);
         firstSpinners();
+        purposeSpinner(view1);
         builder.setView(view1);
         alertDialog = builder.create();
         alertDialog.show();
@@ -193,9 +200,17 @@ public class RequestFeeds extends Fragment {
 
         }
     };
-    private AdapterView.OnItemSelectedListener cityClickListerner = new AdapterView.OnItemSelectedListener() {
+    private AdapterView.OnItemSelectedListener purposeClickListerner = new AdapterView.OnItemSelectedListener(){
+
+
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            if(propPurpose.getSelectedItem().toString().equals("Residential")){
+                propertyTySpinner(typeList.getResidential());
+            }
+            if(propPurpose.getSelectedItem().toString().equals("Commercial")){
+                propertyTySpinner(typeList.getCommercialList());
+            }
 
         }
 
@@ -210,7 +225,20 @@ public class RequestFeeds extends Fragment {
         cityArrayAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item, cityArray);
         cityArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         citySpinner.setAdapter(cityArrayAdapter);
-        citySpinner.setOnItemSelectedListener(cityClickListerner);
+    }
+    void propertyTySpinner(List<String>propType){
+        propertyTypeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, propType);
+        propertyTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        propertyType.setAdapter(propertyTypeAdapter);
+
+    }
+    void purposeSpinner(View root){
+        purposeList = new ArrayList<>(typeList.getPurposeList());
+        purposeAdapter = new ArrayAdapter<String>(root.getContext(), android.R.layout.simple_spinner_item, purposeList);
+        purposeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        propPurpose.setAdapter(purposeAdapter);
+        propPurpose.setOnItemSelectedListener(purposeClickListerner);
+
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

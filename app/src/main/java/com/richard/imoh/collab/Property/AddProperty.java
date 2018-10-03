@@ -2,10 +2,8 @@ package com.richard.imoh.collab.Property;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,7 +27,7 @@ import com.richard.imoh.collab.R;
 import com.richard.imoh.collab.Utils.GetFilePath;
 import com.richard.imoh.collab.Utils.Location;
 import com.richard.imoh.collab.Utils.SaveImageInFireStore;
-import com.richard.imoh.collab.Utils.SavePropertyInFireStore;
+
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -441,26 +439,4 @@ public class AddProperty extends AppCompatActivity {
         imageInFireStore.saveImage(property);
         finish();
     }
-
-
-//    public String getPath(Uri uri){
-//        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-//
-//        cursor.moveToFirst();
-//        String document_id = cursor.getString(0);
-//        document_id = document_id.substring(document_id.lastIndexOf(":")+1);
-//        cursor.close();
-//        cursor = getContentResolver().query(
-//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-//        cursor.moveToFirst();
-//        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-//        if(cursor.moveToNext()){
-//            cursor.close();
-//        }
-//
-//
-//        return path;
-//    }
-
 }

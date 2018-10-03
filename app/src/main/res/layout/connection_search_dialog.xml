@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <Button
+            android:layout_marginRight="2dp"
+            android:textColor="#fff"
+            android:background="@color/colorPrimary"
+            android:id="@+id/button"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="60dp"
+            android:text="search by username" />
+
+        <Button
+            android:layout_weight="0.5"
+            android:layout_marginLeft="2dp"
+            android:textColor="#fff"
+            android:background="@color/colorPrimary"
+            android:text="search by location"
+            android:id="@+id/button2"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/search_connet_first"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.CardView
+            android:layout_margin="10dp"
+            android:background="#000"
+            android:layout_width="476dp"
+            android:layout_height="60dp"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="364dp" >
+            <SearchView
+                android:id="@+id/searchview"
+                android:layout_width="395dp"
+                android:layout_height="60dp"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="144dp" />
+        </android.support.v7.widget.CardView>
+        <Button
+            android:id="@+id/search1"
+            android:textColor="#fff"
+            android:background="@color/colorPrimary"
+            android:text="SEARCH"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_margin="10dp"
+        android:id="@+id/search_connet_second"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            android:layout_marginBottom="5dp"
+            android:entries="@array/city_array"
+            android:background="@drawable/rounded_edit_txt"
+            android:id="@+id/reg_state"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+        <Spinner
+            android:layout_marginTop="5dp"
+            android:background="@drawable/rounded_edit_txt"
+            android:entries="@array/city_array"
+            android:id="@+id/reg_city"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+        <Button
+            android:id="@+id/search2"
+            android:layout_marginTop="10dp"
+            android:textColor="#fff"
+            android:background="@color/colorPrimary"
+            android:text="SEARCH"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

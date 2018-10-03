@@ -5,314 +5,241 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
     tools:context="com.richard.imoh.collab.Property.AddProperty">
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/my_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/transparent"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-    <ScrollView
-        android:id="@+id/add_prop_scroll"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Feel out the form below with your requirements to add your property on PropAlly."/>
 
 
-            <TextView
-
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:text="Purpose"
-                android:textSize="17sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <Spinner
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/rounded_edit_txt"
-                android:id="@+id/add_prop_purpose"
-                android:entries="@array/property_purpose_array"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"/>
-
-
-            <RelativeLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/req_firs"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginLeft="10dp"
-                    android:text="Let Type"
-                    android:textSize="17sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:layout_toRightOf="@id/req_firs"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginLeft="123dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Asking Price(Naira)"
-                    android:textSize="17sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <Spinner
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="33dp"
-                    android:background="@drawable/rounded_edit_txt"
-                    android:id="@+id/add_prop_let_type"
-                    android:entries="@array/let_type_array"
-                    android:layout_width="150dp"
-                    android:layout_height="50dp"/>
-                <EditText
-                    android:inputType="number"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="33dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/rounded_edit_txt"
-                    android:id="@+id/add_prop_price"
-                    android:layout_width="150dp"
-                    android:layout_height="50dp"/>
-
-            </RelativeLayout>
-            <TextView
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:text="Type Of Property"
-                android:textSize="17sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <Spinner
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/rounded_edit_txt"
-                android:id="@+id/add_prop_prop_type"
-                android:entries="@array/residential_property_array"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"/>
-
-
-
-            <RelativeLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/req_sec"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginLeft="10dp"
-                    android:text="No of Plots(If land)"
-                    android:textSize="17sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:layout_toRightOf="@id/req_sec"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginLeft="43dp"
-                    android:layout_marginRight="10dp"
-                    android:text="No of Rooms"
-                    android:textSize="17sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <EditText
-                    android:inputType="number"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="33dp"
-                    android:background="@drawable/rounded_edit_txt"
-                    android:id="@+id/add_prop_plots"
-                    android:layout_width="150dp"
-                    android:layout_height="50dp"/>
-                <EditText
-                    android:inputType="number"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="33dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/rounded_edit_txt"
-                    android:id="@+id/add_prop_rooms"
-                    android:layout_width="150dp"
-                    android:layout_height="50dp"/>
-
-            </RelativeLayout>
-
-            <TextView
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:text="Additional Information"
-                android:textSize="17sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:layout_marginTop="5dp"
-                android:gravity="top|left"
-                android:maxLines="3"
-                android:id="@+id/add_prop_description"
-                android:background="@drawable/rounded_edit_txt"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="80dp" />
-
-            <TextView
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:text="Suitable For"
-                android:textSize="17sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <RadioGroup
-                android:layout_marginLeft="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <RadioButton android:id="@+id/bachelor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Bachelor"
-                    android:layout_margin="5dp"
-                    android:checked="true"
-                    android:onClick="suitableButton"/>
-                <RadioButton android:id="@+id/family"
-                    android:layout_margin="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Family"
-                    android:onClick="suitableButton"/>
-                <RadioButton android:id="@+id/bachelor_family"
-                    android:layout_margin="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Bachelor/Family"
-                    android:onClick="suitableButton"/>
-            </RadioGroup>
-
-
-
-            <RelativeLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/req_third"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginLeft="10dp"
-                    android:text="State"
-                    android:textSize="17sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:layout_toRightOf="@id/req_third"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginLeft="153dp"
-                    android:layout_marginRight="10dp"
-                    android:text="City/Locality"
-                    android:textSize="17sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <Spinner
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="33dp"
-                    android:background="@drawable/rounded_edit_txt"
-                    android:id="@+id/add_prop_state"
-                    android:entries="@array/state_array"
-                    android:layout_width="150dp"
-                    android:layout_height="50dp"/>
-                <Spinner
-
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="33dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/rounded_edit_txt"
-                    android:id="@+id/add_prop_city"
-                    android:entries="@array/city_array"
-                    android:layout_width="150dp"
-                    android:layout_height="50dp"/>
-
-            </RelativeLayout>
-
-
-            <Button
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:textColor="#fff"
-                android:text="Next"
-                android:onClick="addPictureBtn"
-                android:background="@color/colorPrimaryDark"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-    </ScrollView>
     <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/add_prop_relative"
-        android:layout_gravity="center_vertical"
+        android:id="@+id/add_prop_first_relative"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ProgressBar
-            android:visibility="visible"
-            android:layout_centerInParent="true"
-            android:id="@+id/add_prop_progress"
-            android:layout_width="100dp"
-            android:layout_height="100dp" />
-        <Button
-            android:visibility="invisible"
-            android:onClick="sendPropToServer"
-            android:textColor="#fff"
-            android:text="Finish"
-            android:layout_margin="10dp"
-            android:id="@+id/sendProToServerBtn"
-            android:background="@color/colorPrimary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <ImageView
-            android:onClick="addPropertyImages"
-            android:src="@drawable/add"
-            android:layout_centerInParent="true"
-            android:id="@+id/add_prop_image"
-            android:layout_width="120dp"
-            android:layout_height="120dp" />
         <TextView
-            android:id="@+id/add_prop_instruction"
-            android:gravity="center"
-            android:textSize="17sp"
-            android:layout_below="@id/add_prop_image"
-            android:layout_margin="10dp"
-            android:text="Click Button to Add Image, Hold image to select multiple Images"
+            android:textStyle="bold"
+            android:textColor="#FFF"
+            android:id="@+id/ftextview"
+            android:textSize="30sp"
+            android:layout_marginTop="70dp"
+            android:layout_marginBottom="30dp"
+            android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ADD PROPERTY"/>
+        <android.support.v7.widget.CardView
+            android:id="@+id/fcard"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="@color/cardview_light_background"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="-25dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/ftextview"
+            android:layout_width="match_parent"
+            android:layout_height="400dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Spinner
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_margin="10dp"
+                    android:entries="@array/property_purpose_array"
+                    android:id="@+id/add_prop_purpose"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+                <Spinner
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_margin="10dp"
+                    android:id="@+id/add_prop_prop_type"
+                    android:entries="@array/property_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+                <EditText
+                    android:id="@+id/add_prop_plots"
+                    android:inputType="number"
+                    android:hint="Number or rooms/Plots if land"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+
+                <Spinner
+                    android:id="@+id/add_prop_state"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_margin="10dp"
+                    android:entries="@array/location_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+                <Spinner
+                    android:id="@+id/add_prop_city"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_margin="10dp"
+                    android:entries="@array/location_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+        <Button
+            android:onClick="addBtn1"
+            android:textColor="#fff"
+            android:layout_centerHorizontal="true"
+            android:text="Next"
+            android:textSize="25sp"
+            android:layout_below="@id/fcard"
+            android:background="@drawable/rounded_rectangle_orange"
+            android:layout_width="150dp"
             android:layout_height="wrap_content" />
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/add_prop_second_relative"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:textStyle="bold"
+            android:textColor="#FFF"
+            android:id="@+id/stextview"
+            android:textSize="30sp"
+            android:layout_marginTop="70dp"
+            android:layout_marginBottom="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ADDITIONAL DETAILS"/>
+        <android.support.v7.widget.CardView
+            android:id="@+id/scard"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="@color/cardview_light_background"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="-25dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/stextview"
+            android:layout_width="match_parent"
+            android:layout_height="400dp">
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Spinner
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_margin="10dp"
+                    android:entries="@array/let_type_array"
+                    android:id="@+id/add_prop_let_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+                <EditText
+                    android:id="@+id/add_prop_price"
+                    android:inputType="number"
+                    android:hint="Price per year"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+                <Spinner
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_margin="10dp"
+                    android:id="@+id/add_prop_suitable"
+                    android:entries="@array/suitable_for"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+                <EditText
+                    android:id="@+id/add_prop_description"
+                    android:inputType="text"
+                    android:hint="Any Other Information that we missed..?"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+        <Button
+            android:onClick="addBtn2"
+            android:textColor="#fff"
+            android:layout_centerHorizontal="true"
+            android:text="ADD IMAGES"
+            android:textSize="20sp"
+            android:layout_below="@id/scard"
+            android:background="@drawable/rounded_rectangle_orange"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/add_prop_third_relative"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:textStyle="bold"
+            android:textColor="#FFF"
+            android:id="@+id/itextview"
+            android:textSize="30sp"
+            android:layout_marginTop="70dp"
+            android:layout_marginBottom="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ADD IMAGE"/>
+        <android.support.v7.widget.CardView
+            android:id="@+id/icard"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="@color/cardview_light_background"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="-25dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/itextview"
+            android:layout_width="match_parent"
+            android:layout_height="400dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:onClick="addPropertyImages"
+                    android:id="@+id/add_prop_image1"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/addhome"
+                    android:scaleType="centerCrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" />
+                <ImageView
+                    android:onClick="addPropertyImages"
+                    android:id="@+id/add_prop_image2"
+                    android:scaleType="centerCrop"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/addhome"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" />
+                <ImageView
+                    android:onClick="addPropertyImages"
+                    android:id="@+id/add_prop_image3"
+                    android:scaleType="centerCrop"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/addhome"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" />
+
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+        <Button
+            android:onClick="sendPropToServer"
+            android:textColor="#fff"
+            android:layout_centerHorizontal="true"
+            android:text="FINISH"
+            android:textSize="20sp"
+            android:layout_below="@id/icard"
+            android:background="@drawable/rounded_rectangle_orange"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
 
 </LinearLayout>

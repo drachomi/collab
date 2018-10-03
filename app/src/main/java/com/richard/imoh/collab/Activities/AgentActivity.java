@@ -85,7 +85,6 @@ public class AgentActivity extends AppCompatActivity {
         connectionListRecycler.setAdapter(connectionsAdapter);
         Bundle extras = getIntent().getExtras();
         userId = extras.getString("userId");
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         firebaseAuth = FirebaseAuth.getInstance();
         myUserId = firebaseAuth.getUid();
         connectionDB = ConnectionDB.getInstance(this);

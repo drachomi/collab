@@ -10,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -17,6 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.richard.imoh.collab.DBUtils.Connection;
 import com.richard.imoh.collab.DBUtils.ConnectionDB;
 import com.richard.imoh.collab.DBUtils.ConnectionDao;
@@ -47,6 +52,8 @@ public class Repository {
     MutableLiveData<List<Request>> requestLiveDataList = new MutableLiveData<>();
     ConnectionDao connectionDao;
     List<Connection> connectionList;
+    FirebaseFirestore firestore = FireBaseUtils.getFireStore();
+    SaveUserToFireStore userToFireStore = new SaveUserToFireStore();
 
     public Repository(Context context) {
         this.context = context;
@@ -190,24 +197,22 @@ public class Repository {
 
     }
 
-    void connectionListen(String user) {
-        ValueEventListener connectionEventListerner;
-        DatabaseReference connectionReference;
-        connectionReference = database.getReference().child("agents").child(user).child("info");
-        connectionEventListerner = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User mUser = dataSnapshot.getValue(User.class);
-                //addConnnection(mUser);
+    public void specificUser(String user) {
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-        connectionReference.addValueEventListener(connectionEventListerner);
+        firestore.collection("users")
+                .whereEqualTo("userName",user)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                            User mUser = documentSnapshot.toObject(User.class);
+                            if (mUser != null) {
+                                Log.d("madox","user is :"+mUser.getUserName());
+                            }
+                        }
+                    }
+                });
     }
 
     void addConnnection(Connection connection) {
@@ -262,10 +267,13 @@ public class Repository {
 
     }
 
+
+
     public void addToConnectionNode(String userId,Connection connection){
         Log.d("userId",userId);
         database.getReference().child("agents").child(userId).child("connections").push().setValue(connection);
 
     }
+
 
 }
